@@ -194,7 +194,7 @@ skills = sorted(path.parent.name for path in Path("skills").glob("*/SKILL.md"))
 for skill in skills:
     assert readme.count(f"[{skill}](#{skill})") == 1, skill
     assert len(re.findall(rf"^## {re.escape(skill)}$", readme, flags=re.MULTILINE)) == 1, skill
-    assert readme.count(f"skills/{skill}/SKILL.md") == 1, skill
+    assert readme.count(f"](skills/{skill}/SKILL.md)") == 1, skill
 
 local_links = re.findall(r"\[[^]]+\]\((?!https?://|#)([^)]+)\)", readme)
 for target in local_links:
