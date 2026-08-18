@@ -22,32 +22,32 @@ To ensure reliable agentic execution and prevent skipped steps, follow the 7-ste
 
 ## The 7-Step Pipeline
 
-Follow these phases sequentially. At the end of each phase, `git add . && git commit -m "chore: complete [phase] phase"`.
+Follow these phases sequentially. **Crucially, append any decisions, trade-offs, or pivots to `journal.md` during EVERY phase.** At the end of each phase, `git add . && git commit -m "chore: complete [phase] phase"`.
 
 ### 1. Intake
 - **Action:** Discuss the initial idea. Create a local project directory and run `git init`.
 - **Artifact:** Write `intake/brief.md` (stated goals, implied product shape, data entities).
-- **Commit:** Commit the brief and `.gitignore`.
+- **Commit:** Commit the brief, `.gitignore`, and `journal.md`.
 
 ### 2. Interview
 - **Action:** Ask targeted questions to uncover hidden assumptions and clarify the scope. 
-- **Artifact:** Stream findings to `interview/findings.md`.
+- **Artifact:** Stream findings to `interview/findings.md`. Append key insights to `journal.md`.
 - **Commit:** Commit the findings.
 
 ### 3. Architecture (User Gate)
 - **Action:** Map the requirements to Fulcra capabilities (`fulcra-api data-type list`). If a data type exists, use it. If not, define a custom data type.
-- **Artifact:** Write `architecture.md` (capability map, gap register, tenancy).
+- **Artifact:** Write `architecture.md` (capability map, gap register, tenancy). Log the architecture decisions/trade-offs in `journal.md`.
 - **Gate:** STOP and ask the user to review `architecture.md`. Do not proceed until approved.
 - **Commit:** Commit the architecture.
 
 ### 4. Plan
 - **Action:** Define the sequential technical spikes needed to prove the hardest parts of the architecture.
-- **Artifact:** Write `plan.md` (ranked list of technical risks to spike, plus the production build plan).
+- **Artifact:** Write `plan.md`. Log any planning decisions in `journal.md`.
 - **Commit:** Commit the plan.
 
 ### 5. Prototype (The Spikes) (User Gate)
 - **Action:** Tackle risks from `plan.md` *one at a time*. Write focused scripts using **real Fulcra data**.
-- **Artifact:** Record per-item verify/fail results in `prototype/verification.md`. 
+- **Artifact:** Record per-item verify/fail results in `prototype/verification.md`. Document dead-ends and pivots in `journal.md`. 
 - **Gate:** STOP and ask the user to review the verification record.
 - **Commit:** Commit the spikes and verification log.
 - **Backup:** Run `git bundle create prototype.bundle --all` and `fulcra-api file upload prototype.bundle /prototypes/<project-name>.bundle`.
