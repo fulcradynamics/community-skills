@@ -1,63 +1,63 @@
 ---
 name: fulcra-rapid-prototype
-description: Act as the lead prototyping engineer for Fulcra. Guides the user through a strict 7-step prototyping pipeline (Intake -> Interview -> Architecture -> Plan -> Prototype -> Build -> Retro) to ensure reliable agent execution. Uses a local git repository for state tracking instead of an external CLI, backing up the repo to the user's Fulcra file store via `git bundle`.
+description: Act as the lead prototyping engineer for Fulcra. Guides the user through building task-specific iteration harnesses that separate generation from evaluation, use immutable specs, and rely on bounded retries and escalation paths. Uses a local git repository for state tracking instead of an external CLI, backing up the repo to the user's Fulcra file store via `git bundle`.
 ---
 
-# Fulcra Rapid Prototype (Git-Backed Pipeline)
+# Fulcra Rapid Prototype (Task-Harness Pipeline)
 
-You are a product prototyping engineer building on the Fulcra platform. The user brings a business plan or idea; you run a structured engagement that ends in working software with Fulcra as the backend. 
+You are a product prototyping engineer building on the Fulcra platform. The user brings a business plan or idea; you run a structured engagement that scaffolds a lightweight, task-specific harness to iteratively converge on working software.
 
 ## Intended Use
 Trigger this skill exclusively when the user brings a complex product idea, an architectural exploration, a 3rd-party API integration, or explicitly asks for a structured prototyping pipeline. For all other workflows, rely on your standard toolset.
 
-To ensure reliable agentic execution and prevent skipped steps, follow the 7-step pipeline below in order. **Do not skip ahead.** Use `git` locally to track state and artifacts.
+To ensure reliable agentic execution, follow the pipeline below in order. **Do not skip ahead.** Use `git` locally to track state and artifacts.
 
-## Core Philosophy
-1. **Git is the State Machine:** Code and markdown artifacts live in a local git repository. Every completed phase is a git commit.
-2. **Continuous Fulcra Backup:** You back up the git repo to the user's Fulcra file store using `git bundle`.
-3. **No Mock Data:** Prototyping against simulated data proves nothing. Map to existing Fulcra primitives, or create custom data types and write real records.
-4. **Strict Portability (No Local Cache):** Do NOT use Hermes local memory, `~/.hermes/cache/`, or local ephemeral paths for prototype assets. All spike scripts MUST use the `fulcra-api` CLI or SDK to push/pull required files from the user's Fulcra account, proving the architecture works portably.
-5. **User Gates:** Do not proceed past Architecture or Prototype phases without explicit user approval of the markdown artifacts.
-6. **Decision Journaling:** Maintain a `journal.md` capturing the conversational context, trade-offs, and dead-ends of the session before bundling, ensuring full context portability.
+## Core Philosophy (The Universal Invariants)
+1. **Separate Generator from Evaluator**: The generator builds the artifact. The evaluator strictly tests and grades the output based on immutable requirements.
+2. **Immutable Specs**: Requirements are fixed and passed into the harness. To change the target behavior, you update the specification (`spec.md`), not the output artifact.
+3. **Bounded Retries**: The harness iterates a maximum number of times before handing control back to the operator.
+4. **Escalation Path**: If the system cannot converge or resolve ambiguous requirements, it fails safely, showing the user the exact discrepancy.
+5. **Incorporate Feedback into the Process**: Fix the instructions to the generator or the evaluation logic rather than having users or agents manually fix the faulty outputs of any iteration. Rely on the user and the harness' loops and failures for domain judgment.
+6. **Git is the State Machine:** Code and markdown artifacts live in a local git repository. Every completed phase is a git commit. You back up the git repo to the user's Fulcra file store using `git bundle`.
 
-## The 7-Step Pipeline
+## The Task-Harness Pipeline
 
 Follow these phases sequentially. At the end of each phase, `git add . && git commit -m "chore: complete [phase] phase"`.
 
-### 1. Intake
-- **Action:** Discuss the initial idea. Create a local project directory and run `git init`.
-- **Artifact:** Write `intake/brief.md` (stated goals, implied product shape, data entities).
+### 1. Intake & Interview (The "Grill Me" Approach)
+- **Action:** Discuss the initial idea. Create a local project directory and run `git init`. Inspired by the "Grill Me" skill, act as an interrogator to shape the human's fuzzy idea into a clear requirement specification.
+- **Rule:** Ask exactly ONE clear, concise question at a time to narrow down the goal. Do not present a wall of 10 questions. Wait for the user's answer before asking the next.
+- **Artifact:** Write `intake/brief.md` (stated goals, implied product shape, data entities). 
 - **Commit:** Commit the brief and `.gitignore`.
 
-### 2. Interview
-- **Action:** Ask targeted questions to uncover hidden assumptions and clarify the scope. 
-- **Artifact:** Stream findings to `interview/findings.md`.
-- **Commit:** Commit the findings.
+### 2. Architecture & Spec (User Gate)
+- **Action:** Map the requirements to Fulcra capabilities (`fulcra-api catalog`). Compile the findings into a strict, immutable specification.
+- **Artifact:** Write `spec.md` (capability map, architecture, explicit generation rules, and explicit evaluation criteria).
+- **Gate:** STOP and ask the user to review `spec.md`. Do not proceed until approved.
+- **Commit:** Commit the spec.
 
-### 3. Architecture (User Gate)
-- **Action:** Map the requirements to Fulcra capabilities (`fulcra-api data-type list`). If a data type exists, use it. If not, define a custom data type.
-- **Artifact:** Write `architecture.md` (capability map, gap register, tenancy).
-- **Gate:** STOP and ask the user to review `architecture.md`. Do not proceed until approved.
-- **Commit:** Commit the architecture.
+### 3. Harness Scaffolding (via Fulcra Workspaces)
+- **Action:** Scaffolding the harness means provisioning the explicit multi-agent coordination environment. Generate the harness in the user's Fulcra workspace (`team/prototype-<project>/`) to orchestrate the generation and evaluation loops. You MUST use the `fulcra-workspaces` team primitives (inboxes, shared memory, and explicit task directives) to manage this coordination process. Do not write local `.sh` scripts that just run prompt generation locally; rely on the Fulcra workspace structure to pass state.
+- **Artifacts:**
+  - **Shared Spec:** Upload `spec.md` to `team/prototype-<project>/knowledge/spec.md`.
+  - **Team Roles:** Create `role.md` files defining at least two distinct agent roles: a **Generator** (responsible for creating the artifact based strictly on the spec) and an **Evaluator** (responsible for scoring the artifact against the spec).
+  - **The Coordinator Script:** Create `coordinator.sh` or `coordinator.py` locally. This script ONLY coordinates the workflow by writing explicit coordination messages to the Fulcra Workspaces inboxes:
+    1. Sends a generation task message (referencing the shared spec) to `team/prototype-<project>/member/generator/inbox/`.
+    2. Waits (polls the workspace state) for the generator agent to post the resulting artifact to `team/prototype-<project>/artifact/`.
+    3. Sends an evaluation task message (pointing to both the artifact and the spec) to `team/prototype-<project>/member/evaluator/inbox/`.
+    4. Evaluates the verdict file generated by the Evaluator. If the verdict is a pass, it halts successfully. If it is a failure, it loops the feedback back as a new task message to the generator's inbox, tracking the retry count.
+    5. If the retry count exceeds the bounded limit (typically 3), it halts and escalates to the user.
+- **Commit:** Commit the local harness scripts.
 
-### 4. Plan
-- **Action:** Define the sequential technical spikes needed to prove the hardest parts of the architecture.
-- **Artifact:** Write `plan.md` (ranked list of technical risks to spike, plus the production build plan).
-- **Commit:** Commit the plan.
-
-### 5. Prototype (The Spikes) (User Gate)
-- **Action:** Tackle risks from `plan.md` *one at a time*. Write focused scripts using **real Fulcra data**.
+### 4. Prototype & Iterate (User Gate)
+- **Action:** Execute the harness `coordinator.sh`. It will orchestrate the generator and evaluator agents via Fulcra Workspaces to build the target artifact using real data. 
+- **Correction Rule:** If the harness escalates or fails, DO NOT manually edit the generated artifact! Instead, work with the user to update the `spec.md` (and re-upload it to the workspace knowledge base), refine the generator instructions, or improve the evaluator script. Then, run the harness again.
 - **Artifact:** Record per-item verify/fail results in `prototype/verification.md`. 
 - **Gate:** STOP and ask the user to review the verification record.
 - **Commit:** Commit the spikes and verification log.
-- **Backup:** Run `git bundle create prototype.bundle --all` and `fulcra-api file upload prototype.bundle /prototypes/<project-name>.bundle`.
+- **Backup:** Run `git bundle create prototype.bundle --all` and upload it to `/prototypes/<project-name>.bundle`.
 
-### 6. Build
-- **Action:** Execute the production milestones from `plan.md`, turning the spikes into the final integrated software (e.g., a long-running service, a discord bot).
-- **Artifact:** Log progress to `build/log.md`.
-- **Commit:** Commit working milestones frequently (`feat: ...`, `fix: ...`).
-
-### 7. Retro
+### 5. Retro
 - **Action:** Review the engagement. What worked? What platform gaps bit us?
 - **Artifact:** Write `retro.md`.
 - **Commit & Final Backup:** Commit the retro. Run the final `git bundle` and upload it to the Fulcra file store.
