@@ -1,0 +1,14 @@
+interface:
+  display_name: Fulcra Care
+  short_description: Prepare for care visits and carry follow-ups forward
+  default_prompt: Use $fulcra-care to set up and test my recurring care appointment
+    loop with mock data before activating it.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true
