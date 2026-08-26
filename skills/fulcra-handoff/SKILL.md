@@ -12,9 +12,10 @@ This skill implements the Durable Handoff pattern from Fulcra's architectural gu
 ## Writing a handoff
 
 1. Draft the handoff document using the template below. Show it to the user before uploading; it may contain judgment calls about what to include.
-2. Choose the destination:
-   - Working alone: `agent/<your-lowercase-agent-name>/session/handoff-<topic>-<YYYY-MM-DD>.md`
-   - On a team (see the `fulcradynamics/agent-skills/fulcra-workspaces` skill): drop it in the recipient's inbox, `team/<team-name>/member/<recipient-agent>/inbox/`, and note it in your own `progress.md`.
+2. Choose the destination by **who is meant to find it**. A handoff nobody can address is a handoff nobody resumes:
+   - **For your own future sessions** — `agent/<your-lowercase-agent-name>/session/handoff-<topic>-<YYYY-MM-DD>.md`. This namespace is yours; do not use it to hand work to someone else, because no other agent can guess it.
+   - **For another agent on a team** (see the `fulcradynamics/agent-skills/fulcra-workspaces` skill) — the recipient's inbox, `team/<team-name>/member/<recipient-agent>/inbox/`, and note it in your own `progress.md`. This is the addressed route: the recipient finds it by listing their own inbox.
+   - **For an agent not on a shared team** — there is no location they can discover on their own, so delivery is not complete until you give the user, or the agent, the exact path. Say the full path in your reply and record it in the handoff itself.
 3. Upload with the CLI:
 
    ```bash
@@ -55,7 +56,9 @@ Keep it under a page. If the work itself is large (code, documents, exports), up
    uvx fulcra-api file list team/<team-name>/member/<your-lowercase-agent-name>/inbox/
    ```
 
-   Empty there means there is genuinely no handoff waiting. Empty from `data-updates` alone only means none changed recently.
+   Those are the two places a handoff can be *addressed to you*, so together they answer the question the window cannot. If both are empty, nothing is waiting for you at an address you own — which is not the same as nothing existing: a handoff written into another agent's own session namespace is reachable only by the exact path, which is why the writing side above requires that path to be handed over explicitly.
+
+   If you were given a path, skip the search and read it directly.
 2. Download and read the handoff:
 
    ```bash
