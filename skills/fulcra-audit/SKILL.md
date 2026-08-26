@@ -1,11 +1,11 @@
 ---
 name: fulcra-audit
-description: "Show the owner what is actually in their Fulcra context lake and who put it there: data types held, recent write activity, record provenance, files, tags, and active shares. Read-only. Use when a user asks what do my agents know about me, what's stored in Fulcra, who wrote this, or wants a privacy or storage review."
+description: "Show the owner what is in their Fulcra context lake and what it says about where it came from: data types available, recent write activity, self-declared record provenance, files, tags, and active shares. Read-only. Use when a user asks what do my agents know about me, what's stored in Fulcra, who wrote this, or wants a privacy or storage review."
 ---
 
 # Fulcra Audit
 
-Ownership is only real if the owner can inspect it. This skill assembles a read-only report answering four questions: what is stored, what has been written lately, where records came from, and who else can see what. It changes nothing.
+Ownership is only real if the owner can inspect it. This skill assembles a read-only report answering four questions: what types are available, what has been written lately, what records say about their own origin, and who else can see what. It changes nothing — and it claims nothing the store cannot actually show, which is the difference between an audit and a reassurance.
 
 ## Running an audit
 
@@ -17,7 +17,9 @@ Work through the four questions with the CLI, then present one report in chat. O
 uvx fulcra-api catalog
 ```
 
-Report the data types with data, split three ways: built-in types, the user's custom types, and types shared into this account by other people. Note which are queryable versus recordable. For the account identity, expose only the owner ID:
+`catalog` lists the types this account can **query** — it does not say which ones hold records. Report it as the inventory it is, split three ways: built-in types, the user's custom types, and types shared into this account by other people, noting which are queryable versus recordable.
+
+If the user wants to know which types actually contain something, that is a separate and bounded question: sample the types they care about over an explicit range with `get-records`, and say which range you checked. A type can be empty, or merely quiet for longer than you looked — those are different answers and the report should not blur them. For the account identity, expose only the owner ID:
 
 ```bash
 uvx fulcra-api user-info | jq '{userid}'
@@ -42,7 +44,9 @@ uvx fulcra-api get-records <DataType> "7 days"
 uvx fulcra-api tag list
 ```
 
-Group by source in the report: device feeds, the Context app, ingested exports, and records written by agents each show up as distinct sources. This is how the owner sees which agent or feed wrote what.
+Group by source in the report: device feeds, the Context app, ingested exports, and records written by agents each show up as distinct sources.
+
+**Sources are declared, not proven.** `record` accepts caller-supplied `--source` values, repeatable and merged with whatever the input data already carries, so a source chain is what a writer *said* about itself. That is genuinely useful — it is how the owner sees the shape of who is writing — but it is not authentication, and an audit that presents it as proof of identity is telling the user something it cannot know. Attribute a record to a specific agent only if something outside the record supports it, and say plainly that the rest is self-reported.
 
 ### 4. Who else can see what
 
