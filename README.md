@@ -33,7 +33,7 @@ Or clone the repo and copy the skill folders you want into your agent's skills d
 
 A coordination layer over `fulcra-workspaces`: presence and liveness, durable roles with leases, resumable continuity, a review handshake, directed work with acks, and fleet health — folded deterministically by a vendored, stdlib-only engine.
 
-**Contains:** `SKILL.md`, `README.md`, `ALIGNMENT.md`, `references/`, `scripts/` (vendored engine)
+**Contains:** `SKILL.md`, `README.md`, `ALIGNMENT.md`, `upstream-selection.json`, `references/`, `scripts/` (vendored engine)
 
 ## 🧩 fulcra-computed-data-types
 
