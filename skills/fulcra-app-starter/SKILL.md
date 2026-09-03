@@ -9,7 +9,7 @@ metadata: { "openclaw": { "emoji": "🛠️" } }
 
 # Fulcra App Starter
 
-Scaffolds a new web application project with a batteries-included Fulcra authentication flow. Use when the user wants to build a custom web app with user sign-in/sign-up and authenticated API calls backed by Fulcra.
+Scaffolds a new web application project with a batteries-included Fulcra authentication flow. Use when the user wants to build a custom web application.
 
 ## Overview
 
@@ -48,9 +48,23 @@ Choose between two frontend frameworks:
 
 5. **Let the user take over**: After initial setup, the project structure and iteration is up to the user and their agent. This skill just gets them started with a working authentication foundation.
 
+## Fulcra REST API
+
+The Fulcra API provides a general-purpose backend for web applications. Full API documentation is available at:
+**https://docs.fulcra.dev/api**
+
+Key capabilities include:
+- User authentication and session management
+- Data storage and retrieval (annotations)
+- File storage
+- Custom tracking and analytics
+
+When building features for the user's app, consult the API docs to understand available endpoints and how to make authenticated requests from the frontend.
+
 ## Key Points
 
 - Keep setup minimal and straightforward
 - The templates are designed to be customized—don't over-prescribe the structure
 - Focus on getting a working starting point with authentication already configured
 - The user's vision for their app drives what happens next
+- Consult the Fulcra REST API docs when implementing app-specific features
