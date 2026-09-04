@@ -1,0 +1,122 @@
+{
+  "$comment": "Copy, fill in, and pass with --config. NOTHING user- or machine-specific belongs in the skill itself; it all lives here or in the environment.",
+  "sources": [
+    {
+      "$comment": "Any mix. Each emits the SAME normalized record: {title,date,summary,shared_by?,attendees?}. attendees is advisory only -- the calendar stays the attendee authority.",
+      "type": "fulcra_files",
+      "path_template": "/collect/{provider}/{account_id}/{month}",
+      "provider": "gmail",
+      "account_id": "REQUIRED-if-you-use-this-source"
+    },
+    {
+      "$comment": "GENERAL MCP SOURCE, server-agnostic. A script cannot speak MCP -- the connection lives in the AGENT hosting this skill. So the agent calls whatever MCP tool it has (Otter, Fireflies, Granola, Gong...) and either exposes it as bridge_argv or drops normalized records into inbox. No data transits Fulcra.",
+      "type": "mcp",
+      "server": "any-mcp-server-name",
+      "bridge_argv": [
+        "your-agent-cli",
+        "export-meeting-summaries",
+        "--json"
+      ],
+      "inbox": "~/.cache/meeting-crm/mcp-inbox",
+      "glob": "*.json"
+    },
+    {
+      "$comment": "Direct API/CLI: anything that emits normalized records on stdout.",
+      "type": "command",
+      "argv": [
+        "your-otter-export",
+        "--since",
+        "30d",
+        "--json"
+      ],
+      "timeout": 300
+    },
+    {
+      "$comment": "Plain files or a directory of them.",
+      "type": "file",
+      "path": "~/exports/summaries.jsonl"
+    }
+  ],
+  "collect": {
+    "$comment": "DEPRECATED shorthand for a single fulcra_files source; prefer `sources`. Kept so existing configs keep working.",
+    "path_template": "/collect/{provider}/{account_id}/{month}",
+    "provider": "gmail",
+    "account_id": "optional"
+  },
+  "detection": {
+    "$comment": "How a meeting-summary mail is recognised and parsed. NO note-taker is privileged in code; these defaults are vendor-neutral. Override only to support a service the defaults miss. sharer_patterns MUST contain a (?P<name>...) group; the sharer is PROVENANCE, never an attendee.",
+    "subject_patterns": [
+      "meeting\\s+summary",
+      "meeting\\s+notes",
+      "shared\\s+notes",
+      "notes\\s+from",
+      "recap\\s+of",
+      "summary\\s+of",
+      "transcript"
+    ],
+    "title_strip_patterns": [
+      "^(re|fwd|fw)\\s*:\\s*",
+      "^(meeting\\s+summary|meeting\\s+notes|notes|recap|summary|transcript)\\s+(from|for|of)\\s*",
+      "^(your|shared)\\s+(meeting\\s+)?(notes|summary)\\s*[:\\-]?\\s*"
+    ],
+    "sharer_patterns": [
+      "^\\s*(?P<name>.+?)\\s+via\\s+\\S+",
+      "^\\s*(?P<name>.+?)\\s+shared\\s+",
+      "^\\s*(?P<name>.+?)\\s*<[^>]+>\\s*$"
+    ]
+  },
+  "vault": {
+    "people_dir": "/vault/People",
+    "note_source_label": "calendar+summary"
+  },
+  "identity": {
+    "$comment": "self_emails are never written as contacts. internal_domains are colleagues: still worth notes, but never treated as external counterparties.",
+    "self_emails": [
+      "you@example.com"
+    ],
+    "internal_domains": [
+      "example.com"
+    ],
+    "bot_domains": [
+      "otter.ai",
+      "boardy.ai",
+      "metaview.ai",
+      "fireflies.ai",
+      "read.ai",
+      "fathom.video"
+    ],
+    "bot_local_parts": [
+      "no-reply",
+      "noreply",
+      "do-not-reply",
+      "notifications",
+      "mailer",
+      "bounce",
+      "postmaster",
+      "notes",
+      "notetaker",
+      "recorder"
+    ],
+    "resource_domains": [
+      "resource.calendar.google.com",
+      "group.calendar.google.com"
+    ]
+  },
+  "limits": {
+    "$comment": "max_attendees skips mass meetings (all-hands, board meetings) which are not relationship events. title_match_threshold is the token-overlap needed to join a calendar event to a summary email.",
+    "max_attendees": 12,
+    "title_match_threshold": 0.5,
+    "summary_chars": 1200
+  },
+  "guards": {
+    "$comment": "Leave these true. Each was added after it corrupted real data. See references/design-notes.md.",
+    "require_multi_token_name": true,
+    "block_create_on_ambiguous": true,
+    "strip_tracking_urls_from_titles": true
+  },
+  "cli": {
+    "$comment": "null means: use $FULCRA_CLI_COMMAND if set, else the first fulcra-api on PATH. Pin a path here only if your environment cannot express it.",
+    "fulcra_api": null,
+    "min_version": "0.1.37"
+  }
+}
