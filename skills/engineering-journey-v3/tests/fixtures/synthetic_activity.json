@@ -1,0 +1,13 @@
+{
+  "fixture_origin": "synthetic",
+  "contains_private_repository_data": false,
+  "repository": "example-org/sample-repository",
+  "identity": "octo-example",
+  "activity": {
+    "kind": "commit",
+    "source_id": "synthetic-commit-001",
+    "recorded_at": "2024-01-02T03:04:05Z",
+    "summary": "Synthetic fixture only",
+    "url": "https://github.com/example-org/sample-repository/commit/0000000000000000000000000000000000000000"
+  }
+}
