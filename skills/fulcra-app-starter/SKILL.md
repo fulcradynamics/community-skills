@@ -44,11 +44,14 @@ Choose between two frontend frameworks:
 
 3. **Update placeholder strings** in the login flow. Each template includes placeholder text (like "Your App Name", "Your App Description", etc.) that should be replaced with content specific to what the user is building. Search for common placeholder patterns and update them based on the user's project description.
 
-4. **Mention deployment**: Inform the user that these templates are designed to work seamlessly with Vercel for deployment. They can deploy by:
+4. **Install, configure, and verify**: Follow the selected template's `README.md` ("Getting Started") to `npm install`, `cp .env.example .env` (comes preconfigured, so no edits are needed to run), and `npm run dev`. Confirm the app starts locally and the sign-in screen renders before handing off—this is what makes it a working authentication foundation rather than just cloned files.
+
+5. **Mention deployment**: Inform the user that these templates are designed to work seamlessly with Vercel for deployment. They can deploy by:
    - Connecting their repository to Vercel
    - Following Vercel's standard deployment flow for React or Svelte apps
+   - Setting the required environment variables in the deploy platform—these are named per framework (React uses `NEXT_PUBLIC_*`, Svelte uses `PUBLIC_*`) and listed in the template's README Deployment section.
 
-5. **Let the user take over**: After initial setup, the project structure and iteration is up to the user and their agent. This skill just gets them started with a working authentication foundation.
+6. **Let the user take over**: After initial setup, the project structure and iteration is up to the user and their agent. This skill just gets them started with a working authentication foundation.
 
 ## Fulcra REST API
 
