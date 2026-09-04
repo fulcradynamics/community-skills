@@ -14,6 +14,7 @@ Scaffolds a new web application project with a batteries-included Fulcra authent
 ## Overview
 
 This skill helps users start a Fulcra-backed web application by cloning one of the official app templates. These templates provide:
+
 - Complete sign-in and sign-up flow out of the box
 - User authentication with Fulcra
 - Ready-to-use structure for making authenticated API calls
@@ -33,6 +34,7 @@ Choose between two frontend frameworks:
 1. **Ask the user which template** they prefer (React or Svelte), unless they've already specified.
 
 2. **Clone the chosen template** into a new directory named for their project:
+
    ```bash
    git clone https://github.com/fulcradynamics/app-template-[react|svelte] <project-name>
    cd <project-name>
@@ -51,9 +53,10 @@ Choose between two frontend frameworks:
 ## Fulcra REST API
 
 The Fulcra API provides a general-purpose backend for web applications. Full API documentation is available at:
-**https://docs.fulcra.dev/api**
+**https://docs.fulcradynamics.com/rest-api/**
 
 Key capabilities include:
+
 - User authentication and session management
 - Data storage and retrieval (annotations)
 - File storage
