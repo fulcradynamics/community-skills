@@ -1,0 +1,66 @@
+{
+  "player_id": "m-hbt",
+  "city": "Hobart",
+  "ballots": [
+    {
+      "round": 4,
+      "need": "in-003",
+      "your_notice": "Hobart is four storeys high, has three hundred balconies, and nothing edible on any of them. Wanted: herbs, tomatoes in pots, dwarf fruit trees, seed by the packet, grow bags -- enough for three hundred balconies -- and the two things that actually survive a balcony.",
+      "you_asked_for": "Ship Hobart enough pots, seed and cuttings for three hundred balconies, and name the two that survive.",
+      "offers": [
+        {
+          "ballot_ref": "A",
+          "offer": "Three hundred grow bags sewn out of feed sacks by the ladies who sit outside the hardware shop, each one packed with a tin of cherry tomatoes already up two inches, and seed folded into little paper squares torn from exercise books — amaranth, basil, coriander for the brave, and pigeon pea if you want shade. Sixty dwarf pawpaw seedlings as well, which will fruit before anybody finishes discussing them. The two that actually survive a balcony are chilli and sukuma wiki, and I will tell you exactly why: the chilli enjoys being ignored, it gets hotter out of spite, and sukuma wiki you harvest one leaf at a time so it never dies, it only gets shorter and more apologetic. Everything else on a balcony is a hobby. Those two are food."
+        },
+        {
+          "ballot_ref": "B",
+          "offer": "Apologies for arriving late. We prune the olive groves every February, so: 300 rooted olive cuttings already potted in 300 grow bags of our own sandy island dirt, 300 packets of shiso seed, and forty kilos of the seaweed compost that makes salt wind survivable. The two that actually survive a balcony are rosemary and spring onion — rosemary because nothing kills it, spring onion because you cut it and it simply comes back. Ms. Fujiwara, who keeps the pots along the ferry road, has written the watering instructions on a postcard: less than you think, more often than you'd like."
+        },
+        {
+          "ballot_ref": "C",
+          "offer": "Three hundred grow bags, three hundred terracotta pots the colour of our roof tiles, and eleven hundred seed packets hand-labelled by the ladies of the Cerro Alegre seed swap, who argue about basil the way other people argue about football. The two that actually survive a balcony: cherry tomatoes of the *cherry amarillo* strain, which fruit in a bucket of poor soil and sulk beautifully but never die, and rosemary — take a cutting the size of a pencil, push it into sand, forget about it entirely, and in a year it will be a small shrub that outlives the lease. Everything else in the crate is optimism: eighty dwarf lemon whips, chard, oregano, and mint you must keep in its own pot or it will annex the balcony next door. We have also included three hundred saucers, because a balcony that drips onto the balcony below is how neighbourhoods learn to hate each other."
+        },
+        {
+          "ballot_ref": "D",
+          "offer": "Three hundred grow bags, three hundred twenty-litre pots, nine hundred seed packets — chervil, dill, rocket, and a stubby outdoor tomato called Sub-Arctic Plenty, which is exactly what it sounds like — and forty dwarf apples on the smallest rootstock we could get. The two that actually survive a balcony are chives and rhubarb, so both go in bulk: six hundred chive clumps split out of one allotment over three weekends, and three hundred rhubarb crowns, which will outlive the balcony, the flat, and probably the building. Everything else on that list is optional entertainment; those two are the reason there will still be something edible up there in year four."
+        },
+        {
+          "ballot_ref": "E",
+          "offer": "Three hundred grow bags, three hundred pots of chives, six hundred packets of seed, forty dwarf apples that will sulk at you for a year, and thirty rhubarb crowns lifted out of gardens here where they had become a problem for their owners. Everything in the consignment was raised in a wind that regularly removes fence panels, so a balcony will feel like a holiday to it. The two that survive are chives and rhubarb: the chives because you can cut them to the soil in a gale and have them back in a fortnight, the rhubarb because nothing has ever successfully killed a rhubarb. Plant the tomatoes anyway. Everybody does."
+        }
+      ]
+    },
+    {
+      "round": 11,
+      "need": "in-010",
+      "your_notice": "Children in Hobart play two games and both of them involve a wall. Wanted: the equipment for whatever your own city plays outdoors -- bats, boards, boules, hoops, chalk, a net that goes across an alley -- thirty sets of it, and somebody willing to stand in a car park and demonstrate for an afternoon.",
+      "you_asked_for": "Ship Hobart thirty sets of your city's own street game, and whoever comes to demonstrate it.",
+      "offers": [
+        {
+          "ballot_ref": "A",
+          "offer": "The game is kati, and thirty sets are on the way: sixty balls wound from banana fibre and bound in strips of plastic bag until they bounce properly and hurt exactly the right amount, thirty sticks of chalk for the two safe circles, and thirty rubber-band ropes plaited from old inner tubes for when the kati players need a rest. Two throwers, one runner, the ball goes back and forth, and the runner scores by surviving — no wall required anywhere, which I understand is your situation. Coming with the crate: Sanyu, thirteen, unbeaten in her lane for three years, and Ssenyonga, who rides her there on his boda, umpires, and argues every call. Put them in a car park by two in the afternoon and by four you will have parents playing in work shoes. That is a promise, not a forecast."
+        },
+        {
+          "ballot_ref": "B",
+          "offer": "Thirty balls of the soft-seamed sort that will not go through a window, and thirty sticks of chalk you will not end up needing. The game is called yfir — 'over' — and it is played against a roof rather than a wall, which puts us, by my count, one storey ahead of you. Two teams stand either side of a house; you shout the name of the game, throw the ball over the ridge, and if the far side catches it they come round the corner at speed and the running begins. Coming to demonstrate: Sigrún Halldórsdóttir, sixty-eight, school caretaker for thirty-one years and the only authority anyone accepts on whether a throw counted. She has asked for an afternoon with some wind in it; a car park is fine."
+        },
+        {
+          "ballot_ref": "C",
+          "offer": "We have no wall worth playing against. What we have is a stone pier where nothing is level, so we play bowls on the slope and treat the slope as the opponent. Thirty sets are crated: eight small iron balls each, a chalk pallino, and a rag for the salt. With them comes Sandrin, sixty-one years on the dock cranes, who will stand in your car park all afternoon and demonstrate the only rule that matters — you argue first, then you throw. He asks for nothing but coffee roughly hourly and absolutely no chair."
+        },
+        {
+          "ballot_ref": "D",
+          "offer": "Thirty sets of klis, and I will hear no cricket comparisons. Each set is a hornbeam striking stick the length of your forearm and a short peg tapered at both ends, cut and sanded by a man who makes chair legs the rest of the year, plus a fat stick of chalk for the throwing circle and a rubber ball in case somebody insists on a second game — and somebody will. The demonstrator is Braca, seventy-one, from the block behind the bus depot, who played this in a concrete courtyard for eleven years and has never lost an argument about where the line was; he will stand in your car park all afternoon, referee, and re-explain the rules three times with slight differences each time. He requires coffee at eleven, coffee at two, and a chair. He does not require an audience but will get one."
+        },
+        {
+          "ballot_ref": "E",
+          "offer": "Thirty full sets of *palitroque* street bowling, which is what our hills do with a lane that has an unreasonable gradient: nine turned-wood pins painted in nine colours, three hardwood balls, a rolled canvas lane strip forty centimetres wide with chalk lines already printed on it, and a scoring board with a stub of chalk on a shoelace. Thirty sets of *trompos* too — wooden spinning tops with waxed cord, which is the game every child on Cerro Cordillera can already do and no adult can — and a hundred metres of *volantín* line with sixty diamond kites in tissue paper, because a car park with wind in it is a runway. Coming with the crates: Don Rubén Salcedo, seventy-four, who has stood at the top of Calle Templeman calling scores for four decades, plus his grandson Ignacio who will translate and will also beat every adult in the car park at *trompo* within an hour. Don Rubén asks for a chair, shade, and one glass of something at four o'clock; he will stay until dark."
+        },
+        {
+          "ballot_ref": "F",
+          "offer": "Your children have two games with a wall; ours needs an entire building. It is called yfir: two teams on opposite sides of a house, a soft rubber ball thrown over the roof, and whoever catches it before it lands sprints round the corner while the other side guesses which corner. Thirty sets means ninety balls, because every roof keeps one; plus thirty boxes of chalk for marking the safe corners and thirty rolls of soft foam tape for the gutter that someone will otherwise write a letter about. Coming with the crate: Gunnhildur, 74, who has played since 1961 and can put a ball over a two-storey block without grazing it, and her grandson Sölvi, 15, who will spend the whole afternoon in the car park fetching and complaining."
+        }
+      ]
+    }
+  ]
+}

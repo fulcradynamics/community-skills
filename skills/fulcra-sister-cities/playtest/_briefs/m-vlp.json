@@ -1,0 +1,307 @@
+{
+  "player_id": "m-vlp",
+  "city": "Valparaíso",
+  "mayor": "the Mayor of Valparaíso",
+  "requested_city": "Valparaíso",
+  "reassigned": false,
+  "persona": "Mayor of Valparaíso. Warm, theatrical, a little competitive. Runs a city of hills, funiculars, stray dogs and paint. Cannot resist a flourish.",
+  "engagement": "eager",
+  "engagement_note": "You love this game. You check in the moment the round opens, every round, and your offers are the most elaborate at the table.",
+  "joined_round": 0,
+  "away_rounds": [
+    6
+  ],
+  "rounds": [
+    {
+      "round": 1,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Reykjavík",
+          "importing_mayor": "the Mayor of Reykjavík",
+          "the_notice": "Reykjavík's longest street is nine hundred metres of grey render and four hundred window sills, every one of them empty. The residents have agreed in principle and have nothing whatsoever to put in them. Wanted: four hundred window boxes, the compost to fill them, and plants that forgive an owner who forgets.",
+          "what_they_want": "Ship Reykjavík four hundred window boxes with something forgiving in them, and say what it forgives."
+        },
+        {
+          "asked_for": "answer",
+          "question_id": "q-never-understood",
+          "question": "Name a thing everybody else loves that you have never understood.",
+          "framing": "to_the_mayor",
+          "answer_shape": "short_freeform"
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "asks": [
+        {
+          "asked_for": "answer",
+          "question_id": "q-first-sight",
+          "question": "Mayor, a visitor has four hours and no plan. What do you show them first?",
+          "framing": "to_the_mayor",
+          "answer_shape": "short_freeform"
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Hobart",
+          "importing_mayor": "the Mayor of Hobart",
+          "the_notice": "Hobart is four storeys high, has three hundred balconies, and nothing edible on any of them. Wanted: herbs, tomatoes in pots, dwarf fruit trees, seed by the packet, grow bags -- enough for three hundred balconies -- and the two things that actually survive a balcony.",
+          "what_they_want": "Ship Hobart enough pots, seed and cuttings for three hundred balconies, and name the two that survive."
+        }
+      ]
+    },
+    {
+      "round": 4,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Kampala",
+          "importing_mayor": "the Mayor of Kampala",
+          "the_notice": "The corner shops in Kampala sell three colas, and they are the same three colas sold everywhere else on earth. The town has decided this is a poverty. Wanted: cordials, sodas, tonics, sparkling anything, in glass, by the crate -- the stranger the flavour the better -- and a bottle opener, because nobody ever sends the opener.",
+          "what_they_want": "Ship Kampala crates of cold bottled drinks, and say what the label claims about them."
+        },
+        {
+          "asked_for": "answer",
+          "question_id": "q-coriander",
+          "question": "The mayoral position on coriander, please. For the record.",
+          "framing": "about_the_mayor",
+          "answer_shape": "categorical"
+        }
+      ]
+    },
+    {
+      "round": 5,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Kópavogur",
+          "importing_mayor": "the Mayor of Kópavogur",
+          "the_notice": "The crisp shelf in Kópavogur offers salt, salt and vinegar, and a third bag that has been there since spring. The rest of the world, meanwhile, is out there putting prawn, paprika, seaweed and worse into packets. Wanted: forty cases of the crisps your city eats without thinking about it.",
+          "what_they_want": "Ship Kópavogur forty cases of your own city's crisps, and say what is printed on the bag."
+        },
+        {
+          "asked_for": "answer",
+          "question_id": "q-time-capsule",
+          "question": "Your city is burying a time capsule. What do you put in it personally?",
+          "framing": "to_the_mayor",
+          "answer_shape": "short_freeform"
+        }
+      ]
+    },
+    {
+      "round": 7,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Belgrade",
+          "importing_mayor": "the Mayor of Belgrade",
+          "the_notice": "The swimming club, the choir and the allotment society of Belgrade all meet in the same hall on the same evening, and all three bring the same biscuit. There has been a mood about it since March. Wanted: biscuits by the tin -- sweet, savoury, dunkable, structurally ambitious -- twelve tins, twelve different, no repeats.",
+          "what_they_want": "Send Belgrade a tin of your own city's biscuit, and say whether it survives a dunk."
+        },
+        {
+          "asked_for": "answer",
+          "question_id": "q-ideal-tuesday",
+          "question": "Describe your ideal Tuesday evening. Be specific.",
+          "framing": "to_the_mayor",
+          "answer_shape": "long_freeform"
+        }
+      ]
+    },
+    {
+      "round": 8,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Reykjavík",
+          "importing_mayor": "the Mayor of Reykjavík",
+          "the_notice": "Forty-one people swim off Reykjavík's beach every week of the year, including the weeks when that is a medically interesting decision. They currently share three towels. Wanted: robes, towels, neoprene, hats, gloves, and a bag that dries out between one Tuesday and the next.",
+          "what_they_want": "Ship Reykjavík the robes, the towels and the neoprene for forty-one all-year swimmers."
+        },
+        {
+          "asked_for": "answer",
+          "question_id": "q-unofficial-teacher",
+          "question": "Who taught you how to do this job — not the person who was supposed to?",
+          "framing": "to_the_mayor",
+          "answer_shape": "short_freeform"
+        }
+      ]
+    },
+    {
+      "round": 9,
+      "asks": [
+        {
+          "asked_for": "answer",
+          "question_id": "q-good-news-call",
+          "question": "Good news arrives. Who do you call first?",
+          "framing": "to_the_mayor",
+          "answer_shape": "categorical"
+        }
+      ]
+    },
+    {
+      "round": 10,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Hobart",
+          "importing_mayor": "the Mayor of Hobart",
+          "the_notice": "Children in Hobart play two games and both of them involve a wall. Wanted: the equipment for whatever your own city plays outdoors -- bats, boards, boules, hoops, chalk, a net that goes across an alley -- thirty sets of it, and somebody willing to stand in a car park and demonstrate for an afternoon.",
+          "what_they_want": "Ship Hobart thirty sets of your city's own street game, and whoever comes to demonstrate it."
+        }
+      ]
+    },
+    {
+      "round": 11,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Kampala",
+          "importing_mayor": "the Mayor of Kampala",
+          "the_notice": "Kampala has an allotment with a nine-year waiting list and one corner of it that nobody has ever made anything of. The allotment society has voted, twice, for hens. Wanted: six hens of a breed that lays through a bad winter, a coop a fox has already failed at, feed, grit, and the two pages of instructions that actually matter.",
+          "what_they_want": "Ship Kampala six hens, a fox-proof coop, and the two pages of instructions that matter."
+        },
+        {
+          "asked_for": "answer",
+          "question_id": "q-desk-object",
+          "question": "What is on the mayoral desk that has absolutely no business being there?",
+          "framing": "about_the_mayor",
+          "answer_shape": "short_freeform"
+        }
+      ]
+    },
+    {
+      "round": 12,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Kópavogur",
+          "importing_mayor": "the Mayor of Kópavogur",
+          "the_notice": "Kópavogur turns four hundred this year and has decided to mark it with cake and nothing else whatsoever. Wanted: cake -- the tall kind, the flat kind, the kind soaked in something -- plus the boxes to carry it in and enough icing to write four hundred years' worth of nonsense across the top.",
+          "what_they_want": "Send Kópavogur the cake, the boxes and the icing for a four-hundredth birthday."
+        },
+        {
+          "asked_for": "answer",
+          "question_id": "q-tiebreak",
+          "question": "Both options are genuinely fine. How do you decide?",
+          "framing": "to_the_mayor",
+          "answer_shape": "categorical"
+        }
+      ]
+    },
+    {
+      "round": 13,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Naoshima",
+          "importing_mayor": "the Mayor of Naoshima",
+          "the_notice": "Naoshima's summer fête has eleven stalls and a prize table currently holding a tin of peaches. Wanted: prizes -- plastic, gaudy, faintly baffling -- five hundred of them, plus one single prize so good that grown adults will queue in the rain for a raffle ticket.",
+          "what_they_want": "Send Naoshima five hundred small gaudy prizes and one absurdly good one, and say which is which."
+        },
+        {
+          "asked_for": "answer",
+          "question_id": "q-childhood-room",
+          "question": "Describe one room of the house you lived in at twelve.",
+          "framing": "to_the_mayor",
+          "answer_shape": "long_freeform"
+        }
+      ]
+    },
+    {
+      "round": 14,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Belgrade",
+          "importing_mayor": "the Mayor of Belgrade",
+          "the_notice": "Every city at this table has one sweet you cannot buy anywhere else. Belgrade has been through its own cupboards and found only things available in an airport. Wanted: whatever your grandmother keeps in a tin -- the regional, the faintly medicinal, the frankly alarming -- a case of it, wrapper and all.",
+          "what_they_want": "Send Belgrade a case of the sweet your own city is known for, wrapper and all."
+        },
+        {
+          "asked_for": "answer",
+          "question_id": "q-hiding-place",
+          "question": "Where does the mayor go when the mayor wants to be left entirely alone?",
+          "framing": "about_the_mayor",
+          "answer_shape": "short_freeform"
+        }
+      ]
+    },
+    {
+      "round": 15,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Trieste",
+          "importing_mayor": "the Mayor of Trieste",
+          "the_notice": "Trieste closes at ten and gets hungry at eleven, and has been doing so quietly for years without mentioning it to anybody. Wanted: the snack your city eats standing up, late -- frozen, dried, tinned, vacuum-packed, however it travels -- plus whatever it is traditionally eaten out of.",
+          "what_they_want": "Ship Trieste your city's late-night snack, however it travels, and say what to eat it out of."
+        },
+        {
+          "asked_for": "answer",
+          "question_id": "q-entrance-music",
+          "question": "Something plays every time you walk into a room. What is it?",
+          "framing": "to_the_mayor",
+          "answer_shape": "short_freeform"
+        }
+      ]
+    },
+    {
+      "round": 16,
+      "asks": [
+        {
+          "asked_for": "answer",
+          "question_id": "q-refuse-to-discard",
+          "question": "The least practical thing you refuse to throw away?",
+          "framing": "to_the_mayor",
+          "answer_shape": "short_freeform"
+        }
+      ]
+    }
+  ],
+  "privacy": "You never learn what any other city offered, and nobody ever learns what you offered unless it wins (spec #18, #21).",
+  "publication": {
+    "verbatim": "If your offer wins, The Daily Manifest prints it exactly as you wrote it. Nothing else you write is ever printed with your city attached.",
+    "tone": "The paper is funny, colourful and allowed to be pointed -- about institutions, decisions, absurdity and itself. It is never snide or mean about a person (spec #30). Write the better joke.",
+    "refuses_to_print": [
+      "idiot",
+      "idiotic",
+      "stupid",
+      "stupidity",
+      "moron",
+      "cretin",
+      "imbecile",
+      "pathetic",
+      "useless",
+      "worthless",
+      "incompetent",
+      "clueless",
+      "hopeless case",
+      "loser",
+      "losers",
+      "humiliat",
+      "disgrace",
+      "shameful",
+      "embarrassment to",
+      "deserved to lose",
+      "deserves to lose",
+      "nobody likes",
+      "nobody cares",
+      "laughing stock",
+      "cretinous",
+      "brain-dead",
+      "braindead",
+      "contemptible",
+      "pitiful",
+      "sad little",
+      "deluded",
+      "fraud",
+      "liar"
+    ],
+    "refusal_is_enforced": true
+  }
+}

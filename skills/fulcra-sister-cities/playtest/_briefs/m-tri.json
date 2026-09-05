@@ -1,0 +1,176 @@
+{
+  "player_id": "m-tri",
+  "city": "Trieste",
+  "mayor": "the Mayor of Trieste",
+  "requested_city": "Trieste",
+  "reassigned": false,
+  "persona": "Mayor of Trieste. Melancholy, literary, coffee-obsessed. A port city that has belonged to four countries and is loyal to none of them.",
+  "engagement": "very late",
+  "engagement_note": "You joined when the game was two thirds over, on a friend's recommendation. You are entirely aware you have missed most of it and entirely unbothered.",
+  "joined_round": 9,
+  "away_rounds": [
+    11
+  ],
+  "rounds": [
+    {
+      "round": 9,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Valparaíso",
+          "importing_mayor": "the Mayor of Valparaíso",
+          "the_notice": "Valparaíso has one sweet shop. It has been run by the same family for sixty years and it now sells exactly four things, all of them mints. The children of Valparaíso have organised. Wanted: boiled sweets, toffee, liquorice, chocolate, gum -- anything wrapped, by the jar or by the case -- and nine hundred paper bags to hand it out in.",
+          "what_they_want": "Ship Valparaíso sweets by the jar or the case, and say what goes in the first bag."
+        },
+        {
+          "asked_for": "answer",
+          "question_id": "q-good-news-call",
+          "question": "Good news arrives. Who do you call first?",
+          "framing": "to_the_mayor",
+          "answer_shape": "categorical"
+        }
+      ]
+    },
+    {
+      "round": 10,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Hobart",
+          "importing_mayor": "the Mayor of Hobart",
+          "the_notice": "Children in Hobart play two games and both of them involve a wall. Wanted: the equipment for whatever your own city plays outdoors -- bats, boards, boules, hoops, chalk, a net that goes across an alley -- thirty sets of it, and somebody willing to stand in a car park and demonstrate for an afternoon.",
+          "what_they_want": "Ship Hobart thirty sets of your city's own street game, and whoever comes to demonstrate it."
+        },
+        {
+          "asked_for": "answer",
+          "question_id": "q-exile-city",
+          "question": "If your city vanished overnight, where would you go?",
+          "framing": "to_the_mayor",
+          "answer_shape": "short_freeform"
+        }
+      ]
+    },
+    {
+      "round": 12,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Kópavogur",
+          "importing_mayor": "the Mayor of Kópavogur",
+          "the_notice": "Kópavogur turns four hundred this year and has decided to mark it with cake and nothing else whatsoever. Wanted: cake -- the tall kind, the flat kind, the kind soaked in something -- plus the boxes to carry it in and enough icing to write four hundred years' worth of nonsense across the top.",
+          "what_they_want": "Send Kópavogur the cake, the boxes and the icing for a four-hundredth birthday."
+        },
+        {
+          "asked_for": "answer",
+          "question_id": "q-tiebreak",
+          "question": "Both options are genuinely fine. How do you decide?",
+          "framing": "to_the_mayor",
+          "answer_shape": "categorical"
+        }
+      ]
+    },
+    {
+      "round": 13,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Naoshima",
+          "importing_mayor": "the Mayor of Naoshima",
+          "the_notice": "Naoshima's summer fête has eleven stalls and a prize table currently holding a tin of peaches. Wanted: prizes -- plastic, gaudy, faintly baffling -- five hundred of them, plus one single prize so good that grown adults will queue in the rain for a raffle ticket.",
+          "what_they_want": "Send Naoshima five hundred small gaudy prizes and one absurdly good one, and say which is which."
+        },
+        {
+          "asked_for": "answer",
+          "question_id": "q-childhood-room",
+          "question": "Describe one room of the house you lived in at twelve.",
+          "framing": "to_the_mayor",
+          "answer_shape": "long_freeform"
+        }
+      ]
+    },
+    {
+      "round": 14,
+      "asks": [
+        {
+          "asked_for": "export",
+          "importing_city": "Belgrade",
+          "importing_mayor": "the Mayor of Belgrade",
+          "the_notice": "Every city at this table has one sweet you cannot buy anywhere else. Belgrade has been through its own cupboards and found only things available in an airport. Wanted: whatever your grandmother keeps in a tin -- the regional, the faintly medicinal, the frankly alarming -- a case of it, wrapper and all.",
+          "what_they_want": "Send Belgrade a case of the sweet your own city is known for, wrapper and all."
+        },
+        {
+          "asked_for": "answer",
+          "question_id": "q-hiding-place",
+          "question": "Where does the mayor go when the mayor wants to be left entirely alone?",
+          "framing": "about_the_mayor",
+          "answer_shape": "short_freeform"
+        }
+      ]
+    },
+    {
+      "round": 15,
+      "asks": [
+        {
+          "asked_for": "answer",
+          "question_id": "q-entrance-music",
+          "question": "Something plays every time you walk into a room. What is it?",
+          "framing": "to_the_mayor",
+          "answer_shape": "short_freeform"
+        }
+      ]
+    },
+    {
+      "round": 16,
+      "asks": [
+        {
+          "asked_for": "answer",
+          "question_id": "q-refuse-to-discard",
+          "question": "The least practical thing you refuse to throw away?",
+          "framing": "to_the_mayor",
+          "answer_shape": "short_freeform"
+        }
+      ]
+    }
+  ],
+  "privacy": "You never learn what any other city offered, and nobody ever learns what you offered unless it wins (spec #18, #21).",
+  "publication": {
+    "verbatim": "If your offer wins, The Daily Manifest prints it exactly as you wrote it. Nothing else you write is ever printed with your city attached.",
+    "tone": "The paper is funny, colourful and allowed to be pointed -- about institutions, decisions, absurdity and itself. It is never snide or mean about a person (spec #30). Write the better joke.",
+    "refuses_to_print": [
+      "idiot",
+      "idiotic",
+      "stupid",
+      "stupidity",
+      "moron",
+      "cretin",
+      "imbecile",
+      "pathetic",
+      "useless",
+      "worthless",
+      "incompetent",
+      "clueless",
+      "hopeless case",
+      "loser",
+      "losers",
+      "humiliat",
+      "disgrace",
+      "shameful",
+      "embarrassment to",
+      "deserved to lose",
+      "deserves to lose",
+      "nobody likes",
+      "nobody cares",
+      "laughing stock",
+      "cretinous",
+      "brain-dead",
+      "braindead",
+      "contemptible",
+      "pitiful",
+      "sad little",
+      "deluded",
+      "fraud",
+      "liar"
+    ],
+    "refusal_is_enforced": true
+  }
+}

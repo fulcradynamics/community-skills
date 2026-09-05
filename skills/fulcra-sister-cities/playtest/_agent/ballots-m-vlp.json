@@ -1,0 +1,58 @@
+{
+  "player_id": "m-vlp",
+  "city": "Valparaíso",
+  "ballots": [
+    {
+      "round": 3,
+      "need": "in-002",
+      "your_notice": "Valparaíso's postcard rack shows the same view from the same hill, six times, and the shopkeeper has begun apologising for it unprompted. Wanted: postcards of your city -- forty thousand of them, printed, stamps not included -- and the one image on them that your own residents would argue about.",
+      "you_asked_for": "Send Valparaíso forty thousand postcards of your own city, and name the image that starts the argument.",
+      "offers": [
+        {
+          "ballot_ref": "A",
+          "offer": "Forty thousand matte postcards, 100 by 150, card thick enough that a cheap pen doesn't skid. They are two crops of one photograph, twenty thousand each: the church hill at nine in the evening with the capital's skyline sitting behind it, and the identical shot cropped one centimetre higher, so the skyline is gone and there is only our own roofline and a great deal of sky. Our residents have not agreed since 1994 on which of those is the real picture of the town, and they will not settle it for your shopkeeper either. Which pile goes at the front of the rack is entirely his business, and he should know that either choice offends somebody."
+        },
+        {
+          "ballot_ref": "B",
+          "offer": "Forty thousand postcards, printed on a matte stock that will not curl in a damp rack. Thirty-eight thousand of them show the harbour, the church and the coloured roofs, which is what visitors buy and which nobody here argues about. The other two thousand show a wet street at half past eight on a January morning, steam coming up off the pavement where the hot-water pipes run underneath it, photographed from inside a bus shelter. Half the town says that is the only honest picture ever taken of us; the other half says it is a photograph of a puddle and some plumbing. They are both correct, which is why it is the one worth forty thousand of anything."
+        },
+        {
+          "ballot_ref": "C",
+          "offer": "Forty thousand postcards, printed on card thick enough to stand up in a rack, and not one of them the view from the top of the mountain. The image is the town seen from the middle of the river on a grey afternoon, the mountain entirely inside a cloud, one ferry crossing left to right. Half our residents say this is a slander and we should have waited for a clear day; the other half say we have been waiting for a clear day since 1804 and this is the honest one. Both arguments are printed on the reverse in small type, so your shopkeeper has something to say instead of apologising."
+        }
+      ]
+    },
+    {
+      "round": 10,
+      "need": "in-009",
+      "your_notice": "Valparaíso has one sweet shop. It has been run by the same family for sixty years and it now sells exactly four things, all of them mints. The children of Valparaíso have organised. Wanted: boiled sweets, toffee, liquorice, chocolate, gum -- anything wrapped, by the jar or by the case -- and nine hundred paper bags to hand it out in.",
+      "you_asked_for": "Ship Valparaíso sweets by the jar or the case, and say what goes in the first bag.",
+      "offers": [
+        {
+          "ballot_ref": "A",
+          "offer": "The children are right to organise; four mints is not a childhood, it is a waiting room. Twelve cases are coming from a shop that still weighs everything on a brass scale: coffee drops in gold foil, barley sugar, salted liquorice wheels, chocolate in the old Austrian bars that snap loudly, and a toffee that will eventually cost somebody a filling. The nine hundred paper bags are secondhand from our roasters, small and faintly perfumed with espresso, which is either charming or a public health matter depending on the child. First bag: one coffee drop, one liquorice wheel, one candied violet — so the smallest one in the queue learns early that sweetness is complicated."
+        },
+        {
+          "ballot_ref": "B",
+          "offer": "Six jars of shio-ame — hard salt candy boiled from seawater, twisted in wax paper, faintly savoury, the sort children complain about and then finish. Also a case of mikan-peel toffee, bitter at the edges, and a small jar of candied olive for the brave. The nine hundred paper bags are folded from last year's ferry timetables and old exhibition flyers, so every bag has a departure time or half a painting on it. First bag: one salt candy, one toffee, in the bag with the 6:05 sailing printed on it, for whoever gets through the door first."
+        },
+        {
+          "ballot_ref": "C",
+          "offer": "Forty jars of simsim-and-honey brittle, thirty cases of jaggery toffee twisted in waxed paper, twenty cases of tamarind balls rolled in chilli salt, and nine hundred paper bags folded out of last month's newspapers by a primary five class who put their initials on the bottom of every single one, so somewhere in the pile a child has signed the bag your children will be holding. In the first bag: brittle first, because it wins them over; toffee second, because it takes four minutes and buys the queue some quiet; and one tamarind ball last, unlabelled. That last one teaches them that a sweet shop can surprise you, which is what those children have actually organised about."
+        },
+        {
+          "ballot_ref": "D",
+          "offer": "Six cases, and they are almost entirely liquorice: salted ropes, liquorice cut into coins, liquorice under milk chocolate, chocolate with liquorice hidden inside it, chocolate-covered puffed rice for the children who lose their nerve, and four jars of boiled barley sweets for the grandmothers who will be doing the actual handing out. Nine hundred white paper bags with a fold-over top are packed flat on the bottom of the crate. In the first bag: one bar of chocolate-wrapped liquorice, snapped in half through the wrapper before it went in, so the child has ten seconds to decide whether he has a friend. Tell them the first piece is confusing and the third one is not."
+        },
+        {
+          "ballot_ref": "E",
+          "offer": "Twelve cases and one thousand paper bags, since nine hundred assumes no child tears one. Eight cases are liquorice inside chocolate in every arrangement worked out here in a hundred years — bars, buttons, drops, and one that is liquorice rolled in salt and then in chocolate, which is the one they will queue for twice. Two cases are lava bars, wafer and chocolate, meant to be snapped in half over a table. Two are boiled sweets loose in jars the size of buckets, and a scoop. The first bag goes to whoever has been behind that counter for sixty years: one of everything, laid in order of increasing salt, with a note saying start at the top and work down."
+        },
+        {
+          "ballot_ref": "F",
+          "offer": "Nine jars and four cases, and the children were right to organise. Two jars of rose Turkish delight cut in cubes and buried in icing sugar, two of black liquorice-anise hard sweets that numb your whole mouth and taste faintly of a bus station in 1987, a case of banana-fondant bars in dark chocolate that must be kept out of the sun, a case of orange-jelly biscuit rounds, two jars of hazelnut toffee, and one case of chocolate bars that come with a collector card of an animal inside — the children will trade these for weeks and one of them will end up with all the wolves. Nine hundred paper bags, grey, the kind that goes translucent where the toffee sits. The first bag goes to whoever has been standing behind that counter the longest, and it holds one of each of the six things plus a seventh mint, out of respect, and then she has to admit the mints were not enough."
+        }
+      ]
+    }
+  ]
+}

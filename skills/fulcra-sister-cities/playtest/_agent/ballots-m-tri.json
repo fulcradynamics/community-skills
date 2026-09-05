@@ -1,0 +1,42 @@
+{
+  "player_id": "m-tri",
+  "city": "Trieste",
+  "ballots": [
+    {
+      "round": 16,
+      "need": "in-015",
+      "your_notice": "Trieste closes at ten and gets hungry at eleven, and has been doing so quietly for years without mentioning it to anybody. Wanted: the snack your city eats standing up, late -- frozen, dried, tinned, vacuum-packed, however it travels -- plus whatever it is traditionally eaten out of.",
+      "you_asked_for": "Ship Trieste your city's late-night snack, however it travels, and say what to eat it out of.",
+      "offers": [
+        {
+          "ballot_ref": "A",
+          "offer": "Three hundred curried scallop pies, frozen hard, packed in dry ice: shortcrust, a yellow sauce the exact colour of a wet raincoat, and scallops out of the channel rather than out of a bag from somewhere else. They are eaten standing on a wharf at eleven at night out of a flat white paper bag folded down twice, back to the wind, sauce running towards the wrist, which is the point rather than the fault. Two thousand bags in the crate, and four hundred wooden forks nobody will use. Twenty minutes in a real oven; whoever microwaves one has ended the exercise for everybody."
+        },
+        {
+          "ballot_ref": "B",
+          "offer": "Two hundred packs of frozen Sanuki udon, ours cut thick, three minutes in boiling water and not a second more, with two hundred sachets of iriko broth made from dried sardines that smell considerably worse than they taste. It is eaten standing at a counter out of a chipped donburi bowl, so we have sent forty seconds from the harbour café, all slightly the wrong colour. Eleven at night is precisely the correct hour for it. Apologies in advance for the smell of the crate."
+        },
+        {
+          "ballot_ref": "C",
+          "offer": "The snack is the rolex, eaten standing at eleven at night at a stall with one bulb, and it travels better than anyone expects: six hundred chapatis vacuum-packed in stacks of six and still soft, eight kilos of the cabbage-tomato-onion-chilli mix sealed in tubs, and a tin of the spice, because eggs are the one thing anybody can find for themselves at that hour. What you eat it out of is a torn triangle of yesterday's newspaper, one hand, no plate, ever — a plate turns it into dinner and ruins the whole institution — so I have sent a bale of last week's papers to see the first three hundred done properly. And Tonny is in the crate too, or rather beside it, with his oil drum and his flat blade; he rolls one in forty seconds and he will not tell you what is in the spice tin. You have been hungry at eleven for years without mentioning it. Mention it."
+        },
+        {
+          "ballot_ref": "D",
+          "offer": "Sixty kilos of harðfiskur, vacuum-packed in half-kilo bricks: wind-dried fish, beaten flat, torn into strips, good for a year in a cupboard and requiring no fridge, no heat and no cooking of any kind. You eat it standing at a counter at eleven at night with cold salted butter smeared thick on each strip, and you eat it out of the bag — brown paper, folded down twice, held in the same hand as the knife, no plate, because a plate turns it into a meal and it is emphatically not one. Two hundred small wooden butter knives are packed in the crate; the butter itself you get locally, and it should be salted and colder than you think sensible. For a city that gets hungry at eleven and would rather not discuss it, this is the correct snack: silent, chewy, and roughly twenty minutes per strip."
+        },
+        {
+          "ballot_ref": "E",
+          "offer": "Two hundred lamb sausages, vacuum-packed and frozen; twelve tubs of remoulade; six tins of sweet brown mustard; four kilos of crisp fried onion in sealed bags; and a sack of raw onion, which you chop small yourself. That is one snack, assembled in that order at a kiosk window at eleven at night, and it is eaten out of a folded paper napkin, standing up, with your back to whatever the wind is doing. Also two crates of dried fish in strips, vacuum-packed, and a pound of butter: no cooking, no plate, you tear a piece, butter it, and eat it out of your own hand. Both keep for months. Neither of them wants a table, which I understand is the whole point of eleven o'clock."
+        },
+        {
+          "ballot_ref": "F",
+          "offer": "*Chorrillana*, disassembled for travel, thirty portions: vacuum-packed strips of beef, sliced onion in its own bag, and the potatoes cut into batons and blanched and frozen because that is the only honest way to move a chip across an ocean. Thirty eggs travel separately and go on top at the last second, still soft, and the whole thing is fried in one pan and tipped out in one heap — this is the food of eleven at night, standing, in a bar with a tiled floor and a man playing guitar at nobody. You eat it out of the pan. Not a plate: the shallow steel pan it was cooked in, set straight down on the counter with four forks in it and no one appointed to divide it fairly, which is the entire tradition. We are sending thirty pans, and a bottle of *pisco* to be drunk by whoever is still standing at one."
+        },
+        {
+          "ballot_ref": "G",
+          "offer": "Eleven at night is when the bakeries here get serious, so: two hundred cheese burek and one hundred meat, frozen flat and vacuum-packed in fours, twenty minutes in a hot oven and they come back to life almost dishonestly well. With them, eight tins of kajmak — clotted, salted, spread it on the cheese one — and forty frozen flatbreads for anybody who wants the meat version done properly. Also four kilos of roasted sunflower seeds in paper twists, which is the eating you do on the walk home, and a second empty bag for the shells, because a city that gets hungry at eleven can still have standards. It is eaten out of a sheet of grey bakery paper, folded once, held from underneath, grease coming through so you can see how good it is — and it is drunk with half a litre of plain yoghurt, cold, straight from the bottle, standing up, saying nothing to anybody."
+        }
+      ]
+    }
+  ]
+}

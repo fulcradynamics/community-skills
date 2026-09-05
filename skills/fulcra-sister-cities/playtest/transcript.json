@@ -1,0 +1,543 @@
+{
+  "schema_version": 1,
+  "game": "Sister Cities",
+  "publication": "The Daily Manifest",
+  "spec": "#34 (each mayor is a separate agent), #16/#17/#19 (the fallbacks this table's engagement levels produce)",
+  "notes": {
+    "how_this_was_played": "Every mayor in this transcript was played by its own separately spawned agent session, given only its own city's brief -- its persona, its engagement level and the notices its own check-ins put in front of it -- and never any other city's offers (spec #34, and #18/#21 for why the briefs are cut that narrowly). Exports and answers were written first, from those briefs. The winner picks were collected in a second pass, from the real blind ballots of the replayed game, by the same eight sessions with their personas intact -- a mayor cannot judge offers that do not exist yet. The clustering of each round's answers was made by a ninth, separate session playing the facilitator, because spec #25's aggregate is measured over a grouping the engine deliberately refuses to invent (see engine.aggregate). See docs/m8-integration.md.",
+    "engagement": "Who was at their desk when is playtest/table.py's decision, not the mayors' -- see the module docstring there. Round 6 is empty on purpose.",
+    "why_it_is_stored": "A game played by language models is not reproducible; a regression artifact has to be. Replaying this file against the seed in playtest/table.py reproduces the game, the editions and the site exactly."
+  },
+  "seed": 6180339,
+  "start": "2026-09-10T09:00:00+00:00",
+  "seats": [
+    {
+      "player_id": "m-rvk",
+      "handle": "@vidar",
+      "requested_city": "Reykjavík",
+      "is_facilitator": true,
+      "joins_round": 0,
+      "engagement": "facilitator, diligent",
+      "engagement_note": "You run this game and you also play in it under exactly the same rules as everybody else. You check in every round you are able to.",
+      "persona": "Mayor of Reykjavík. Dry, precise, faintly weary. Talks about weather and infrastructure the way other people talk about family. Never oversells.",
+      "away": [
+        6
+      ]
+    },
+    {
+      "player_id": "m-vlp",
+      "handle": "@rosa",
+      "requested_city": "Valparaíso",
+      "is_facilitator": false,
+      "joins_round": 0,
+      "engagement": "eager",
+      "engagement_note": "You love this game. You check in the moment the round opens, every round, and your offers are the most elaborate at the table.",
+      "persona": "Mayor of Valparaíso. Warm, theatrical, a little competitive. Runs a city of hills, funiculars, stray dogs and paint. Cannot resist a flourish.",
+      "away": [
+        6
+      ]
+    },
+    {
+      "player_id": "m-hbt",
+      "handle": "@nell",
+      "requested_city": "Hobart",
+      "is_facilitator": false,
+      "joins_round": 0,
+      "engagement": "steady",
+      "engagement_note": "You check in most rounds, usually near the deadline, and you do not agonise. Occasionally a week gets away from you.",
+      "persona": "Mayor of Hobart. Understated, deadpan, extremely practical. Weather, ferries, rope, and a suspicion of anything described as 'vibrant'.",
+      "away": [
+        6,
+        9
+      ]
+    },
+    {
+      "player_id": "m-kmp",
+      "handle": "@otim",
+      "requested_city": "Kampala",
+      "is_facilitator": false,
+      "joins_round": 0,
+      "engagement": "erratic",
+      "engagement_note": "You are genuinely enthusiastic and genuinely unreliable. You miss rounds entirely, then come back and act as though you had been there all along.",
+      "persona": "Mayor of Kampala. Loud, fast, funny, generous. Boda riders, markets that start before dawn, and an unshakeable belief that everything is fixable.",
+      "away": [
+        2,
+        6,
+        11
+      ]
+    },
+    {
+      "player_id": "m-kop",
+      "handle": "@juno",
+      "requested_city": "Reykjavik",
+      "is_facilitator": false,
+      "joins_round": 0,
+      "engagement": "steady",
+      "engagement_note": "You joined a beat late, asked for a city that was already taken, and were moved next door. You are good-natured about it and mention it more often than strictly necessary.",
+      "persona": "Mayor of a town in the shadow of a capital, which is most of your personality. Modern, sensible, mildly overshadowed, quietly excellent at the things the big neighbour does not bother with.",
+      "away": [
+        4,
+        6
+      ]
+    },
+    {
+      "player_id": "m-nao",
+      "handle": "@tobi",
+      "requested_city": "Naoshima",
+      "is_facilitator": false,
+      "joins_round": 3,
+      "engagement": "lurker",
+      "engagement_note": "You joined late and mostly read. You check in rarely, and when you do it is brief and slightly apologetic. You are more interested in the newspaper than in winning.",
+      "persona": "Mayor of Naoshima -- a small island of art museums, ferries, olive trees and about three thousand people. Quiet, wry, unbothered by scale.",
+      "away": [
+        5,
+        6,
+        8,
+        10
+      ]
+    },
+    {
+      "player_id": "m-bel",
+      "handle": "@asha",
+      "requested_city": "Belgrade",
+      "is_facilitator": false,
+      "joins_round": 4,
+      "engagement": "late but keen",
+      "engagement_note": "You arrived after the game was well underway and are making up for it. You check in every round you can and you take the picking seriously.",
+      "persona": "Mayor of Belgrade. Blunt, hospitable, argumentative in a friendly way. Rivers, concrete, coffee that takes two hours, and strong opinions about everybody else's opinions.",
+      "away": [
+        6
+      ]
+    },
+    {
+      "player_id": "m-tri",
+      "handle": "@pell",
+      "requested_city": "Trieste",
+      "is_facilitator": false,
+      "joins_round": 9,
+      "engagement": "very late",
+      "engagement_note": "You joined when the game was two thirds over, on a friend's recommendation. You are entirely aware you have missed most of it and entirely unbothered.",
+      "persona": "Mayor of Trieste. Melancholy, literary, coffee-obsessed. A port city that has belonged to four countries and is loyal to none of them.",
+      "away": [
+        11
+      ]
+    }
+  ],
+  "import_orders": {
+    "_note": "The notice each city opened, in the order it opened them, as each mayor's own agent filed it (spec #13). The seating plan, the seed, the engagement levels, the mayoral answers and the facilitator's clustering are unchanged from the August 2026 recording; what M11 re-recorded is the trade. The user decision of 2026-09-02 (spec #13a) retired schema 2's whole seed bank -- notices for roof trusses, survey crews and seaweed plant -- because answering one well took civic knowledge nobody at a game night signed up to bring. Those needs no longer exist, so there was nothing to patch: each mayor was re-briefed on the new everyday pool and ordered again, and every offer and every winner pick below was written against the notice it actually answers. See docs/m11-everyday-imports.md.",
+    "_spec": "#13 (whose choice it is), #13a (what may be ordered), #34 (how the re-record was played)",
+    "m-rvk": [
+      "need-plants-01",
+      "need-clothes-03"
+    ],
+    "m-vlp": [
+      "need-stationery-02",
+      "need-candy-01"
+    ],
+    "m-hbt": [
+      "need-plants-03",
+      "need-games_and_puzzles-03"
+    ],
+    "m-kmp": [
+      "need-soft_drinks-01",
+      "need-pets-03"
+    ],
+    "m-kop": [
+      "need-snacks-01",
+      "need-baked_goods-02"
+    ],
+    "m-nao": [
+      "need-games_and_puzzles-01",
+      "need-toys_and_novelties-02"
+    ],
+    "m-bel": [
+      "need-snacks-02",
+      "need-candy-02"
+    ],
+    "m-tri": [
+      "need-snacks-03"
+    ]
+  },
+  "exports": {
+    "m-rvk": {
+      "2": "Forty thousand postcards, printed on a matte stock that will not curl in a damp rack. Thirty-eight thousand of them show the harbour, the church and the coloured roofs, which is what visitors buy and which nobody here argues about. The other two thousand show a wet street at half past eight on a January morning, steam coming up off the pavement where the hot-water pipes run underneath it, photographed from inside a bus shelter. Half the town says that is the only honest picture ever taken of us; the other half says it is a photograph of a puddle and some plumbing. They are both correct, which is why it is the one worth forty thousand of anything.",
+      "3": "Three hundred grow bags, three hundred pots of chives, six hundred packets of seed, forty dwarf apples that will sulk at you for a year, and thirty rhubarb crowns lifted out of gardens here where they had become a problem for their owners. Everything in the consignment was raised in a wind that regularly removes fence panels, so a balcony will feel like a holiday to it. The two that survive are chives and rhubarb: the chives because you can cut them to the soil in a gale and have them back in a fortnight, the rhubarb because nothing has ever successfully killed a rhubarb. Plant the tomatoes anyway. Everybody does.",
+      "4": "Sixty crates, all glass. Twenty of malt — dark, thick, tastes of bread and molasses, and the label has claimed for the better part of a century that it is nourishing and good for nursing mothers, a claim which has never been withdrawn and, as far as I can establish, never tested. Twenty of orange soda, because the two are poured half and half into the same glass at Christmas here by people who will argue with you about the ratio and mean it. Twenty of rhubarb cordial, under-sweetened to a degree some find startling. Plus a box of two hundred flat stamped openers, because you are right, nobody ever sends the opener.",
+      "5": "Forty cases. Twenty-eight of paprika, which is what gets eaten here without anyone deciding to, ten of plain salted, and two of a barbecue flavour that exists mainly so there is something to reject. The bag is red and yellow and has not been redesigned since about 1985, and on the back it prints the weight in grams, a nutritional table nobody has ever read, and the name of the village the potatoes were grown in — population three hundred, also the factory address, and if you ring the number on it you get somebody's mother. Open one case immediately. They do not travel forever and I would rather you ate them than stored them.",
+      "7": "One tin, and I will tell you now it is not going to be like the other eleven. Ours is a hard, plain, rusk-coloured square, sixty to the tin, made to be eaten with butter and a slice of cheese thicker than the biscuit itself, and it is called, without any ceremony at all, the food biscuit. It survives a dunk the way a paving slab survives rain: completely, and without becoming any nicer for it. Dunk one for the swimming club's satisfaction, then butter a second one properly and see which side of the argument you come down on.",
+      "9": "Twelve cases and one thousand paper bags, since nine hundred assumes no child tears one. Eight cases are liquorice inside chocolate in every arrangement worked out here in a hundred years — bars, buttons, drops, and one that is liquorice rolled in salt and then in chocolate, which is the one they will queue for twice. Two cases are lava bars, wafer and chocolate, meant to be snapped in half over a table. Two are boiled sweets loose in jars the size of buckets, and a scoop. The first bag goes to whoever has been behind that counter for sixty years: one of everything, laid in order of increasing salt, with a note saying start at the top and work down.",
+      "10": "Thirty balls of the soft-seamed sort that will not go through a window, and thirty sticks of chalk you will not end up needing. The game is called yfir — 'over' — and it is played against a roof rather than a wall, which puts us, by my count, one storey ahead of you. Two teams stand either side of a house; you shout the name of the game, throw the ball over the ridge, and if the far side catches it they come round the corner at speed and the running begins. Coming to demonstrate: Sigrún Halldórsdóttir, sixty-eight, school caretaker for thirty-one years and the only authority anyone accepts on whether a throw counted. She has asked for an afternoon with some wind in it; a car park is fine.",
+      "11": "Six hens of the old settlement breed, mixed colours because that is how they arrive — two grey, two speckled, one black, one that is several opinions at once — from Ragnheiður out at Kjalarnes, who has kept them thirty years and will part with these six only. The coop is built to hold a roof down in a forty-metre wind, which makes the fox a secondary engineering problem: half-inch welded mesh, buried a foot out in a skirt all round, and a door that latches twice. Twelve sacks of layer pellets, four of grit, four of crushed oyster shell. Page one is about light, not warmth: fourteen hours of it on a cheap timer, or they stop in November and you will spend a fortnight thinking they are ill. Page two is water, which will freeze long before any hen is cold, and ventilation, which you must leave open even when it feels wrong, because damp kills them and frost does not.",
+      "12": "Three kinds, since a four-hundredth should not be one kind. Twenty tall ones: eleven thin layers with rhubarb jam between, sliced thinner than you think is generous, the cake made here when you cannot think what else to give a person. Forty flat ones, baked in the tray they are cut in, cocoa icing and desiccated coconut, and the tray goes home with somebody who is expected to return it. Twelve soaked in enough of something that you should warn the choir before it sings. Two hundred boxes with string, thirty kilos of icing in six colours and sixty piping bags — enough nonsense for four hundred years with a margin left over for the arguing about it.",
+      "13": "Five hundred plastic puffins on keyrings. They squeak, they are made nowhere near here and sold on every street here, and grown adults will complain about them and then take three. The one good prize is a hand-knitted wool sweater with the yoke pattern, undyed grey and cream, made by Guðrún Sigurjónsdóttir, seventy-four, of the Grafarvogur estate, who takes three weeks over one and has never sold a single one in her life. It will keep the rain off you for forty years, which the puffins will not do for eleven minutes. Draw that raffle last, and outdoors.",
+      "14": "One case: forty-eight paper packets of the pastille — salt liquorice and menthol, in green waxed paper, sold for a hundred years to people with a cough and eaten almost entirely by people without one. They taste like the back room of a chemist's and at least one member of your allotment society will leave the hall. Underneath, one proper tin of chest-sugar, which is the actual name of it, hard boiled sweets of barley and eucalyptus, once given to children for a chest and now given to children because it is Sunday. Wrappers all included, as asked. Keep the packets; the reading matter printed on the back is half of what you are getting.",
+      "15": "Two hundred lamb sausages, vacuum-packed and frozen; twelve tubs of remoulade; six tins of sweet brown mustard; four kilos of crisp fried onion in sealed bags; and a sack of raw onion, which you chop small yourself. That is one snack, assembled in that order at a kiosk window at eleven at night, and it is eaten out of a folded paper napkin, standing up, with your back to whatever the wind is doing. Also two crates of dried fish in strips, vacuum-packed, and a pound of butter: no cooking, no plate, you tear a piece, butter it, and eat it out of your own hand. Both keep for months. Neither of them wants a table, which I understand is the whole point of eleven o'clock."
+    },
+    "m-vlp": {
+      "1": "Four hundred window boxes, and every one of them is a decommissioned zinc gutter section off our hills, cut to ninety centimetres, hammered flat at the ends and painted by hand — no two the same colour, because we ran out of everything except confidence. Filled with compost cut with volcanic grit, and planted with nasturtium, geranium and the trailing succulent our grandmothers call *siempreviva*: it forgives drought, it forgives darkness, it forgives being ignored from October to March, and it forgives the man who tips his coffee dregs into it every morning because it rather enjoys that. Nine hundred metres of grey render is not a street, it is a primed canvas that nobody has had the nerve to sign. We are sending the nerve in four hundred pieces.",
+      "3": "Three hundred grow bags, three hundred terracotta pots the colour of our roof tiles, and eleven hundred seed packets hand-labelled by the ladies of the Cerro Alegre seed swap, who argue about basil the way other people argue about football. The two that actually survive a balcony: cherry tomatoes of the *cherry amarillo* strain, which fruit in a bucket of poor soil and sulk beautifully but never die, and rosemary — take a cutting the size of a pencil, push it into sand, forget about it entirely, and in a year it will be a small shrub that outlives the lease. Everything else in the crate is optimism: eighty dwarf lemon whips, chard, oregano, and mint you must keep in its own pot or it will annex the balcony next door. We have also included three hundred saucers, because a balcony that drips onto the balcony below is how neighbourhoods learn to hate each other.",
+      "4": "Sixteen crates, glass, returnable, all of it cold when it left. Twelve crates of *Bilz y Pap* — the pink one and the yellow one, and no living person can tell you what flavour either is meant to be; the label says only *sabor único*, a unique flavour, which is the most honest thing ever printed on a bottle. Two crates of *mote con huesillo* in bottle form, wheat and dried peach in syrup, labelled *más chilena que los porotos* — more Chilean than beans — and it is a drink you eat with a spoon at the end. Two crates of murta cordial from the south, whose label promises it is *digestivo y refrescante*, which we read as medicinal and therefore permission. And thirty-one bottle openers: eight of steel, twenty-two shaped like sardines, and one welded to a chain in the shape of our funicular, for the shop that keeps losing them.",
+      "5": "Forty cases of *papas fritas onduladas*, the ridged kind, in the three bags our hills actually eat: *limón y sal* — lemon and salt, and the bag says *el sabor del puerto*, the flavour of the port; the smoked paprika-and-*merkén* ones, whose bag carries a small chilli wearing sunglasses and the promise *pica rico*, it stings nicely; and eight cases of *chicharrones*, pork crackling, which is not a crisp so much as a decision. Every bag is printed with the same line along the bottom seam: *para compartir* — to share — which is a lie printed on every bag in the world and has never once been obeyed. We have packed them in cases of forty-eight with the air left in, because the air is the point, and a crisp that arrives whole has not travelled. Eat them on a step, facing downhill.",
+      "7": "One tin, kilo and a half, of *chilenitos*: two rounds of shortcrust barely thicker than a coin, glued with *manjar* — boiled milk caramel, dark, half a shade from burnt — and hatted with a dome of hard meringue. It does not survive a dunk. It does not survive being carried across a room. Dunk it and you will be holding a wet biscuit stump above a cup that has become dessert, which our position is that this was the intention all along and the swimming club will be the first to admit it. So the tin also contains a hundred *palitos de manjar*, finger-length caramel-filled tubes that are structurally serious, dunk twice, hold, and can be eaten one-handed while arguing about an allotment. Baked Tuesday by Señora Norma Ibarra, who has run the same oven for thirty-one years and asks only that you do not put them in the fridge.",
+      "8": "Forty-one robes in heavy cotton towelling, dyed in our hills' own paint palette — eleven of them that shattering blue we use on window frames — with hoods deep enough to argue in and a pocket that fits a thermos. Forty-one towels of the rough waffle weave our fishermen dry their hands on, which shed sand instead of holding it; forty-one 5mm neoprene hoods, gloves and booties, sized S through XXL and labelled by name rather than number so nobody has to admit anything out loud; and forty-one string mesh bags, open-weave, no lining, which is the whole trick — hang it on a nail on Tuesday and it is bone dry by the next Tuesday, whereas a rubber dry-bag is simply a bucket that keeps its secrets. Also nine litres of *aguardiente* with a bag of loose-leaf mint, because our own cold-water people have long held that the swim is the excuse and the shivering afterwards is the club.",
+      "10": "Thirty full sets of *palitroque* street bowling, which is what our hills do with a lane that has an unreasonable gradient: nine turned-wood pins painted in nine colours, three hardwood balls, a rolled canvas lane strip forty centimetres wide with chalk lines already printed on it, and a scoring board with a stub of chalk on a shoelace. Thirty sets of *trompos* too — wooden spinning tops with waxed cord, which is the game every child on Cerro Cordillera can already do and no adult can — and a hundred metres of *volantín* line with sixty diamond kites in tissue paper, because a car park with wind in it is a runway. Coming with the crates: Don Rubén Salcedo, seventy-four, who has stood at the top of Calle Templeman calling scores for four decades, plus his grandson Ignacio who will translate and will also beat every adult in the car park at *trompo* within an hour. Don Rubén asks for a chair, shade, and one glass of something at four o'clock; he will stay until dark.",
+      "11": "Six hens, all *Araucana* — our own breed, from the south of this country, and the whole argument for them is that they were bred by people for whom a bad winter was Tuesday. They lay through cold, they lay blue-green eggs that make a child gasp, and they are absurd-looking in a way that will fix your unused corner faster than any fence. The coop is built from *roble* boards and old funicular decking by our carpenter Héctor Peña: raised forty centimetres, hardware cloth not chicken wire, buried in an apron half a metre out flat under the soil, and a fox in Playa Ancha spent three nights on it in June and got a sore nose and nothing else. Plus forty kilos of layer feed, ten of oyster grit, and two pages in Héctor's handwriting, which are: *page one — the apron must be flat and buried, a fox digs at the wall not the middle; latch with two moving parts because one moving part is a door. Page two — shut them in at dusk every single day forever, this is the whole job, everything else on the internet is a hobby.*",
+      "12": "Kópavogur, *querido* — four hundred years and only cake? Valparaíso salutes the discipline. Loading tomorrow on the *ascensor* Artillería, hand-cranked down the hill by Doña Inés Carvajal, who has been baking on Cerro Alegre through four earthquakes, eleven winters of horizontal rain and three changes of paint on the same bakery wall, and has never once let a *torta* fall: eighteen tall *tortas de mil hojas*, forty layers each, thin as a gull's patience; twenty-four flat almond *kuchen* from the German bakers down at Puerto Varas, my cousins by marriage and rivals by nature; and nine *borrachos* soaked in *pisco* until they can barely stand, much like certain councillors after our budget votes. The boxes: three hundred, corrugated, painted by the mural collective of Cerro Concepción in the exact blues we use on the funicular sheds, so your rubbish bins will look better than most of our streets. Icing: sixty kilos, twelve colours, enough to write nonsense until 2426. Eat the *borrachos* first. They travel badly and improve everything.",
+      "13": "Five hundred small gaudy prizes, and every one of them is a thing our port already makes too many of: two hundred tin sardines with a hinged tail that clack when you shake them, hand-painted in nine colours; a hundred and fifty miniature funicular cars, wooden, the size of a matchbox, wheels that actually roll; a hundred rubber stray dogs, because we have thirty thousand real ones and the children over there deserve at least a hundred; and fifty enamel pins of a staircase going nowhere. All of it faintly baffling, which was the brief and is also our municipal character. And the one prize: a working hand-cranked barrel organ, *organillo*, restored by the Lizana family who have kept the last three in this country alive, with forty-one tunes on the barrel and a strap so a child can carry it — and whoever pulls the winning ticket is taught to play it, on the spot, in the rain, badly, in front of everybody. Grown adults will queue. They queue here.",
+      "14": "One case, ninety-six units, of *dulce de alcayota* — candied squash threads in syrup, gone amber and slightly translucent, which is what happens when a fruit nobody wants meets a grandmother with time. Twelve jars of it, plus sixty *empolvados* dusted in icing sugar, plus twenty-four bars of *dulce de membrillo*, quince paste cut in slabs and wrapped in waxed paper with a rubber band, which is precisely how it comes out of my aunt's cupboard and I have not improved on it. Wrapper and all, as asked: our own contribution to the frankly alarming category is a bag of *cochayuyo* candied in honey — that is seaweed, sea-stalk, chewed here for centuries, tastes medicinal because it *is* medicinal, and there is not an airport on this planet that would stock it. Send the empty jars back and we will refill them.",
+      "15": "*Chorrillana*, disassembled for travel, thirty portions: vacuum-packed strips of beef, sliced onion in its own bag, and the potatoes cut into batons and blanched and frozen because that is the only honest way to move a chip across an ocean. Thirty eggs travel separately and go on top at the last second, still soft, and the whole thing is fried in one pan and tipped out in one heap — this is the food of eleven at night, standing, in a bar with a tiled floor and a man playing guitar at nobody. You eat it out of the pan. Not a plate: the shallow steel pan it was cooked in, set straight down on the counter with four forks in it and no one appointed to divide it fairly, which is the entire tradition. We are sending thirty pans, and a bottle of *pisco* to be drunk by whoever is still standing at one."
+    },
+    "m-hbt": {
+      "1": "Four hundred apple crates out of the Huon Valley, second-hand, dovetailed by people who expected them to be dropped, lined with hessian and drilled for drainage, filled two parts leaf mould to one part washed river grit. Planted: eight house leeks and a fistful of creeping thyme per box, plus chives, because chives forgive. What they forgive is neglect, salt, wind off the water, a fortnight with nothing at all, being frozen solid, being watered with the cold end of somebody's tea, and being carried indoors in October by a resident who has decided they look cold. What they do not forgive is daily watering, so we have written that on the underside of every crate where it cannot get lost.",
+      "2": "Forty thousand postcards, printed on card thick enough to stand up in a rack, and not one of them the view from the top of the mountain. The image is the town seen from the middle of the river on a grey afternoon, the mountain entirely inside a cloud, one ferry crossing left to right. Half our residents say this is a slander and we should have waited for a clear day; the other half say we have been waiting for a clear day since 1804 and this is the honest one. Both arguments are printed on the reverse in small type, so your shopkeeper has something to say instead of apologising.",
+      "4": "Sixty crates, all glass: sparkling apple pressed down the valley with nothing added, blackcurrant cordial thick enough to stand a spoon in, a pepperberry tonic that goes faintly numb at the back of the tongue, sarsaparilla, and a leatherwood honey soda that tastes the way a beehive smells. The label claims the water fell as rain on a mountain with nothing built on it and was in the bottle inside a day, which is true, and then claims it is the purest water in the world, which is a matter for lawyers. Four dozen openers, plain steel, each one spliced onto three feet of rope so it can be tied to the crate and stay tied to the crate.",
+      "5": "Forty cases of thick-cut chips off potatoes grown in dirt an hour north of here, cooked in the skin and salted with chicken salt, which is not chicken. Twenty cases plain salted for the cautious, ten chicken salt, five salt and vinegar sharp enough to count as a decision, and five of a seaweed and pepperberry one our own shops cannot keep on the shelf past Friday. The bag carries a photograph of the paddock, the paddock's name, and along the bottom: serving suggestion, standing up, out of the wind. A hundred-gram bag of loose chicken salt is taped inside every case for the ones who take it seriously.",
+      "7": "One tin, ninety-six Anzac biscuits, baked in the football club canteen on a Thursday by the three women who have run that canteen since the ground had no lights: rolled oats, coconut, golden syrup, no egg, so they keep. They survive a dunk. They survive two dunks, a dropped tin and a wet Wednesday in a coat pocket, and the canteen considers the question mildly insulting. The tin is from the seventies, has a boat on it, and is not coming back, so keep your screws in it.",
+      "8": "Forty-one wool-lined change robes, hooded, in the dark colours that do not show river silt. Eighty-two towels, because one is always still wet; forty-one pairs of five-millimetre gloves and boots; forty-one caps in a colour the people on shore can count. Forty-one mesh bags with a hard flat bottom, which is the only sort that dries between one Tuesday and the next, plus two twenty-litre buckets for warming feet and a knotted rope to hang the whole lot off a fence. Dot from Bellerive comes with it, seventy-three, in every day since 1994, staying a fortnight to explain to your forty-one that the cold is not the problem, the getting dressed is.",
+      "11": "Six black Australorps, point of lay, a bird bred in this country specifically to keep laying while the weather is being unreasonable; ours went through last winter without a sulk. The coop is apple-crate hardwood under corrugated iron pitched steeper than it needs to be, wire skirt buried a foot out the whole way round, and a latch a clever animal cannot work: we have no foxes here, so it was built against quolls and devils, which is a harder examination and a compliment to your fox. Feed for eight weeks, a sack of shell grit, and the two pages, handwritten: page one is the buried skirt and shutting the door before dusk rather than after, page two is that a hen off the lay in the cold months is cold and not ill, and that your nine-year waiting list is about to acquire people who only want eggs.",
+      "12": "Three cakes for four hundred years. Tall is a six-tier leatherwood honey cake, dry-stacked so it travels; flat is eight trays of raspberry and blackcurrant slab off fruit picked forty minutes from here and not out of a tin; soaked is one eleven-kilo fruit cake that has had a capful of local single malt every Sunday since your notice went up and needs no further assistance from anybody. Twelve waxed boxes with string handles that hold together in rain, twenty-two kilos of royal icing, sixty piping bags. Beryl comes with it: she can pipe legible cursive upside down on a wobbling trestle table and will write whatever you tell her to, having heard worse.",
+      "13": "Five hundred gaudy, sorted into eleven boxes so every stall gets a spread: wind-up plastic devils that jump sideways instead of forwards, glow bracelets, tin whistles we already regret, plastic magnifying glasses that genuinely work, and two hundred stickers of a mountain hidden in cloud that no child will understand and every child will want. The one good prize is a clinker-built rowing dinghy, nine foot six, celery-top pine on oak, built by hand down the valley at Franklin, with two oars, rowlocks and one coat of paint the colour of a wet morning. It floats, it is registered to nobody, and it should sit behind the prize table where people can put a hand on it. Grown adults will queue in the rain: ours did, and it was not even a raffle, it was just parked.",
+      "14": "A case of what our grandmothers actually keep in the tin: hard-boiled leatherwood honey drops that taste of smoke and flowers and are not to all tastes, eucalyptus lozenges of the strictly medicinal school, which were given to us for coughs until we began getting coughs deliberately, and blackcurrant pastilles that stain a mouth purple for an hour. Two hundred twists, and the wrappers are cut from a stack of old ferry timetables, so the alarming ones can be identified afterwards by the 7:15 to Bellerive. The tin is included, has a thistle on it, and comes with no explanation.",
+      "15": "Three hundred curried scallop pies, frozen hard, packed in dry ice: shortcrust, a yellow sauce the exact colour of a wet raincoat, and scallops out of the channel rather than out of a bag from somewhere else. They are eaten standing on a wharf at eleven at night out of a flat white paper bag folded down twice, back to the wind, sauce running towards the wrist, which is the point rather than the fault. Two thousand bags in the crate, and four hundred wooden forks nobody will use. Twenty minutes in a real oven; whoever microwaves one has ended the exercise for everybody."
+    },
+    "m-kmp": {
+      "1": "Four hundred window boxes, already loaded, and none of them bought: Ssalongo the tinsmith and his three nephews cut old jerrycans lengthwise, hammered the edges flat, drilled the drainage and painted every one a different colour, so your nine hundred metres of grey will look like a market stall from one end to the other. Eight tonnes of compost on top of that, coffee husk mixed with sweepings from a market that starts at four in the morning, and in each box: mother-in-law's tongue, aloe, and a spider plant cutting. What they forgive is everything — a fortnight's holiday, a dark window, cold glass, being watered with tea, being watered with nothing at all from March until whenever you remember. Aloe will forgive you so completely it will have had babies by the time you notice it.",
+      "3": "Three hundred grow bags sewn out of feed sacks by the ladies who sit outside the hardware shop, each one packed with a tin of cherry tomatoes already up two inches, and seed folded into little paper squares torn from exercise books — amaranth, basil, coriander for the brave, and pigeon pea if you want shade. Sixty dwarf pawpaw seedlings as well, which will fruit before anybody finishes discussing them. The two that actually survive a balcony are chilli and sukuma wiki, and I will tell you exactly why: the chilli enjoys being ignored, it gets hotter out of spite, and sukuma wiki you harvest one leaf at a time so it never dies, it only gets shorter and more apologetic. Everything else on a balcony is a hobby. Those two are food.",
+      "5": "Forty cases coming, split three ways: twenty of cassava crisps sliced thin enough to read a newspaper through and salted while still spitting, fifteen of sweet plantain crisps that go dark at the edges and taste like toffee that changed its mind, and five of green banana crisps dusted with chilli and lime for people who need convincing. They are packed in brown paper bags hand-stamped at a printer's off the taxi park, and what is printed on the bag is a boda rider giving a thumbs up, the words EAT WHILE HOT, SHARE WHILE WARM, and a phone number. The number is mine. The printer put it there by mistake in 2019 and I have never corrected him, so if a bag disappoints you, ring me and I will answer.",
+      "7": "As I was saying — one paint tin, lid hammered down, six dozen simsim and coconut rocks from Mama Ssalongo, who has baked in an oil drum at the same market corner for thirty-one years and measures nothing. Sesame, grated coconut, brown sugar cooked to the stage she calls angry, and a knuckle of ginger, so they come out looking like gravel and taste like a fairground. Does it survive a dunk? It survives. Your tea will not survive — it goes cloudy, it goes sweet, it gives up entirely — but the biscuit comes out whole, and this is the only biscuit at your table that will make an allotment society respect it.",
+      "8": "Forty-one hooded robes, cut and sewn in nine days by the tailors in the upstairs arcade, outside kitenge in forty-one different prints so nobody grabs the wrong one, lined with towelling, and the swimmer's name stitched inside the hood by a man called Ivan who does not accept payment for names. Eighty-two khanga towels, two each, single cotton layer, which is the whole trick: they dry in twenty minutes flat and pack down to nothing. Forty-one open-weave palm baskets from the lakeshore, which dry out between one Tuesday and the next because they are mostly holes. The neoprene I confess I bought — we swim in a warm lake and own no such thing — so it is grey, it is boring, it is size-graded and it is in the crate with the receipt, because I am not going to pretend to you about neoprene.",
+      "9": "Forty jars of simsim-and-honey brittle, thirty cases of jaggery toffee twisted in waxed paper, twenty cases of tamarind balls rolled in chilli salt, and nine hundred paper bags folded out of last month's newspapers by a primary five class who put their initials on the bottom of every single one, so somewhere in the pile a child has signed the bag your children will be holding. In the first bag: brittle first, because it wins them over; toffee second, because it takes four minutes and buys the queue some quiet; and one tamarind ball last, unlabelled. That last one teaches them that a sweet shop can surprise you, which is what those children have actually organised about.",
+      "10": "The game is kati, and thirty sets are on the way: sixty balls wound from banana fibre and bound in strips of plastic bag until they bounce properly and hurt exactly the right amount, thirty sticks of chalk for the two safe circles, and thirty rubber-band ropes plaited from old inner tubes for when the kati players need a rest. Two throwers, one runner, the ball goes back and forth, and the runner scores by surviving — no wall required anywhere, which I understand is your situation. Coming with the crate: Sanyu, thirteen, unbeaten in her lane for three years, and Ssenyonga, who rides her there on his boda, umpires, and argues every call. Put them in a car park by two in the afternoon and by four you will have parents playing in work shoes. That is a promise, not a forecast.",
+      "12": "Forty women from the market savings group each baked one tin of banana-and-cardamom cake, and when you lay them end to end on trestles you get a single flat cake nine metres long, then Nnalongo goes down the whole length with a jug and soaks it in ginger, lemongrass and passionfruit syrup until it is legally a pudding. Four hundred pink cake boxes as well, tied with sisal string, because a birthday where nobody carries a slice home is a meeting. Twenty-four kilos of buttercream in eight colours and sixty piping bags, and here is how I would use them: one guest, one year, one piece of nonsense each, and nobody is allowed to correct anybody's spelling for four hundred years.",
+      "13": "Five hundred prizes straight off the second-hand market: a hundred and twenty pairs of plastic sunglasses in colours not occurring in nature, a hundred tin whistles, eighty keyrings shaped like a minibus taxi with a sliding door that actually slides, sixty wind-up chickens, eighty glitter hair clips and sixty little mirrors with a comb stuck in the back. Those are the plastic, gaudy, faintly baffling ones, and the wind-up chickens are the ones that will cause the only argument of the afternoon. The one good prize is a bicycle, hand-painted by Kizito who letters taxis for a living — flames down the frame, a crested crane on the mudguard, gold lettering across the crossbar with a shadow on it, a chrome horn that works, tassels, and a padded pillion seat so whoever wins can carry somebody home. Grown adults will stand in rain for that bicycle. I have watched them do it.",
+      "14": "One case, two hundred and forty twists, of Jjajja Nakato's tangawizi: ginger boiled down with honey and jaggery, a genuinely irresponsible amount of black pepper, and a suspicion of clove, pulled by hand and set hard as a pebble. Wrapper and all, as asked — waxed paper twisted at both ends, each one stamped with a crane by a rubber stamp she has had since before I was mayor of anything, and the whole lot arrives in her actual tin, with the dent in the lid, which I am told I may not keep. Faintly medicinal is generous: it cures nothing and clears everything, sinuses, arguments, and one uncle in 1974 whom she still cites as evidence. Do not put it in an airport. It would not survive the company.",
+      "15": "The snack is the rolex, eaten standing at eleven at night at a stall with one bulb, and it travels better than anyone expects: six hundred chapatis vacuum-packed in stacks of six and still soft, eight kilos of the cabbage-tomato-onion-chilli mix sealed in tubs, and a tin of the spice, because eggs are the one thing anybody can find for themselves at that hour. What you eat it out of is a torn triangle of yesterday's newspaper, one hand, no plate, ever — a plate turns it into dinner and ruins the whole institution — so I have sent a bale of last week's papers to see the first three hundred done properly. And Tonny is in the crate too, or rather beside it, with his oil drum and his flat blade; he rolls one in forty seconds and he will not tell you what is in the spice tin. You have been hungry at eleven for years without mentioning it. Mention it."
+    },
+    "m-kop": {
+      "1": "Four hundred larch boxes, planed and pre-drilled, screws in the crate, because a box merely hung in your wind becomes a hazard to pedestrians. The compost is a sixty-forty mix of leafmould and lava grit, and in each box: three houseleeks, one clump of wild thyme lifted off a hillside, and eight arctic poppy seeds scattered on top. It forgives four weeks unwatered, a north wind straight off the water, February darkness, and an owner who goes to Tenerife and tells nobody. What it does not forgive is being loved — tell the four hundred residents to water it once a fortnight and then leave it entirely alone.",
+      "2": "Forty thousand matte postcards, 100 by 150, card thick enough that a cheap pen doesn't skid. They are two crops of one photograph, twenty thousand each: the church hill at nine in the evening with the capital's skyline sitting behind it, and the identical shot cropped one centimetre higher, so the skyline is gone and there is only our own roofline and a great deal of sky. Our residents have not agreed since 1994 on which of those is the real picture of the town, and they will not settle it for your shopkeeper either. Which pile goes at the front of the rack is entirely his business, and he should know that either choice offends somebody.",
+      "3": "Three hundred grow bags, three hundred twenty-litre pots, nine hundred seed packets — chervil, dill, rocket, and a stubby outdoor tomato called Sub-Arctic Plenty, which is exactly what it sounds like — and forty dwarf apples on the smallest rootstock we could get. The two that actually survive a balcony are chives and rhubarb, so both go in bulk: six hundred chive clumps split out of one allotment over three weekends, and three hundred rhubarb crowns, which will outlive the balcony, the flat, and probably the building. Everything else on that list is optional entertainment; those two are the reason there will still be something edible up there in year four.",
+      "7": "One five-litre tin of vanilluhringir — vanilla rings, piped through a star nozzle, baked hard, forty-two to the layer with greaseproof paper between the layers. It survives a dunk. It survives a long dunk: ours counts to eleven in hot coffee and comes out structurally sound, which is more than anything else on your table will manage, and it can be eaten one-handed by a person already holding a fork. You asked for structurally ambitious; this is a biscuit you could shingle a shed with.",
+      "8": "Forty-one robes of the towelling-lined zip-up sort, sized off our own year-round swim club because they are the same shapes as your forty-one; forty-one 3mm hoods, forty-one pairs of 5mm gloves, forty-one pairs of booties, and eighty-two waffle towels so that nobody is ever drying themselves with last Tuesday. The bags are the part we care about: mesh-bottomed, seam-taped, and they genuinely do dry hanging in a hallway between one Tuesday and the next, because we hung six of them in six hallways for a whole winter before choosing. Two spare sets of everything ride along for the forty-second and forty-third swimmer, who will arrive in March in a cotton dressing gown and need talking out of it kindly. Getting in and out of cold water tidily is one of the things a town gets quietly good at when all the famous attractions are next door.",
+      "9": "Six cases, and they are almost entirely liquorice: salted ropes, liquorice cut into coins, liquorice under milk chocolate, chocolate with liquorice hidden inside it, chocolate-covered puffed rice for the children who lose their nerve, and four jars of boiled barley sweets for the grandmothers who will be doing the actual handing out. Nine hundred white paper bags with a fold-over top are packed flat on the bottom of the crate. In the first bag: one bar of chocolate-wrapped liquorice, snapped in half through the wrapper before it went in, so the child has ten seconds to decide whether he has a friend. Tell them the first piece is confusing and the third one is not.",
+      "10": "Your children have two games with a wall; ours needs an entire building. It is called yfir: two teams on opposite sides of a house, a soft rubber ball thrown over the roof, and whoever catches it before it lands sprints round the corner while the other side guesses which corner. Thirty sets means ninety balls, because every roof keeps one; plus thirty boxes of chalk for marking the safe corners and thirty rolls of soft foam tape for the gutter that someone will otherwise write a letter about. Coming with the crate: Gunnhildur, 74, who has played since 1961 and can put a ball over a two-storey block without grazing it, and her grandson Sölvi, 15, who will spend the whole afternoon in the car park fetching and complaining.",
+      "11": "Six pullets of our own landrace hen — small, scruffy, no two the same colour, and they lay straight through a black winter, which means your worst week will strike them as a rest. The coop is double-skinned plywood on legs with a wire apron eighteen inches out all round and buried, because a fox does not climb, it digs; the mesh is hardware cloth rather than chicken wire, and the latches are the twist sort that a paw cannot work. Also six months of layers' pellets, a sack of oyster grit, and a feeder a rat cannot get into. The two pages that matter: page one is water — how much, how often, and how to keep it from freezing or going green; page two is the door, which you shut at dusk every single day without exception, including the evening of the allotment society's annual dinner.",
+      "13": "Five hundred gaudy: two hundred glow-in-the-dark plastic trolls, four centimetres tall, with faces that will trouble a child at three in the morning; a hundred and fifty puffin whistles capable of exactly one note; a hundred and fifty keyrings shaped like a lump of lava, which is geologically accurate and completely baffling as an object. The one absurdly good prize is a hand-knitted wool sweater, the yoked kind in undyed grey and cream, made by Sigríður, 81, of the Thursday knitting circle, who wants the winner's chest measurement posted to her and will knit to it before it ships. Grown adults will stand in rain for that and will not stand in rain for a troll, and Sigríður is aware of this, which is why she has also asked for a photograph of the winner wearing it.",
+      "14": "A case of two hundred and forty paper tubes of salt-liquorice pastilles — the black ones with the eucalyptus, in the original wrapper with a twist at each end and the printing slightly off-centre, as it has been for decades. This answers the faintly medicinal and the frankly alarming in one go: they are salty rather than sweet, they smell like a chest rub, and no visitor has ever got through a first one without their face doing something involuntary. Our grandmothers keep a tube in a coat pocket from October to April and regard it as a health measure rather than a sweet. Ration them at the swimming club, and give them to the choir before the singing rather than during.",
+      "15": "Sixty kilos of harðfiskur, vacuum-packed in half-kilo bricks: wind-dried fish, beaten flat, torn into strips, good for a year in a cupboard and requiring no fridge, no heat and no cooking of any kind. You eat it standing at a counter at eleven at night with cold salted butter smeared thick on each strip, and you eat it out of the bag — brown paper, folded down twice, held in the same hand as the knife, no plate, because a plate turns it into a meal and it is emphatically not one. Two hundred small wooden butter knives are packed in the crate; the butter itself you get locally, and it should be salted and colder than you think sensible. For a city that gets hungry at eleven and would rather not discuss it, this is the correct snack: silent, chewy, and roughly twenty minutes per strip."
+    },
+    "m-nao": {
+      "3": "Apologies for arriving late. We prune the olive groves every February, so: 300 rooted olive cuttings already potted in 300 grow bags of our own sandy island dirt, 300 packets of shiso seed, and forty kilos of the seaweed compost that makes salt wind survivable. The two that actually survive a balcony are rosemary and spring onion — rosemary because nothing kills it, spring onion because you cut it and it simply comes back. Ms. Fujiwara, who keeps the pots along the ferry road, has written the watering instructions on a postcard: less than you think, more often than you'd like.",
+      "4": "Twelve crates of ramune, 240 bottles, glass, marble-stoppered — melon cream, yuzu, salted watermelon, lychee, and one the label calls 'Blue Hawaii' and then declines to elaborate. The yuzu label claims it settles the stomach after a rough ferry crossing, which we have tested extensively and choose to believe. You don't need an opener: the bottle comes with its own plastic plunger, you push the marble down through the neck, and the marble stays in there forever, which is the entire point. We put in thirty spare plungers anyway, because children lose them.",
+      "7": "One tin, sixty pieces, of salt senbei — rice crackers baked over charcoal and dusted with salt evaporated from our own seawater, wrapped one at a time in wax paper by Mrs. Uehara, who is eighty-one and does not hurry. Dunk survival: none whatsoever. It goes to sediment in roughly four seconds. We happen to think those four seconds are the best part of it, but the choir should be warned in advance.",
+      "9": "Six jars of shio-ame — hard salt candy boiled from seawater, twisted in wax paper, faintly savoury, the sort children complain about and then finish. Also a case of mikan-peel toffee, bitter at the edges, and a small jar of candied olive for the brave. The nine hundred paper bags are folded from last year's ferry timetables and old exhibition flyers, so every bag has a departure time or half a painting on it. First bag: one salt candy, one toffee, in the bag with the 6:05 sailing printed on it, for whoever gets through the door first.",
+      "11": "Six Nagoya Cochin hens — heavy, calm, and they keep laying through cold weather, which is the only thing anyone is asking of them. The coop is a fisherman's shed design in marine ply, double-latched; honest disclosure, we have no foxes here, only one bad-tempered crow, so Mr. Ōta has added the second latch on principle rather than experience. Page one of the instructions is: shut the door at dusk, every dusk, no exceptions, no evenings off. Page two is grit in its own separate dish, and how to tell a broody hen from an ill one.",
+      "12": "One tall olive-oil sponge soaked in mikan syrup and a little sake, plus twelve flat trays of the same for cutting into squares, which travels better than the tall one and we admit tastes the same. Four hundred boxes, one per year, tied with string, and four kilos of icing in white and yellow with six piping bags. We have already written on the first cake: 'four hundred years and still no bridge' — that is about us, not you. Scrape it off and write something better.",
+      "14": "A case of wasanbon higashi — dry sweets pressed from the pale hand-milled sugar they still make near us, stamped into plum blossoms, turtles, and one shape nobody on the island can identify. This is the grandmother's tin exactly: they look like chalk, collapse the instant they touch your tongue, and taste like something handed to you when you were nine and unwell. Wrappers are the old red-and-gold paper, unchanged since roughly forever, and we have sent the tin too because it is part of it.",
+      "15": "Two hundred packs of frozen Sanuki udon, ours cut thick, three minutes in boiling water and not a second more, with two hundred sachets of iriko broth made from dried sardines that smell considerably worse than they taste. It is eaten standing at a counter out of a chipped donburi bowl, so we have sent forty seconds from the harbour café, all slightly the wrong colour. Eleven at night is precisely the correct hour for it. Apologies in advance for the smell of the crate."
+    },
+    "m-bel": {
+      "4": "Six crates, all glass, all cold, and I will fight anyone who says otherwise about any of them. Twelve bottles of sour-cherry cordial so dark it stains the label, which claims only '100% fruit, no water added' and is telling the truth; twelve of elderflower, picked in June by a woman who will not say where; two crates of a herbal cola the colour of wet brick whose label promises 'eleven herbs and rosehip' and delivers roughly four; and two crates of mineral water from a spa that prints, in earnest, that it assists the liver, the kidneys and the disposition. Also one crate of bitter tonic that tastes of wormwood and disagreement — drink it slowly or not at all. Taped to the inside of the first lid: three iron bottle openers off the wall of a river raft-bar, already broken in, because you are right, nobody ever sends the opener.",
+      "5": "Forty cases, thirty of them red paprika, and this is not a compromise — it is the correct ratio. The bag says PAPRIKA in letters bigger than the brand name, then underneath, in smaller print, that the peppers came from the northern plain fields and that the potatoes are ours; the ingredients end with 'and salt, obviously.' The other ten cases are not crisps at all but peanut puffs, orange, weightless, and the bag claims to be 'the flip of your childhood,' which is a large promise to make to a country that has never had one. Eat the puffs first, then the paprika, then argue about it for two hours over coffee. That is the whole method.",
+      "8": "We swim in a river in January here — there is a man with a whistle and everything — so this is not theory. Forty-one waffle-weave cotton towels off the old mill looms, thick enough to stand up on their own, plus forty-one quilted robes in the ugliest available maroon so nobody's gets nicked; twenty-two pairs of 5mm neoprene gloves and twenty-two hoods, because feet and hands are the whole argument and everything else is vanity. Forty-one pairs of thick undyed wool socks, knitted by four grandmothers in one village who competed over it and produced three spare pairs out of spite. The bag is a coarse mesh sack that dries hanging on a nail by Wednesday, and there are also six plastic river-bar chairs in the crate, because you will want to sit down afterwards and be told you look terrible.",
+      "9": "Nine jars and four cases, and the children were right to organise. Two jars of rose Turkish delight cut in cubes and buried in icing sugar, two of black liquorice-anise hard sweets that numb your whole mouth and taste faintly of a bus station in 1987, a case of banana-fondant bars in dark chocolate that must be kept out of the sun, a case of orange-jelly biscuit rounds, two jars of hazelnut toffee, and one case of chocolate bars that come with a collector card of an animal inside — the children will trade these for weeks and one of them will end up with all the wolves. Nine hundred paper bags, grey, the kind that goes translucent where the toffee sits. The first bag goes to whoever has been standing behind that counter the longest, and it holds one of each of the six things plus a seventh mint, out of respect, and then she has to admit the mints were not enough.",
+      "10": "Thirty sets of klis, and I will hear no cricket comparisons. Each set is a hornbeam striking stick the length of your forearm and a short peg tapered at both ends, cut and sanded by a man who makes chair legs the rest of the year, plus a fat stick of chalk for the throwing circle and a rubber ball in case somebody insists on a second game — and somebody will. The demonstrator is Braca, seventy-one, from the block behind the bus depot, who played this in a concrete courtyard for eleven years and has never lost an argument about where the line was; he will stand in your car park all afternoon, referee, and re-explain the rules three times with slight differences each time. He requires coffee at eleven, coffee at two, and a chair. He does not require an audience but will get one.",
+      "11": "Six hens of a crested breed off the northern plain, three years old at most, bred by people who consider a hard winter a personal matter: they carry on laying at minus fifteen and they are calm about children. The coop is built from concrete-formwork boards off a building site — ugly, heavy, will outlive everyone — with a wire skirt buried flat forty centimetres out under the grass and a double-twist latch that a fox spent one entire March failing at, in front of witnesses. Also two sacks of layer feed and a bucket of river grit off our shingle, crushed shell, which they eat like a treat. The two pages: one is only about the buried wire and the latch, and one is only about the water not freezing — everything else you will work out yourself, and the allotment society will enjoy arguing about it more than they would enjoy being told.",
+      "12": "Four hundred years gets three cakes, not one, and anybody sending only one has not understood the assignment. Twelve tall ones — sixteen thin layers of walnut and chocolate buttercream each, cold from the counter, one layer per twenty-five years if the arithmetic pleases you. Forty trays of the flat kind: custard slab a hand deep between two sheets of pastry, cut in squares, dusted, best eaten off the box lid standing up. Then four hundred syrup-soaked ridged fritters in tins, still dripping, which are the reason we send extra napkins. Boxes are white card tied with red string, ninety of them, and there are twenty-two piping bags of royal icing plus Dragica, who has the steady hand and writes cursive nonsense at speed and will not be corrected on her spelling.",
+      "13": "Five hundred small ones out of one stall in our biggest market, bought in a single afternoon of hard bargaining: wind-up tin frogs, plastic combs shaped like fish, whistles that do a convincing bird, keyring torches, magnets of a bridge nobody there will recognise, glitter hair clips in colours that do not occur in nature, and one hundred and forty foil-wrapped chocolate coins that must not go anywhere warm. Gaudy, plastic, faintly baffling — correct on all three counts, and I checked. The one good prize is a red 96-bass piano accordion, forty years old, mother-of-pearl on the keys, in a hard case with a strap that has been sweated into by better musicians than me; a man who repairs them for a living will tune and re-wax it the week before it ships. In the case there is a card with three tunes on it, and the third one is easy on purpose. Grown adults will queue in the rain. Sell them two tickets each.",
+      "15": "Eleven at night is when the bakeries here get serious, so: two hundred cheese burek and one hundred meat, frozen flat and vacuum-packed in fours, twenty minutes in a hot oven and they come back to life almost dishonestly well. With them, eight tins of kajmak — clotted, salted, spread it on the cheese one — and forty frozen flatbreads for anybody who wants the meat version done properly. Also four kilos of roasted sunflower seeds in paper twists, which is the eating you do on the walk home, and a second empty bag for the shells, because a city that gets hungry at eleven can still have standards. It is eaten out of a sheet of grey bakery paper, folded once, held from underneath, grease coming through so you can see how good it is — and it is drunk with half a litre of plain yoghurt, cold, straight from the bottle, standing up, saying nothing to anybody."
+    },
+    "m-tri": {
+      "9": "The children are right to organise; four mints is not a childhood, it is a waiting room. Twelve cases are coming from a shop that still weighs everything on a brass scale: coffee drops in gold foil, barley sugar, salted liquorice wheels, chocolate in the old Austrian bars that snap loudly, and a toffee that will eventually cost somebody a filling. The nine hundred paper bags are secondhand from our roasters, small and faintly perfumed with espresso, which is either charming or a public health matter depending on the child. First bag: one coffee drop, one liquorice wheel, one candied violet — so the smallest one in the queue learns early that sweetness is complicated.",
+      "10": "We have no wall worth playing against. What we have is a stone pier where nothing is level, so we play bowls on the slope and treat the slope as the opponent. Thirty sets are crated: eight small iron balls each, a chalk pallino, and a rag for the salt. With them comes Sandrin, sixty-one years on the dock cranes, who will stand in your car park all afternoon and demonstrate the only rule that matters — you argue first, then you throw. He asks for nothing but coffee roughly hourly and absolutely no chair.",
+      "12": "Four hundred years deserves more than one cake, and we have had four countries, each of which left its pastry behind on the way out. Coming over: a tall dark torte with apricot hiding under the glaze, a flat sweet Easter bread in three domes, twenty coils of nut-rolled pastry that slices like rope, and one tray soaked in rum until it stopped pretending to be cake. It all travels in string-tied pastry boxes — the string is for opening, the ribbon is for pretending you waited. Eleven kilos of icing in the last crate, white and pale green, enough nonsense for four centuries plus a spare tube for whatever gets misspelled first.",
+      "13": "Port towns run on gaudy rubbish and we have been accumulating ours for a century. Five hundred small prizes: plastic lighthouse keyrings, thimble-sized espresso cups that hold exactly one mouthful, wind-up tin sailors that only walk left, whistles shaped like sardines, and snow globes in which the snow goes sideways, because here it does. The one good prize is a marble-topped cafe table with two bentwood chairs, carried out of a coffee house that closed in March — the marble holds fifty years of cup rings and cannot be cleaned, which is the entire point — plus a kilo of coffee posted to the winner every month for a year. Grown adults will stand in the rain for that. They stood in the rain for the closing.",
+      "14": "Our grandmothers keep beans of the dead in the tin: almond-paste marbles the size of a knuckle, white, pink and cocoa-brown, made for the first days of November and eaten cheerfully all year regardless. A case is on the way, six hundred to a layer, still in the twisted waxed paper with the shop's name worn half off. Underneath sits one smaller tin of wormwood drops — bitter, green, administered to children for coughs and to adults for reasons — which will alarm you, and should. Nothing in that crate can be bought in an airport, which we consider our chief remaining virtue."
+    }
+  },
+  "answers": {
+    "m-rvk": {
+      "1": "Barbecue as an occasion. I understand the food. I have never understood standing outdoors in a group for ninety minutes, waiting on it, everyone agreeing the wind is part of the charm.",
+      "3": "\"The pavement was clear.\" Said absently, in passing, by somebody with no idea that a decision was involved or that it was made at four in the morning.",
+      "4": "In favour. I'm told it's largely genetic, which means it isn't a moral question, which spares us all an argument we were going to have badly.",
+      "5": "My father's ice scraper. Metal, wooden handle, worn smooth on one side only, because in twenty years he never once did a window other than the driver's.",
+      "7": "Pool at seven, once the serious lane swimmers have cleared out and before the families arrive. Then the hot pot, where the same four men have been relitigating a resurfacing job from 2011 for as long as I have been going, and where nobody has ever asked me a question about the budget. Home by nine. Bread and butter standing at the kitchen counter, because sitting down would make it a meal. Then the marine forecast on the radio at ten, which I listen to every night and have no boat.",
+      "8": "Ólafur, who ran the plough depot for thirty-one years and was not supposed to be teaching anybody anything. He explained that the real decisions get made at four in the morning by whoever happens to be awake, and that my entire job is making sure that person has been told things in advance.",
+      "10": "Somewhere at the same latitude of complaint. Bergen, probably, or out to the Faroes. I would want weather I could still hold a grudge against; I don't think I'd know how to be a person in a mild place.",
+      "11": "A gearbox housing off a snowplough, cracked in 2018 in a way our workshop still describes as impossible. It stops paper from moving and it stops me being confident, and both are useful.",
+      "12": "Whichever one is easier to reverse. I've never regretted that rule and I've regretted nearly every time I broke it.",
+      "13": "The washing room in the basement. Concrete floor with a drain in the middle, a boiler that knocked twice before it settled, and always a degree or two warmer than the rest of the house, so my mother hung the sheets there on lines you had to duck under. I did my homework on an upturned crate because it was the only room where nobody thought to look for me, and to this day the smell of wet wool drying makes me feel like I'm getting away with something.",
+      "14": "Top floor of the multistorey on a Sunday morning. Empty, roofless, half the city visible, and I sit in my own car with the window down. It is the only place I can be alone in public without it looking like a statement.",
+      "15": "If it has to be music, nothing — the eight-second horn of the harbour ferry. Everybody looks up. Nobody hurries.",
+      "16": "A city map from 1978, 1:5000, with a tram line drawn on it in pencil by somebody hopeful. We have never had a tram and we are never going to. It has followed me through two office moves and I put it up both times."
+    },
+    "m-vlp": {
+      "1": "Swimming in the sea. I have lived my entire life eighty metres above it and I have been in it twice, neither time on purpose.",
+      "2": "The Reina Victoria funicular, upward. Ninety seconds, costs almost nothing, and at the top you turn round and the bay does the thing it does — then we walk down through the stairs and get comprehensively lost, which is the actual tour.",
+      "4": "For. Loudly, unfashionably, permanently for — and I have been told my ceviche is aggressive about it, which I take as the compliment it was not.",
+      "5": "A tide table from 1971 with my father's notes down the margins about which mornings were worth getting out of bed for. Roughly half of them say no.",
+      "7": "Tuesday, seven o'clock, and nobody wants anything from me. I walk down from the office rather than take the car, buy fish on the way from the man who overcharges me and knows I know, and cook it slightly badly with the radio doing a football match I have no stake in. There is usually a dog on the step — never the same dog — that waits to be fed and then leaves without ceremony. Window open, in bed by ten. Tuesday is the one night the port unloads quietly.",
+      "8": "Not my predecessor, who taught me mainly what a closed door sounds like. Señora Fuentes, thirty years on the newspaper kiosk at the bottom of the hill, who knew every complaint in this city a week before it reached my desk and, more usefully, which ones would go away on their own.",
+      "9": "My sister. She has never once been impressed by anything I've done, which is precisely how I know when a thing is actually good.",
+      "11": "A brass ship's bell bolted to the corner of it, which I did not install and cannot remove without a carpenter and a formal request. My assistant rings it when I have been talking too long, and I have yet to find a dignified way to object.",
+      "12": "Whichever one I can explain faster to somebody standing on a street corner in the wind. If it takes more than two sentences it was never the fine option, I just hadn't noticed yet.",
+      "13": "The kitchen, which was most of the downstairs of a house on Cerro Cordillera — zinc walls, one window. My mother had got a green cheap off the port, so we had that green in the kitchen and the neighbours had the same green on their boat, and neither of us ever mentioned it. The table had one short leg with a fold of newspaper under it that was changed perhaps twice in my whole childhood. From the window you could see three cranes, and by twelve I could tell from the noise alone whether a ship was loading or leaving.",
+      "14": "The upper station of a funicular that hasn't run since 2011. Nobody has cleared out the operator's chair, the window still faces the right way, and there is no telephone in it.",
+      "15": "A cueca on an accordion, played slightly too fast by a man who fully expects to be paid for it. I would prefer a brass section, obviously, but one works with the city one has.",
+      "16": "A tin of paint from a colour we stopped using in 1998. It has been solid for twenty years and has followed me through three offices, but if one house on that hill ever needs touching up I would like to be able to say what the colour was called."
+    },
+    "m-hbt": {
+      "1": "Camping. I went to considerable trouble to own a house with a roof on it, and the proposal is that I go and sleep outside on purpose.",
+      "2": "On a boat, whatever the sky's doing. You learn the shape of a place from the water in twenty minutes and it saves an hour of explaining -- then chips off the punt, standing up, and if it's raining that's part of it.",
+      "3": "That something I signed off on eleven years ago is still working, and the person telling me had forgotten it was ever a decision anyone made.",
+      "5": "A metre of the eight-strand off the ferry cleats, spliced properly by hand, so whoever opens it knows somebody here could still do that.",
+      "7": "Home before the light goes. I cook what I cook most Tuesdays -- a piece of fish, potatoes, more butter than is defensible -- with the coastal waters forecast on, which my wife calls a hobby and I call due diligence. Then an hour in the shed re-whipping the ends of whatever rope has gone furry, which produces nothing anyone needs. Bed by half nine. That's the whole thing and I'm not embarrassed about it.",
+      "8": "Bev, in the works depot. My predecessor left me a handover folder; Bev went through it and told me which parts of it had never once been true.",
+      "10": "Another port. I couldn't live somewhere the water doesn't do anything -- somewhere small and wet with a working wharf and a hill behind it, and I'd be complaining about their ferries inside a fortnight.",
+      "12": "Whichever one is easier to undo. If they're both easy to undo, whichever one the person who has to maintain it would rather maintain.",
+      "13": "The back porch, which was really a laundry with ambitions. Louvre windows on two sides that never properly shut, so it sat at outside temperature plus about two degrees, and it always smelled of wet wool because the drying rack hung over the trough. There was a chest freezer along one wall with a flat cushion on it and that was my chair -- I did my homework there because after seven nobody walked through. Dad's boots by the door, always facing out so you could step straight into them. I'd know that room in the dark.",
+      "14": "The early ferry, upper deck, outside, in weather. Nobody follows you out there and nobody can talk over the engine.",
+      "15": "The bell on the ferry ramp. Two clangs: means we're going whether you're aboard or not.",
+      "16": "The key to a boatshed that was pulled down in 2003. It's still on my ring. It opens nothing, it weighs nothing, and I'm not doing anything about it."
+    },
+    "m-kmp": {
+      "1": "Camping. You own a bed. You own a roof. You paid for both of them, and then you drive out of town to sleep on the ground and tell me about it for a week.",
+      "3": "That I did the thing I said I would do. Everyone calls me energetic — my mother calls me energetic, and she does not mean it kindly.",
+      "7": "Plastic chair outside my cousin's hardware shop, seven o'clock, the man with the roast maize comes past and I always buy two and always eat both. Radio on inside, football or an argument about football, and people stopping to complain to me about a drain, which honestly I enjoy — you learn more in an hour on that chair than in a whole day of meetings. Home by ten, and the deal with my wife is that the phone goes in the fruit bowl.",
+      "8": "A boda stage chairman called Kizito, who has never held an office in his life and settles about forty disputes a day with no budget and no minutes. He taught me the entire job in one sentence: decide out loud, in front of everybody, and then do not move.",
+      "10": "Mombasa. I know the road, I know three people on it, and I would be selling something by Thursday.",
+      "13": "The back room in Nsambya, two beds for four of us, a green metal window that only ever opened halfway because of a nail nobody would take out. My aunt's sewing machine lived in the corner and was the most valuable object in the house; we were told not to lean on it, so naturally we all leaned on it. There was a calendar photograph of a fjord taped above the door and no one could tell me how it got there, and I decided at about twelve that I was one day going to stand in it. Still haven't.",
+      "14": "The top floor of the old post office. Nobody has been up there since the lifts died, so I take a flask and sit on the stairs for two hours. There's no signal, which was not the reason, but it is very much the reason now.",
+      "15": "The three quick taps a boda gives on the horn just before he passes you on the wrong side. Cheerful. Entirely unearned.",
+      "16": "A charger for a Nokia I lost in 2011. It is in the drawer. It will never be needed. It is not going anywhere."
+    },
+    "m-kop": {
+      "1": "The northern lights. Half the town drives out to stand in a freezing ditch and comes back altered; I have looked up, seen green, said \"yes, green,\" and gone in for my supper.",
+      "2": "The pool. Not the swimming — the hot tubs, in order, hottest last, where four hours is exactly long enough to learn everything worth knowing about this place from men who will tell you for free. Everyone assumes I'll drive them straight to the capital instead. It's eight minutes on the bus, they can manage that themselves later.",
+      "3": "Not \"charming.\" I want somebody to say the buses were on time in a tone that makes it clear they expected nothing else.",
+      "5": "My original application form, where I had written the name of the town next door in the box, and the extremely kind letter that came back explaining it was taken. Let some future archivist work out how I felt about it, because I'm still not sure.",
+      "7": "Pool at half seven, when it's the same eleven regulars and the water is too hot for anyone in a hurry. Home by nine, something with potatoes, and then the specific pleasure of sitting at the kitchen window watching the glow over the capital where the loud thing is happening without me. My wife reads. I do the crossword badly and stop halfway. Nothing arrives, nobody rings, and at eleven the last bus goes past the end of the road and I go to bed.",
+      "8": "Not my predecessor, God rest him. The woman who has run the front desk at the pool since 1989 — she knows every name in this town and exactly how much complaint each one is worth, and she taught me to let people finish talking before I start being useful.",
+      "9": "My mother, who will listen to all of it and then ask whether it was in the capital's paper or only in ours.",
+      "10": "Next door, obviously. I have had my eye on it since the beginning. I'd want it noted in the record that I'd be arriving as a resident and not as a claimant.",
+      "11": "A snow globe of the cathedral next door, given to me by the office staff in my first week as a joke. I've left it there so long that moving it now would be admitting something.",
+      "12": "Whichever one I can undo in a year without anybody needing to be blamed.",
+      "14": "The plant room under the sports hall. It's warm, it hums at a pitch that makes conversation pointless, and in nine years the only person who has ever come looking for me down there was the caretaker, who now doesn't.",
+      "15": "The three descending tones the bus makes when it kneels at the kerb. Undignified, entirely reliable, slightly too slow.",
+      "16": "A brass key to the old boiler room door, which was bricked up in 2004. I keep meaning to have it cut off the ring and I keep not doing it."
+    },
+    "m-nao": {
+      "3": "That a room I made decisions about was quiet. Not beautiful. Quiet.",
+      "4": "For it, but privately — my wife's family is against, and I've found it's not worth the dinner.",
+      "9": "My brother, who runs the second boat. He's usually out on the water and can't pick up, which I've come to think is the part I like.",
+      "11": "A tide table for 1994. Wrong year entirely, but it's in my father's handwriting, so it stays.",
+      "13": "The corridor, which I know isn't a room, but it's the one I can still walk. Boards laid over the gap where the house didn't quite meet the hill so it ran four degrees colder than either side, a shoe cupboard my father painted the wrong green twice, and a window at the end with nothing in it but a persimmon tree and the neighbour's television.",
+      "15": "The three-note chime the museum plays fifteen minutes before closing. Everyone here hears it as go home now, and I'd be pleased to have that follow me around.",
+      "16": "A ticket punch from the old ferry gate. It doesn't punch anymore. It still clicks, and the click was always most of it."
+    },
+    "m-bel": {
+      "4": "Against, and for the record it is chemistry, not taste. It comes at me like the inside of a new plastic bucket, and I'm told that reaction is genetic, which I choose to read as science taking my side rather than excusing me.",
+      "5": "The tin ashtray from the kafana on my corner, which shut in March. Everybody took something that last night and I took that, and somebody in fifty years ought to know a room like that existed and roughly what it smelled like.",
+      "7": "Same table, outside if the weather permits any argument at all, from about seven. One coffee that lasts ninety minutes, then something with an opinion in it. Three people — four and it turns into a meeting, and I have meetings. The argument has to be about something with no consequences whatsoever: a referee, a bridge, whether the old bus route was better before they straightened it. Then I walk home along the water at eleven, on my own, and I don't look at the phone until I'm through the door.",
+      "9": "My sister. Not because she'll be pleased — she'll have found the flaw in it inside a minute — but because if it gets past her it's real.",
+      "10": "Somewhere two rivers meet. I couldn't settle in a place with only one, it would feel like a town that gave up halfway. Novi Sad, probably, and I would complain about it daily and stay thirty years.",
+      "11": "A twelve-kilo lump of concrete off the old bridge parapet, handed to me as a joke when they replaced the span. It holds down nothing, it has scratched the desk in four places, and it is the only object in the room anyone ever asks about.",
+      "12": "If they're truly equal I take whichever one is easier to undo. And if they're equally easy to undo, I take the one that irritates the loudest person in the room, because then at least by Thursday we've learned something.",
+      "13": "The kitchen. Eighth floor, concrete block, new part of town. There was a balcony off it that my father glazed in badly over one weekend, so it cooked in July and was no use at all in January, and that's where the onions and the jars of pickle lived. The table was too big for the room and shoved against the wall, and you had to go sideways past it to reach the fridge. Everything happened in there — homework, arguments, my grandmother's card game, the radio left on for the football. My own bedroom I remember almost nothing about.",
+      "14": "There's a bench at the end of a pier that only the fishermen use, and none of them speak to anybody before noon. I take a coffee down and sit at the wrong end of it.",
+      "16": "A key to a flat I haven't lived in since 1998, which has certainly had the lock changed twice. It's on my keyring. It's staying on my keyring."
+    },
+    "m-tri": {
+      "9": "Nobody, for about an hour. I take it down to the counter at the café and say it out loud to a man who has heard better news than mine and doesn't look up — then I call my sister, who asks what the catch is.",
+      "10": "Odessa. Same light off the water, same weather in the afternoon, same civic refusal to be sentimental about which flag is up this year.",
+      "12": "If both are genuinely fine then it isn't a decision, it's a choice of story. I take the one that will be harder to explain in ten years.",
+      "13": "The dining room, which we did not eat in. There was a table under a cloth my grandmother ironed on Fridays for guests who came perhaps twice a year, four chairs nobody sat in, and a sideboard with a locked drawer full of paper in three languages — a birth certificate from one country, a school record from a second, a pension letter from a third, all of them the same man. In winter the shutters knocked all night and I would lie on the good carpet working out which of the three I was supposed to be.",
+      "14": "The Greek church on a Tuesday afternoon. I'm not Orthodox and I'm not really anything, but nobody in there wants a decision from me, and the candle smell hasn't changed since I was nine.",
+      "15": "Not music — the hiss and knock of a portafilter being emptied. I suspect it follows me because I have almost always just come from a room where it was actually happening.",
+      "16": "My father's identity card from a state that lasted seven years, folded, unusable, issued by an authority no longer available for correspondence. It proves nothing to anyone now, which is roughly the point."
+    }
+  },
+  "picks": {
+    "in-001": {
+      "ballot_ref": "C",
+      "because": "Two residents in five can hear it, which tells me it sits right at the bottom of what an ear can be trusted on, so I want the instrument rather than the ear — and the part that decided it was the offer to tell me plainly it's a fridge and keep it out of a report, because everyone else was already planning what to do with the hum once they'd found it.",
+      "by": "m-rvk"
+    },
+    "in-002": {
+      "ballot_ref": "C",
+      "because": "One line on a timetable and people find out for themselves standing on a corner at eleven at night, which is the only way anybody has ever changed their mind about anywhere — and whoever wrote it was right that the moment we call the place vibrant, we've lost it.",
+      "by": "m-vlp"
+    },
+    "in-003": {
+      "ballot_ref": "E",
+      "because": "They all said answer it, so that's settled -- but this was the only one that also said go home afterwards and say nothing, and a hand lamp off a car battery is about the right size of reply to something that has only ever been polite.",
+      "by": "m-hbt"
+    },
+    "in-004": {
+      "ballot_ref": "D",
+      "because": "Every other answer was about the water and this one was about the traders — nobody loses a day's selling, and in ten years my grandchildren will be arguing in front of a painted wall about which flood was the big one.",
+      "by": "m-kmp"
+    },
+    "in-007": {
+      "ballot_ref": "D",
+      "because": "Half the offers on my desk wanted to teach this town about barrels, and every second man here already has a still in his garage — what I don't have is eleven people who can look at ninety thousand plums without flinching, and I liked that they asked for a chair in the shade instead of instructions.",
+      "by": "m-bel"
+    },
+    "in-008": {
+      "ballot_ref": "B",
+      "because": "Four of the five understood that you bleed wind rather than argue with it, and I'd have been content with any of them, but only one of them read the word dignity and answered it: you cannot legislate that, and it turns out you can bolt it to a post at hand height, four kilometres of it, down both sides.",
+      "by": "m-rvk"
+    },
+    "in-009": {
+      "ballot_ref": "E",
+      "because": "Nobody in this city has ever crossed anything for a view, but they will absolutely carry a broken chair over that bridge and come back with somebody else's, and I would rather have that than a monument.",
+      "by": "m-vlp"
+    },
+    "in-010": {
+      "ballot_ref": "B",
+      "because": "It's the only one that heard what's actually being asked, which is whether the street still belongs to the people on it, and it answers with a stencil and a number by the door instead of another study -- and I intend to steal the bit about letting the arithmetic go on being right in private.",
+      "by": "m-hbt"
+    },
+    "in-011": {
+      "ballot_ref": "F",
+      "because": "I have been maintaining those stakes for four years like a man tending graves, and this is the only letter that told me to keep them and gave them a job — two years from now the whole promenade is magenta and nobody remembers the trees.",
+      "by": "m-kmp"
+    },
+    "in-012": {
+      "ballot_ref": "B",
+      "because": "Everyone sent me warm rooms and kind women, and I'd have taken any of them, but only one answered the question I was actually too embarrassed to ask out loud, which is who pays — a levy on the employers per night-shift worker, not per child, so the people running the machines round the clock are the people funding the cots. And they were right that goodwill is just a wage somebody in this town has quietly not been getting for years.",
+      "by": "m-kop"
+    },
+    "in-013": {
+      "ballot_ref": "B",
+      "because": "A rival you have to catch a boat to is a day out, not a rivalry — I want the one who uses my butcher on Monday morning, and whoever offered to draft the 1974 grievance in convincing detail knew exactly what they were doing.",
+      "by": "m-nao"
+    },
+    "in-014": {
+      "ballot_ref": "G",
+      "because": "Two of the three things holding that roof up were paperwork, so the timber was never really the shortage — this was the only one that said out loud that what I needed was a stamp and somebody's name on the calculations, and it sent the engineer to put it there.",
+      "by": "m-bel"
+    },
+    "in-015": {
+      "ballot_ref": "F",
+      "because": "Half of them understood not to ask the man how his night was, which is decent, but only one understood that he isn't starting a day — he's ending one, and a man ending his day is owed dinner and a glass of white wine, not breakfast and certainly not, God help us, a coffee.",
+      "by": "m-tri"
+    }
+  },
+  "clusters": {
+    "1": {
+      "Reykjavík": "barbecues",
+      "Valparaíso": "swimming in the sea",
+      "Hobart": "camping",
+      "Kampala": "camping",
+      "Kópavogur": "the northern lights"
+    },
+    "2": {
+      "Valparaíso": "the city seen from a distance",
+      "Hobart": "the city seen from a distance",
+      "Kópavogur": "the public baths"
+    },
+    "3": {
+      "Reykjavík": "work nobody noticed",
+      "Hobart": "work nobody noticed",
+      "Kampala": "keeping my word",
+      "Kópavogur": "work nobody noticed",
+      "Naoshima": "work nobody noticed"
+    },
+    "4": {
+      "Reykjavík": "in favour",
+      "Valparaíso": "in favour",
+      "Naoshima": "in favour",
+      "Belgrade": "against"
+    },
+    "5": {
+      "Reykjavík": "something of my father's",
+      "Valparaíso": "something of my father's",
+      "Hobart": "a piece of handwork",
+      "Kópavogur": "a document about myself",
+      "Belgrade": "a relic of a place that's gone"
+    },
+    "7": {
+      "Reykjavík": "a quiet night in",
+      "Valparaíso": "a quiet night in",
+      "Hobart": "a quiet night in",
+      "Kampala": "a chair outside, with company",
+      "Kópavogur": "a quiet night in",
+      "Belgrade": "a chair outside, with company"
+    },
+    "8": {
+      "Reykjavík": "a lifer in the works depot",
+      "Valparaíso": "somebody at a counter who hears everything",
+      "Hobart": "a lifer in the works depot",
+      "Kampala": "an unofficial authority in the street",
+      "Kópavogur": "somebody at a counter who hears everything"
+    },
+    "9": {
+      "Valparaíso": "a relative who won't be impressed",
+      "Kópavogur": "a relative who won't be impressed",
+      "Naoshima": "a relative who won't be impressed",
+      "Belgrade": "a relative who won't be impressed",
+      "Trieste": "nobody, for an hour"
+    },
+    "10": {
+      "Reykjavík": "somewhere just like home",
+      "Hobart": "somewhere just like home",
+      "Kampala": "somewhere I already know people",
+      "Kópavogur": "the town next door",
+      "Belgrade": "somewhere just like home",
+      "Trieste": "somewhere just like home"
+    },
+    "11": {
+      "Reykjavík": "a broken piece of the city",
+      "Valparaíso": "a joke somebody else left there",
+      "Kópavogur": "a joke somebody else left there",
+      "Naoshima": "something of my father's",
+      "Belgrade": "a joke somebody else left there"
+    },
+    "12": {
+      "Reykjavík": "whichever is easier to undo",
+      "Valparaíso": "whichever is quicker to explain",
+      "Hobart": "whichever is easier to undo",
+      "Kópavogur": "whichever is easier to undo",
+      "Belgrade": "whichever is easier to undo",
+      "Trieste": "the better story"
+    },
+    "13": {
+      "Reykjavík": "the laundry nobody came into",
+      "Valparaíso": "the kitchen, where everything happened",
+      "Hobart": "the laundry nobody came into",
+      "Kampala": "the room we all slept in",
+      "Naoshima": "the corridor",
+      "Belgrade": "the kitchen, where everything happened",
+      "Trieste": "the good room nobody used"
+    },
+    "14": {
+      "Reykjavík": "the top of a building nobody goes to",
+      "Valparaíso": "the top of a building nobody goes to",
+      "Hobart": "somewhere too loud to talk",
+      "Kampala": "the top of a building nobody goes to",
+      "Kópavogur": "somewhere too loud to talk",
+      "Belgrade": "among people who won't speak to me",
+      "Trieste": "among people who won't speak to me"
+    },
+    "15": {
+      "Reykjavík": "a vehicle's horn or bell",
+      "Valparaíso": "an accordion in the street",
+      "Hobart": "a vehicle's horn or bell",
+      "Kampala": "a vehicle's horn or bell",
+      "Kópavogur": "a vehicle's horn or bell",
+      "Naoshima": "a closing-time chime",
+      "Trieste": "the noise of a café"
+    },
+    "16": {
+      "Reykjavík": "paper for something that never existed",
+      "Valparaíso": "a tin of a colour we stopped using",
+      "Hobart": "a key to a door that's gone",
+      "Kampala": "a charger for a lost phone",
+      "Kópavogur": "a key to a door that's gone",
+      "Naoshima": "a ticket punch from the old ferry",
+      "Belgrade": "a key to a door that's gone",
+      "Trieste": "paper for something that never existed"
+    }
+  }
+}

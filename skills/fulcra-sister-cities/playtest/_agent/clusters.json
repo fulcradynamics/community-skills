@@ -1,0 +1,116 @@
+{
+ "1": {
+  "Reykjavík": "barbecues",
+  "Valparaíso": "swimming in the sea",
+  "Hobart": "camping",
+  "Kampala": "camping",
+  "Kópavogur": "the northern lights"
+ },
+ "2": {
+  "Valparaíso": "the city seen from a distance",
+  "Hobart": "the city seen from a distance",
+  "Kópavogur": "the public baths"
+ },
+ "3": {
+  "Reykjavík": "work nobody noticed",
+  "Hobart": "work nobody noticed",
+  "Kampala": "keeping my word",
+  "Kópavogur": "work nobody noticed",
+  "Naoshima": "work nobody noticed"
+ },
+ "4": {
+  "Reykjavík": "in favour",
+  "Valparaíso": "in favour",
+  "Naoshima": "in favour",
+  "Belgrade": "against"
+ },
+ "5": {
+  "Reykjavík": "something of my father's",
+  "Valparaíso": "something of my father's",
+  "Hobart": "a piece of handwork",
+  "Kópavogur": "a document about myself",
+  "Belgrade": "a relic of a place that's gone"
+ },
+ "7": {
+  "Reykjavík": "a quiet night in",
+  "Valparaíso": "a quiet night in",
+  "Hobart": "a quiet night in",
+  "Kampala": "a chair outside, with company",
+  "Kópavogur": "a quiet night in",
+  "Belgrade": "a chair outside, with company"
+ },
+ "8": {
+  "Reykjavík": "a lifer in the works depot",
+  "Valparaíso": "somebody at a counter who hears everything",
+  "Hobart": "a lifer in the works depot",
+  "Kampala": "an unofficial authority in the street",
+  "Kópavogur": "somebody at a counter who hears everything"
+ },
+ "9": {
+  "Valparaíso": "a relative who won't be impressed",
+  "Kópavogur": "a relative who won't be impressed",
+  "Naoshima": "a relative who won't be impressed",
+  "Belgrade": "a relative who won't be impressed",
+  "Trieste": "nobody, for an hour"
+ },
+ "10": {
+  "Reykjavík": "somewhere just like home",
+  "Hobart": "somewhere just like home",
+  "Kampala": "somewhere I already know people",
+  "Kópavogur": "the town next door",
+  "Belgrade": "somewhere just like home",
+  "Trieste": "somewhere just like home"
+ },
+ "11": {
+  "Reykjavík": "a broken piece of the city",
+  "Valparaíso": "a joke somebody else left there",
+  "Kópavogur": "a joke somebody else left there",
+  "Naoshima": "something of my father's",
+  "Belgrade": "a joke somebody else left there"
+ },
+ "12": {
+  "Reykjavík": "whichever is easier to undo",
+  "Valparaíso": "whichever is quicker to explain",
+  "Hobart": "whichever is easier to undo",
+  "Kópavogur": "whichever is easier to undo",
+  "Belgrade": "whichever is easier to undo",
+  "Trieste": "the better story"
+ },
+ "13": {
+  "Reykjavík": "the laundry nobody came into",
+  "Valparaíso": "the kitchen, where everything happened",
+  "Hobart": "the laundry nobody came into",
+  "Kampala": "the room we all slept in",
+  "Naoshima": "the corridor",
+  "Belgrade": "the kitchen, where everything happened",
+  "Trieste": "the good room nobody used"
+ },
+ "14": {
+  "Reykjavík": "the top of a building nobody goes to",
+  "Valparaíso": "the top of a building nobody goes to",
+  "Hobart": "somewhere too loud to talk",
+  "Kampala": "the top of a building nobody goes to",
+  "Kópavogur": "somewhere too loud to talk",
+  "Belgrade": "among people who won't speak to me",
+  "Trieste": "among people who won't speak to me"
+ },
+ "15": {
+  "Reykjavík": "a vehicle's horn or bell",
+  "Valparaíso": "an accordion in the street",
+  "Hobart": "a vehicle's horn or bell",
+  "Kampala": "a vehicle's horn or bell",
+  "Kópavogur": "a vehicle's horn or bell",
+  "Naoshima": "a closing-time chime",
+  "Trieste": "the noise of a café"
+ },
+ "16": {
+  "Reykjavík": "paper for something that never existed",
+  "Valparaíso": "a tin of a colour we stopped using",
+  "Hobart": "a key to a door that's gone",
+  "Kampala": "a charger for a lost phone",
+  "Kópavogur": "a key to a door that's gone",
+  "Naoshima": "a ticket punch from the old ferry",
+  "Belgrade": "a key to a door that's gone",
+  "Trieste": "paper for something that never existed"
+ }
+}

@@ -1,0 +1,18 @@
+# Running `python3 run_tests.py` leaves bytecode behind; none of it is game state.
+__pycache__/
+*.py[cod]
+
+# The newspaper's address (spec #26). The unguessable subdomain label is the
+# only thing keeping the paper non-publicly-discoverable, so it is a secret and
+# never a committed one. hosting/identity.py creates it 0600 on first use and
+# hosting/guard.py refuses to publish anything that contains it -- which is what
+# makes the built site under site/ safe to commit while this file is not.
+.site-id
+
+# Private facilitator durability. This snapshot contains the exporter ledger
+# and player routing identity, so it is never a Workspace artifact or commit.
+state/
+
+# Verification builds sample public artifacts in these directories.
+editions/
+site/

@@ -1,0 +1,42 @@
+{
+  "player_id": "m-kop",
+  "city": "Kópavogur",
+  "ballots": [
+    {
+      "round": 13,
+      "need": "in-012",
+      "your_notice": "Kópavogur turns four hundred this year and has decided to mark it with cake and nothing else whatsoever. Wanted: cake -- the tall kind, the flat kind, the kind soaked in something -- plus the boxes to carry it in and enough icing to write four hundred years' worth of nonsense across the top.",
+      "you_asked_for": "Send Kópavogur the cake, the boxes and the icing for a four-hundredth birthday.",
+      "offers": [
+        {
+          "ballot_ref": "A",
+          "offer": "One tall olive-oil sponge soaked in mikan syrup and a little sake, plus twelve flat trays of the same for cutting into squares, which travels better than the tall one and we admit tastes the same. Four hundred boxes, one per year, tied with string, and four kilos of icing in white and yellow with six piping bags. We have already written on the first cake: 'four hundred years and still no bridge' — that is about us, not you. Scrape it off and write something better."
+        },
+        {
+          "ballot_ref": "B",
+          "offer": "Kópavogur, *querido* — four hundred years and only cake? Valparaíso salutes the discipline. Loading tomorrow on the *ascensor* Artillería, hand-cranked down the hill by Doña Inés Carvajal, who has been baking on Cerro Alegre through four earthquakes, eleven winters of horizontal rain and three changes of paint on the same bakery wall, and has never once let a *torta* fall: eighteen tall *tortas de mil hojas*, forty layers each, thin as a gull's patience; twenty-four flat almond *kuchen* from the German bakers down at Puerto Varas, my cousins by marriage and rivals by nature; and nine *borrachos* soaked in *pisco* until they can barely stand, much like certain councillors after our budget votes. The boxes: three hundred, corrugated, painted by the mural collective of Cerro Concepción in the exact blues we use on the funicular sheds, so your rubbish bins will look better than most of our streets. Icing: sixty kilos, twelve colours, enough to write nonsense until 2426. Eat the *borrachos* first. They travel badly and improve everything."
+        },
+        {
+          "ballot_ref": "C",
+          "offer": "Forty women from the market savings group each baked one tin of banana-and-cardamom cake, and when you lay them end to end on trestles you get a single flat cake nine metres long, then Nnalongo goes down the whole length with a jug and soaks it in ginger, lemongrass and passionfruit syrup until it is legally a pudding. Four hundred pink cake boxes as well, tied with sisal string, because a birthday where nobody carries a slice home is a meeting. Twenty-four kilos of buttercream in eight colours and sixty piping bags, and here is how I would use them: one guest, one year, one piece of nonsense each, and nobody is allowed to correct anybody's spelling for four hundred years."
+        },
+        {
+          "ballot_ref": "D",
+          "offer": "Four hundred years deserves more than one cake, and we have had four countries, each of which left its pastry behind on the way out. Coming over: a tall dark torte with apricot hiding under the glaze, a flat sweet Easter bread in three domes, twenty coils of nut-rolled pastry that slices like rope, and one tray soaked in rum until it stopped pretending to be cake. It all travels in string-tied pastry boxes — the string is for opening, the ribbon is for pretending you waited. Eleven kilos of icing in the last crate, white and pale green, enough nonsense for four centuries plus a spare tube for whatever gets misspelled first."
+        },
+        {
+          "ballot_ref": "E",
+          "offer": "Three cakes for four hundred years. Tall is a six-tier leatherwood honey cake, dry-stacked so it travels; flat is eight trays of raspberry and blackcurrant slab off fruit picked forty minutes from here and not out of a tin; soaked is one eleven-kilo fruit cake that has had a capful of local single malt every Sunday since your notice went up and needs no further assistance from anybody. Twelve waxed boxes with string handles that hold together in rain, twenty-two kilos of royal icing, sixty piping bags. Beryl comes with it: she can pipe legible cursive upside down on a wobbling trestle table and will write whatever you tell her to, having heard worse."
+        },
+        {
+          "ballot_ref": "F",
+          "offer": "Three kinds, since a four-hundredth should not be one kind. Twenty tall ones: eleven thin layers with rhubarb jam between, sliced thinner than you think is generous, the cake made here when you cannot think what else to give a person. Forty flat ones, baked in the tray they are cut in, cocoa icing and desiccated coconut, and the tray goes home with somebody who is expected to return it. Twelve soaked in enough of something that you should warn the choir before it sings. Two hundred boxes with string, thirty kilos of icing in six colours and sixty piping bags — enough nonsense for four hundred years with a margin left over for the arguing about it."
+        },
+        {
+          "ballot_ref": "G",
+          "offer": "Four hundred years gets three cakes, not one, and anybody sending only one has not understood the assignment. Twelve tall ones — sixteen thin layers of walnut and chocolate buttercream each, cold from the counter, one layer per twenty-five years if the arithmetic pleases you. Forty trays of the flat kind: custard slab a hand deep between two sheets of pastry, cut in squares, dusted, best eaten off the box lid standing up. Then four hundred syrup-soaked ridged fritters in tins, still dripping, which are the reason we send extra napkins. Boxes are white card tied with red string, ninety of them, and there are twenty-two piping bags of royal icing plus Dragica, who has the steady hand and writes cursive nonsense at speed and will not be corrected on her spelling."
+        }
+      ]
+    }
+  ]
+}

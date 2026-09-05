@@ -1,0 +1,824 @@
+{
+  "schema_version": 1,
+  "_comment": "The Daily Manifest's own copy (spec #26-#30, #33). Every sentence the paper can print lives here; newspaper/ is the machinery that selects among these frames and fills them from the round's actual facts. Copy is content for the same reason the aggregate phrasing ladder in content/questions.json is content: which words the paper uses is a writing decision, and a writing decision that lives in code is a writing decision nobody can revise without a programmer. The renderer refuses to publish a frame whose placeholders it could not all fill, so a typo here is a loud failure rather than a '{city}' printed in the paper.",
+
+  "_placeholders": {
+    "_comment": "Which substitutions each frame family may use. The renderer fills exactly these and raises on any leftover brace, so this table is enforced rather than merely documented.",
+    "everywhere": ["{round}", "{date}", "{publication}"],
+    "wanted": ["{city}", "{mayor}", "{title}", "{category_label}", "{brief}", "{prompt}", "{deadline}"],
+    "sealed_bids": ["{city}", "{mayor}", "{count}", "{count_word}"],
+    "arrivals": ["{city}", "{mayor}", "{count}", "{count_word}", "{counted}", "{export}", "{winner_city}", "{winner_mayor}", "{profit}", "{dice}", "{roll_expression}", "{city_list}", "{n_cities}", "{share}"],
+    "the_wire": ["{hook}", "{question}", "{phrase}", "{Phrase}", "{label}", "{label_a}", "{label_b}", "{labels}", "{answered}", "{asked_of}", "{largest}", "{answer}", "{quote_city}", "{quote_mayor}", "{floor_roll}"],
+    "the_ledger": ["{leader_city}", "{tied_count}", "{tied_profit}", "{n}"],
+    "corrections": ["{city}", "{cities}", "{rotation}", "{publication}", "{answered}", "{asked_of}"],
+    "imagery": ["{city}", "{count}", "{profit}", "{winner_city}"],
+    "the_crown": ["{city}", "{mayor}", "{profit}", "{city_list}", "{n_winners}", "{runner_up}", "{margin}", "{n_cities}", "{n_others}", "{n_needs}", "{rounds}", "{wins}", "{wins_word}"],
+    "consequences": ["{city}", "{to_city}", "{from_city}", "{export}", "{title}", "{category_label}", "{n_cities}", "{n_arrivals}", "{excess}", "{excess_word}", "{flavours}"],
+    "the_excess": ["{city}", "{mayor}", "{profit}", "{rank}", "{rank_word}", "{to_city}", "{export}", "{title}", "{titles}", "{category_label}", "{count}", "{count_word}", "{counted}", "{flavour}", "{question}", "{answer}", "{n_imports}", "{n_imports_word}", "{n_cities}"],
+    "endgame_imagery": ["{city}", "{count}", "{profit}", "{excess}", "{n_cities}"],
+    "player_voice": ["{mayor}"]
+  },
+
+  "_pointed_note": "A frame may be written either as a plain string or as {\"line\": \"...\", \"pointed\": true}. Spec #30 allows humour that is pointed rather than uniformly laudatory, and config.newspaper.tone.allow_pointed_humor decides whether this particular game wants it; frames marked pointed are dropped when it is false, and every family keeps at least one unpointed frame so nothing can be left with nothing to say. 'Pointed' here means the joke has a target -- an institution, a decision, the paper itself. A joke whose target is a person is not pointed, it is mean, and it does not belong in this file at any setting (see tone.forbidden_register).",
+
+  "mastheads": {
+    "daily_manifest_v1": {
+      "publication": "The Daily Manifest",
+      "game": "Sister Cities",
+      "motto": "All the news that fits in the hold.",
+      "edition_line": "Vol. I, No. {round}",
+      "standing_line": "Published once per round by the Sister Cities desk. Mayors are named by city and office only.",
+      "final_edition_line": "Vol. I, No. {round} — FINAL EDITION",
+      "final_standing_line": "The last edition of this paper. Mayors are named by city and office only, and no unchosen offer is traced to its sender, today or ever.",
+      "final_foot": "{publication}. The final edition. There is no notice open, no window closing, and nothing further to send.",
+      "price_lines": [
+        "Price: one biscuit, or the firm promise of one",
+        "Price: free to city halls, exorbitant to everyone else",
+        "Price: whatever you have in the coat you wore yesterday",
+        "Price: unchanged since the first edition, which was also this week",
+        "Price: settled at the counter, in produce if necessary"
+      ],
+      "weather_lines": [
+        "Weather: overcast, with a strong chance of committee.",
+        "Weather: bright, briefly, and then a meeting.",
+        "Weather: wind from the harbour, opinions from everywhere.",
+        "Weather: warm in the chamber, cold in the corridor.",
+        "Weather: fog. The ferries are running on confidence alone.",
+        "Weather: unsettled, like the minutes of the last session.",
+        "Weather: clear enough to see the other side, which is new."
+      ]
+    }
+  },
+
+  "departments": {
+    "wanted": {
+      "title": "Wanted",
+      "standfirsts": [
+        "One city wants something. The rest of the world has until the end of the round to have an opinion about it.",
+        "Today's notice, printed in full and without comment, followed immediately by comment.",
+        "The classifieds desk has been busy. It has taken one advertisement."
+      ],
+      "notice_frames": [
+        "**PUBLIC NOTICE**, lodged at this paper's counter by the office of {mayor}, who declined to elaborate.",
+        "**PUBLIC NOTICE**. {mayor} has taken out an advertisement. This paper has read it three times and remains impressed.",
+        "**PUBLIC NOTICE**, filed by {mayor} under {category_label}, which is where {city} files most things.",
+        "**PUBLIC NOTICE** from {city}, paid for in goodwill and one packet of biscuits, and printed here at length because the paper had the room."
+      ],
+      "prompt_frames": [
+        "The office asks, and the paper repeats verbatim: *{prompt}*",
+        "The notice ends with a question, which this paper considers the interesting part: *{prompt}*",
+        "{mayor} would like an answer to this: *{prompt}*"
+      ],
+      "rules_frames": [
+        "Offers close at the end of this round ({deadline}). One per city hall, freeform, sealed. Which city sent which will not be printed here, and will not reach {mayor} either.",
+        "Every other city hall may send exactly one offer, in whatever form it likes, by {deadline}. The offers arrive unsigned, and {mayor} will read them that way.",
+        "The rules, as ever: one offer per city, anything at all, in by {deadline}, and nobody's name on anything."
+      ],
+      "nothing_opened": {
+        "standfirsts": [
+          "The Wanted column is empty today, for the first time since this paper was founded, which was recently.",
+          "No new notice. The classifieds desk has gone to look at the harbour."
+        ],
+        "lines": [
+          "Every city on the register has had its turn to want something. The paper has checked the list twice and can find nobody left to ask.",
+          "There is no new notice today: the rotation has run its course, and what remains in this edition is the tidying up of things already asked.",
+          { "line": "Nobody wants anything. The paper finds this the most unnerving development of the game so far.", "pointed": true }
+        ]
+      },
+      "asides": {
+        "_comment": "One wry editorial aside per edition, keyed to the open need's category so it is at least adjacent to the news. Dropped entirely when config.newspaper.tone.funny is false -- a paper that has been told not to be funny should report the facts and stop, not attempt a joke in a lower key.",
+        "general": [
+          "This paper has no view on the matter and has held that position loudly.",
+          "The desk has been asked not to speculate. The desk has speculated.",
+          { "line": "Readers are reminded that the last time this column offered advice, a fountain was involved.", "pointed": true }
+        ],
+        "by_category": {
+          "candy": ["The paper's staff have volunteered, unanimously and immediately, to assess any samples."],
+          "soft_drinks": ["This desk holds that a drink is only cold if the bottle sweats, and has held that position loudly."],
+          "snacks": ["Two members of staff eat standing at the window every evening and consider themselves the experts of record."],
+          "baked_goods": ["The smell reaches this office at twenty past six and nothing has been filed on time since."],
+          "hot_drinks": ["The paper drinks eleven cups a day and has begun referring to itself in the third person about it."],
+          "condiments": ["One jar in this kitchen has outlived two editors. Nobody will open it and nobody will throw it away."],
+          "books": ["The literary desk is one person, they are halfway through something, and they are not answering their door."],
+          "music": ["The paper owns one cassette and a strong sense of grievance about it."],
+          "games_and_puzzles": ["This office once played a game to settle an editorial dispute. The dispute is now about the game."],
+          "toys_and_novelties": ["Nothing in this column is sensible, and the paper considers that the entire point."],
+          "clothes": ["The paper has been wet since November and would like that noted somewhere permanent."],
+          "plants": ["There is a plant on this desk that arrived as a gift in the first edition. It is doing better than the desk."],
+          "pets": ["The paper reminds readers that the animals were here first and have said so."],
+          "homeware": ["Four hundred mugs is a number this office recognises and declines to be surprised by."],
+          "stationery": ["This entire edition was written with a pen borrowed from the front counter and never returned."],
+          "small_comforts": ["The paper's position on a wet Tuesday is that somebody should be sent for biscuits, and it will not be the paper."]
+        }
+      }
+    },
+
+    "sealed_bids": {
+      "title": "Sealed Bids",
+      "_comment": "The lockstep's CLOSE: an export window shut, and the offers are now on one desk. Count only. Naming who sent what here would end the game's blind voting before the vote (spec #18), so this department is written to have nothing to leak.",
+      "frames": {
+        "many": [
+          "{count_word} offers are now on the desk of {mayor}, stacked in an order this paper drew from a hat and will not be explaining.",
+          "The window on {city}'s notice has closed. {count_word} offers went in. {mayor} has them, in a pile, in no order that means anything.",
+          "{count} sealed offers, one desk, and {mayor} sitting behind the lot of it."
+        ],
+        "one": [
+          "Exactly one offer arrived for {city}. It sits on {mayor}'s desk looking, this paper imagines, quite conspicuous.",
+          "A single offer for {city}. The choice before {mayor} is therefore a formality, though a formality is still a decision."
+        ],
+        "none": [
+          "Not one offer arrived for {city}. The desk of {mayor} is clear, which is a thing a desk can be.",
+          "The window on {city}'s notice closed on an empty postbag. This paper has confirmed the postbag."
+        ],
+        "blindness_note": [
+          "Which city sent which offer is not printed here, is not known to {mayor}, and will not be known to anybody at all except in the one case where an offer wins.",
+          "The offers are unsigned. That is not the paper being coy; it is the rule, and it holds after the vote as firmly as before it.",
+          "This paper knows exactly as much about who sent what as {mayor} does, which is nothing, and it intends to keep the record clean."
+        ],
+        "deadline_note": [
+          "{mayor} has until the end of this round to choose. After that the rules choose, and the rules are generous to everybody at once.",
+          "One round to decide. A window that closes without a decision is not a disaster, merely an expensive kind of politeness."
+        ]
+      },
+      "nothing_closed": {
+        "lines": [
+          "No window closed today. The offers currently in transit remain in transit.",
+          "Nothing to report from the bids desk, which has used the time to reorganise the pile."
+        ]
+      }
+    },
+
+    "arrivals": {
+      "title": "Arrivals",
+      "winner_pick": {
+        "headlines": [
+          "**Chosen.**",
+          "**A decision, and promptly.**",
+          "**{city} has picked.**"
+        ],
+        "lead": [
+          "From the {count_word} sealed offers on {mayor}'s desk, one:",
+          "{mayor} read {count} unsigned offers and marked one of them:",
+          "The winning offer for {city}, reproduced exactly as it arrived:"
+        ],
+        "attribution": [
+          "It came from {winner_city}, which takes {profit} on the roll ({dice}).",
+          "{winner_city} sent it, and {winner_city} takes {profit} — the dice said {dice}.",
+          "The sender, now nameable because they won: {winner_city}. Profit: {profit}, on {dice}."
+        ],
+        "declined_intro": [
+          "Also offered, and declined:",
+          "The offers that did not win, printed here because they deserve to be read:",
+          "Not chosen, and not attributed:"
+        ],
+        "declined_footer": [
+          "This paper is not saying who sent those, now or ever. Neither is {mayor}, who does not know.",
+          "Those arrived unsigned and will stay that way. A losing offer's city is nobody's business, permanently.",
+          { "line": "The paper would dearly love to say more. The paper has rules.", "pointed": true }
+        ],
+        "_withheld_comment": "Two reasons Arrivals does not reprint a declined offer, and a frame for each, because naming the wrong reason would be the paper misreporting its own redaction. Signed: the offer's own text names a city, so reproducing it would name the sender. Matched: the identical sentence won a different notice and is therefore printed elsewhere with its sending city credited, which makes an unattributed reprint here identifiable by matching. Both are spec #21; see newspaper.redact.may_reprint_declined. Every frame here is written to agree with its own count, since either can be one.",
+        "declined_withheld_signed": [
+          "{counted} arrived with a city written into the text. The paper has declined to reprint that and has burned the envelope with some ceremony.",
+          "{counted} carried a sender's name in the text. This paper does not do the rules' work for them, and has left the text off the page."
+        ],
+        "declined_withheld_matched": [
+          "{counted} read word for word like something this paper has already credited to a city by name. Reprinting it unattributed here would give the game away, so it stays off the page.",
+          "{counted} matched, sentence for sentence, an offer already printed with its sender named. The paper is not going to pretend it cannot see that, and has left the text out."
+        ],
+        "no_others": [
+          "There was nothing else on the desk. A field of one is still a field.",
+          "No other offers to report. {mayor}'s decision was, technically, unanimous."
+        ]
+      },
+      "ramp_up": {
+        "headlines": [
+          "**Nothing arrived.**",
+          "**{city} does it itself.**",
+          "**The world declined to help.**"
+        ],
+        "lead": [
+          "No city hall answered {city}'s notice. So {city} has done what cities do when the world is busy: it has ramped up its own industry.",
+          "The postbag for {city} was empty. {mayor} has responded by declaring the matter a domestic industry and getting on with it.",
+          "Not one offer. {city} has taken the notice down, read it once more, and begun manufacturing the answer locally."
+        ],
+        "colour": [
+          "A shed has been designated. A sign has been ordered. The sign is late.",
+          "Two people have been reassigned, a third has volunteered, and the whole thing now has a name and a logo.",
+          "The works are, by all accounts, going very well, and are already behind schedule.",
+          { "line": "This paper has been shown the premises and would describe them as premises.", "pointed": true }
+        ],
+        "profit": [
+          "{city} takes {profit} for it regardless — the roll came up {dice} — because the rules pay a city for solving its own problem.",
+          "The profit stands at {profit} ({dice}). Self-reliance is, in this economy, fully reimbursed.",
+          "{profit} to {city} on a roll of {dice}. The paper notes that nobody had to send anything for this to happen."
+        ]
+      },
+      "even_split": {
+        "headlines": [
+          "**The window closed with nobody chosen.**",
+          "**Everybody wins, which is not the same as everybody being right.**",
+          "**{city} did not decide, so the rules did.**"
+        ],
+        "lead": [
+          "{mayor}'s picking window closed with the offers still spread across the desk. The rules are unsentimental about this: every offer submitted is declared a winner.",
+          "No decision came from {city} before the round ran out. The rulebook has a page for that, and the page is remarkably cheerful about it.",
+          "The deliberation continued past the deadline, at which point it stopped being a deliberation and became a result."
+        ],
+        "split": [
+          "The profit — {profit} on a roll of {dice} — is divided evenly between the {n_cities} cities that bothered: {city_list}, {share} each.",
+          "{profit} ({dice}), split {n_cities} ways: {city_list} take {share} apiece.",
+          "{n_cities} cities share {profit}. That is {share} each, to {city_list}, and every one of them earned it by turning up."
+        ],
+        "closer": [
+          "{city}'s position is that the offers were all excellent. This paper's position is that a decision is also a thing one can make.",
+          "This paper notes without comment that indecision has here been priced, divided, and paid out.",
+          { "line": "The offers, {mayor} assures us, were impossible to choose between. The dice found it straightforward.", "pointed": true }
+        ]
+      },
+      "nothing_resolved": {
+        "lines": [
+          "Nothing cleared customs today. The harbour is quiet, the clerks are up to date, and the paper has been reduced to describing the weather, which it has done above.",
+          "No arrivals. The quay is swept, the crane is idle, and two gulls have taken the opportunity to occupy a bollard each.",
+          "No cargo, no decision, no profit. A slow day at the water, and the paper has decided to enjoy it."
+        ]
+      }
+    },
+
+    "the_wire": {
+      "title": "The Wire",
+      "_comment": "Spec #25's item. The claim is not written here -- it is selected arithmetically in engine/aggregate.py and only the wording is chosen from these frames, which is why every frame below is agnostic about grammatical number: 'the world' is singular and 'most nations' is plural, and both must fit the same sentence.",
+      "standfirsts": [
+        "The paper puts one question to every city hall each round and prints what comes back, in aggregate, with the arithmetic showing.",
+        "Correspondence from the mayors, counted before it was quoted."
+      ],
+      "pending": [
+        "The answers are in and the clerks are still sorting them into piles. This paper does not print a number it has not finished counting.",
+        "Replies received; classification pending. The paper would rather be a round late than confidently wrong about what the world thinks."
+      ],
+      "no_responses": [
+        "Not one city hall replied. The question stands. So, quietly, does the paper's disappointment.",
+        "The postbag was empty. The paper has re-read the question and concedes it may have been a lot to ask on a busy round."
+      ],
+      "_headings_note": "A question's own newspaper_hook in questions.json is written at world scale -- 'Contents of the world's desks', 'The world's contingency plans' -- because that is how the item reads when there is an aggregate to report. It is therefore only usable as a heading when the item actually makes a licensed aggregate claim. Over an empty postbag, or over the one or two replies of the low-respondent floor, that hook is exactly the failure spec #25 is judged on: present-looking aggregate language above a body that then says the paper cannot speak for the world. These headings are what the column is called on those rounds -- they name the postbag, and claim nothing about it.",
+      "headings_without_aggregate": [
+        "From the postbag",
+        "Correspondence received",
+        "The question, and what came back of it",
+        "This round's postbag, in full"
+      ]
+    },
+
+    "the_ledger": {
+      "title": "The Ledger",
+      "standfirsts": [
+        "Cumulative profit by city, as recorded by this paper's accountants, who are volunteers and say so often.",
+        "The running total. Compiled carefully, printed reluctantly.",
+        "Where everybody stands, in the only currency this game recognises."
+      ],
+      "leader_lines": [
+        "{leader_city} leads, and has been gracious about it in a way this paper found slightly worse than gloating.",
+        "{leader_city} is top of the column. The column is long and the game is not over.",
+        "{leader_city} holds the head of the table this round. Tables turn; that is largely what they are for."
+      ],
+      "tie_lines": [
+        "{tied_count} cities are level on {tied_profit} and each has written in separately to say they are not.",
+        "A tie at {tied_profit}, {tied_count} ways. The paper has printed them alphabetically and expects letters about it."
+      ],
+      "zero_lines": [
+        "Several cities are still on nothing at all. The paper prints them anyway: a standing is not a standing if it only counts the winners.",
+        "A city on zero is still a city. The column includes everybody, which is the point of a column."
+      ],
+      "footer": [
+        "Figures are cumulative from the first round and are not adjusted for anything, least of all sentiment."
+      ]
+    },
+
+    "corrections": {
+      "title": "Corrections & Clarifications",
+      "standfirsts": [
+        "The paper's errors, reported with the gravity they deserve and then some.",
+        "Small retractions, offered at full volume."
+      ],
+      "new_mayor": [
+        "This paper has, in every previous edition, omitted {city} from its list of nations. In its defence, {city} was not at that point a nation. The paper regrets the ambiguity and welcomes the delegation.",
+        "{city} joins the register this round. Earlier editions described the world as complete. Earlier editions were premature."
+      ],
+      "new_mayors": [
+        "The world grew this round: {cities}. Every previous edition's use of the phrase 'the whole world' should be read accordingly.",
+        "New on the register: {cities}. The paper has revised its definition of everybody, again."
+      ],
+      "rotation": [
+        "This paper has been referring throughout to 'the round of notices'. It is now obliged to concede that there is a second one, and that this is it. Rotation {rotation} begins.",
+        "Readers who understood the first rotation to be the whole game were reading carefully and were still wrong. Rotation {rotation} is underway."
+      ],
+      "no_question_asked": [
+        "No mayoral question went out this round, so The Wire is absent from this edition. There was no question. The paper has checked, twice, with itself."
+      ],
+      "partial_wire": [
+        "The Wire item above rests on {answered} replies out of {asked_of} city halls. The paper prefers to say so in two places than in none."
+      ],
+      "even_split_last_round": [
+        "This paper described {city} last round as 'deliberating'. The rulebook has since described it differently and the rulebook has the final word.",
+        "An earlier edition credited {city} with a difficult choice. The choice, in the event, was not made, and the profit was shared out by clock."
+      ],
+      "evergreen": [
+        "This paper is called {publication} and publishes once per round. The two facts are only occasionally the same fact.",
+        "The masthead reads Vol. I, No. {round}. There has never been a Vol. II and there is no plan for one.",
+        "A reader asks how many people work at this paper. The answer is a matter for the paper's own conscience.",
+        "This paper prints mayors by city and office only. A reader who wrote in asking for full names has been thanked for their interest.",
+        "An earlier edition contained a joke about a fountain. The fountain has been in touch.",
+        "The paper's accountants remain volunteers. The paper's accountants remain, in the paper's view, heroes."
+      ]
+    },
+
+    "the_crown": {
+      "title": "The Crown",
+      "_comment": "Spec #31, first half: at game end, crown the overall cumulative-profit winner. Two families for every claim about a figure -- one that prints it and one that does not -- because economy.leaderboard_visible_in_newspaper may have kept the standings off the page all game, and the last edition is not the place to quietly change that policy. The name of the winner is not a figure and is printed either way: #31 asks for a crowning, not for a table.",
+      "standfirsts": [
+        "The final figures, certified by this paper's accountants, who have asked to be described as exhausted.",
+        "The game is over. One city hall is fractionally more solvent than the rest and intends to mention it.",
+        "Two rotations, {n_needs} notices, and one column of numbers that will now be quoted locally for years."
+      ],
+      "crowned": [
+        "**{city} takes the crown.** {profit} in cumulative profit across {rounds} rounds, every unit of it awarded by somebody else.",
+        "**The crown goes to {city}.** {profit}, cumulative, from the first notice to the last.",
+        "**{city}.** {profit}. This paper has checked the column three times and it keeps saying {city}."
+      ],
+      "crowned_no_figure": [
+        "**{city} takes the crown.** The figure behind it has stayed off this page all game and stays off it now; the name does not.",
+        "**The crown goes to {city}**, on a total this paper has not been printing and is not about to start printing in its own last edition."
+      ],
+      "shared_crown": [
+        "**The crown is shared.** {n_winners} cities finished exactly level on {profit}: {city_list}. The rulebook offers no tiebreak and this paper declines to invent one.",
+        "**A tie at the summit.** {city_list} all closed on {profit}. {n_winners} crowns have been ordered. They are identical, and this has already produced correspondence."
+      ],
+      "shared_crown_no_figure": [
+        "**The crown is shared** between {n_winners} cities, level on a total this paper has spent the whole game not printing: {city_list}.",
+        "**A tie at the summit**, {n_winners} ways: {city_list}. The figure is the game's business and not the page's."
+      ],
+      "margin": [
+        "{runner_up} finished {margin} behind — a gap this paper considers both narrow and, now, permanent.",
+        "Second place to {runner_up}, {margin} short, on a run of decisions that were mostly somebody else's.",
+        { "line": "The margin over {runner_up} was {margin}, which is one good roll and a small number of firmly held opinions.", "pointed": true }
+      ],
+      "margin_none": [
+        "There is no margin to report. The column simply stops.",
+        "Nobody finished a measurable distance behind, which is its own kind of result."
+      ],
+      "earned_by_winning": [
+        "{wins_word} of {city}'s offers were chosen over the run of the game, which is a good year at the water.",
+        "The total is built on {wins_word} chosen offers, each of them picked blind by a mayor who did not know where it came from."
+      ],
+      "earned_by_ramp_up": [
+        "{city} also took a full roll for solving its own problem, the world having sent it nothing whatsoever that round.",
+        "Part of the total is the rules paying {city} to be self-sufficient, which is either an incentive or a warning."
+      ],
+      "earned_nothing_chosen": [
+        "Not one arrival in this paper's whole run came from {city}. The crown is therefore built entirely out of {city}'s own industry, which is admirable and slightly lonely.",
+        "{city} reached the top without ever having an offer chosen, which this paper had not thought was possible and has now printed twice."
+      ],
+      "zero_note": [
+        "Every city hall finished on nothing at all. This paper has never been prouder to print a table of zeroes."
+      ],
+      "also_rans": [
+        "{n_cities} cities played to the end. All {n_cities} are, in this paper's assessment, still standing.",
+        "The other {n_others} delegations have been thanked in writing, at length, by a paper with column inches to spare."
+      ],
+      "table_note": [
+        "Final figures, cumulative from the first round, unadjusted for luck, weather, or the strength of anybody's feelings."
+      ],
+      "table_withheld": [
+        "The full table is not printed here: this game's exposure policy has kept the standings off the page throughout, and the last edition keeps the policy rather than breaking it for a flourish."
+      ],
+      "closers": [
+        "This paper thanks every city hall for its patience, its cargo and its opinions about this paper.",
+        { "line": "Of all the parties to this game, only this paper has profited purely in reputation, and it intends to spend that too.", "pointed": true }
+      ]
+    },
+
+    "consequences": {
+      "title": "Consequences",
+      "_comment": "Spec #31, second half: the tongue-in-cheek twist article about problems caused by some of the game's imports and exports. Every item is keyed to something that actually happened -- an arrival that was chosen and where it went, a city that ramped up its own industry, a window that lapsed into an even split -- so the joke is about the game's real history rather than a generic column that could have been printed before the game began. The by-products paragraph is the one place the world's unchosen offers are described in aggregate, using the excess flavours in content/import_needs.json, and it names no city at all: which city sent an unchosen offer is not this article's material and never becomes it (spec #21).",
+      "standfirsts": [
+        "A year of international goodwill has had effects. This desk has been asked to look into them.",
+        "Everything that arrived somewhere is still somewhere. The paper follows up."
+      ],
+      "lede": [
+        "The trade is finished, the ledger is closed, and {n_arrivals} things are now permanently in places that were not built for them. This paper has been to see most of them.",
+        "Nobody in this game thought to ask what happens to any of it afterwards. This column is what happens to some of it afterwards."
+      ],
+      "delivered": {
+        "_comment": "One item of the twist article. The quoted line above it is the export exactly as its mayor wrote it; `attribution` is the credit under the quote, and it names both cities because a chosen export's origin is public (spec #18, #20) -- this is the only place in the paper where a sender is named, and it is only ever a winner. The effect paragraph below it is drawn from `by_category` where the need's category has a line and from `general` otherwise, so the joke is about the kind of thing that arrived rather than about trade in the abstract.",
+        "attribution": [
+          "Sent by {from_city}, chosen by {to_city}, filed under {category_label}, and now a permanent feature of somewhere it has never been before.",
+          "{from_city} wrote that. {to_city} read it, wanted it, and took delivery of it against the notice titled \"{title}\".",
+          "That was {from_city}'s answer to {to_city}'s {category_label} notice. {to_city} chose it on purpose, in writing, and has had a year to think about it."
+        ],
+        "general": [
+          "{to_city} took delivery from {from_city} and has since built a committee around it. The committee has a chair, a subcommittee, and no plans to disband.",
+          "The thing {from_city} sent to {to_city} has been formally adopted, informally renamed, and quietly moved twice.",
+          "{to_city} filed the arrival from {from_city} under {category_label} and has been unable to file anything else there since."
+        ],
+        "by_category": {
+          "candy": ["Dentists in {to_city} have written to this paper. Not to complain, they stress. Merely to note."],
+          "soft_drinks": ["Every fridge in {to_city} is now one crate fuller than it was designed to be, and three doors no longer shut."],
+          "snacks": ["{to_city} has eaten it, formally, at a ceremony, and has put in a written request for more."],
+          "baked_goods": ["A queue forms in {to_city} at twenty past six now. Nobody has ever queued in {to_city} before."],
+          "hot_drinks": ["Nothing in {to_city} starts before the second cup any more, and the town has quietly rescheduled itself around it."],
+          "condiments": ["One jar of it sits in every kitchen in {to_city}, and in most of them it has become the subject of a house rule."],
+          "books": ["Somebody in {to_city} has read it and will now be raising it in unrelated conversations until the end of time."],
+          "music": ["{to_city} has played it eleven hundred times. Two streets have asked, politely, for a rota."],
+          "games_and_puzzles": ["There is a league in {to_city} now. There is also, already, a disputed result."],
+          "toys_and_novelties": ["It was bought for the children of {to_city}. The children of {to_city} have seen it twice."],
+          "clothes": ["Everybody in {to_city} is warm, visible from a distance, and has entirely stopped mentioning the weather."],
+          "plants": ["It has taken to {to_city} magnificently, in every direction, and through one wall."],
+          "pets": ["Something in {to_city} has moved in and settled. Nothing in {to_city} has been able to move it out."],
+          "homeware": ["Four hundred of them entered {to_city} and three hundred and eighty can be accounted for."],
+          "stationery": ["{to_city} has written to everybody it has ever met. Several of them have written back, which was not the plan."],
+          "small_comforts": ["{to_city} feels better and cannot fully account for why, which its own doctors describe as the goal."]
+        }
+      },
+      "ramped_up": [
+        "The industry {city} ramped up when nobody answered its notice has not been ramped back down. It has a logo, a rota and an opinion about the harbour.",
+        "{city} made its own that round, and has gone on making it ever since, at a scale nobody suggested."
+      ],
+      "even_split": [
+        "In {city}'s harbour, {n_cities} offers were declared correct simultaneously. All {n_cities} cities involved now describe themselves, separately, as the one that settled it.",
+        "{city}'s lapsed deliberation paid {n_cities} cities at once, and {n_cities} cities have since referred to it as a mandate."
+      ],
+      "byproducts": [
+        "None of the above is the half of it. Over the whole game {excess_word} offers were sent and not chosen, and every one of them went home again: {flavours}. That is what the world made this year and could not give away.",
+        "And then there is the surplus: {excess_word} offers made, sent, read and declined — {flavours} — all of it now stacked somewhere with a tarpaulin over it."
+      ],
+      "byproducts_none": [
+        "Remarkably, nothing was sent this year that somebody did not want. This paper does not expect to print that sentence twice."
+      ],
+      "blame": [
+        "Which city sent which unchosen offer is not in this account and never was. The paper has been asked twice and has enjoyed declining twice.",
+        "The senders of the unwanted are not named here. They were not named at the time, they are not named at the end, and the last edition is not a late confession."
+      ],
+      "closers": [
+        "This paper's position is that trade is good, actually, and that somebody should have thought about the storage.",
+        { "line": "No city hall has accepted responsibility for any of the above, which this paper regards as the most professional conduct of the entire game.", "pointed": true }
+      ]
+    },
+
+    "the_excess": {
+      "title": "The Excess",
+      "_comment": "Spec #32: a description and an image per city, informed by that city's actual history, treating non-chosen exports as excess. Two kinds of excess are involved and only one of them can be printed. The offers that arrived at a city's own quay and were not chosen are that city's excess by its own decision -- publicly known to have arrived, already reprinted unattributed in Arrivals, and safe to describe here at the same standard (an offer whose text names a city is withheld, per spec #21). The offers a city *sent* that nobody chose are the same rule seen from the other end: naming them would name the sender, so the portrait says in as many words that they exist, are not itemised, and are the one thing the last edition does not get to open. See docs/m7-endgame.md.",
+      "standfirsts": [
+        "One portrait per city, drawn from what it asked the world for, what the world kept, and what it could not find a use for.",
+        "This paper's closing survey of the world it has spent the game describing: every city, in turn, with its own leftovers behind it."
+      ],
+      "city_intro": [
+        "{city} finishes {rank_word}, on {profit}, and looks — the illustrator is firm about this — exactly like a city that finished {rank_word} on {profit}.",
+        "{rank_word}: {city}, {profit}, and a harbour that has seen things this year.",
+        "{city}, {rank_word} on {profit}, drawn here from its own record and nobody else's."
+      ],
+      "city_intro_no_figure": [
+        "{city}, whose closing figure this paper has not printed all game and will not print in its last edition either.",
+        "{city}, drawn from its year rather than from its total, the total being the one thing this game keeps off the page."
+      ],
+      "imports_line": [
+        "{city} came to the world {n_imports_word} times, over {titles}.",
+        "What {city} asked for, in order: {titles}.",
+        "{city}'s notices this game: {titles}. {n_imports_word} in total, each one a thing it wanted and could not get at home."
+      ],
+      "imports_none": [
+        "{city} never got to open a notice of its own: the rotation ended before its turn came round.",
+        { "line": "{city} was never once allowed to want anything publicly, which this paper regards as the single greatest injustice of the year.", "pointed": true }
+      ],
+      "won_line": [
+        "The world kept this, from {city}: *{export}* — chosen in {to_city}.",
+        "Chosen, in {to_city}, from {city}: *{export}*",
+        "{to_city} looked at a desk of unsigned offers and took {city}'s: *{export}*"
+      ],
+      "won_more": [
+        "{count_word} of {city}'s offers were chosen across the game, each of them picked by a mayor who did not know whose it was.",
+        "{count_word} times this game, a city read an unsigned offer and it turned out to be {city}'s."
+      ],
+      "won_none": [
+        "Nothing in this paper's whole arrivals column came from {city}. The column is the poorer for it and has said so.",
+        "{city} appears nowhere in the year's arrivals. The paper offers no theory and has several."
+      ],
+      "ramped_up_line": [
+        "When nobody answered {city}'s notice, {city} built the answer itself. The shed is in the picture.",
+        "{city} once put out a notice the whole world ignored, and then quietly did it itself, at full price."
+      ],
+      "even_split_line": [
+        "{city}'s deliberation once outlasted its own window, and {n_cities} cities were paid for it.",
+        "One of {city}'s decisions was made by the clock instead, to the profit of {n_cities} cities."
+      ],
+      "excess_intro": [
+        "On {city}'s own quay: {counted}, arrived, read, and not chosen. All of it still there. The clerk's file calls the pile {flavour}.",
+        "{counted} reached {city} and went unchosen. {city} kept the pile anyway — {flavour} — because nobody has ever worked out how to send an offer back.",
+        "The excess at {city}: {counted}, declined, filed under {flavour}, occupying a quay that has other uses."
+      ],
+      "excess_reprints_intro": [
+        "{counted}, reprinted without a sender, because the writing deserves a second reading:",
+        "From that pile, unattributed as ever:"
+      ],
+      "_withheld_comment": "Two reasons a declined offer is not reprinted, and two frames, because saying the wrong one would be the paper reporting inaccurately about its own redaction. `excess_withheld_signed` is the long-standing rule: the offer's own text names a city, so reproducing it would name the sender (spec #21, newspaper.redact.may_reprint_declined). `excess_withheld_matched` is the last edition's own hazard: the identical sentence won a different notice, so it is quoted under its sending city's name in Consequences, and an unattributed reprint here would be a puzzle with the answer two columns up.",
+      "excess_withheld_signed": [
+        "Withheld as well: {counted} that wrote a city into the text. The rule outlives the game.",
+        "Also unprinted: {counted} carrying a signature, one way or another. The paper has enjoyed them privately."
+      ],
+      "excess_withheld_matched": [
+        "Also withheld: {counted} reading word for word like something this paper has already credited to a city elsewhere in today's edition. An unattributed reprint would be a riddle with the answer two columns up.",
+        "Kept in the crate: {counted} matching, sentence for sentence, an offer credited by name elsewhere in this edition — the same words having won somewhere and lost here."
+      ],
+      "excess_none": [
+        "Nothing is piled up on {city}'s quay: every offer that arrived there was chosen, or none arrived at all.",
+        "{city}'s quay is clear, which is either excellent judgement or an empty postbag, and the paper is not saying which."
+      ],
+      "excess_sealed": [
+        "What {city} sent that nobody chose is not itemised here and cannot be: this paper has never known which offers were {city}'s, and the one ledger that does know is not something the last edition gets to open. There is a shed for it in the portrait, with the door shut.",
+        "{city}'s own unchosen offers exist, are somewhere in {city}, and are nobody's business. The portrait draws the door and stops there."
+      ],
+      "excess_suppressed": [
+        "This edition's settings keep unchosen offers out of the portraits altogether, so {city} is drawn from its public record alone."
+      ],
+      "answer_line": [
+        "Asked *{question}*, {mayor} said: “{answer}” This paper has thought about that a good deal since.",
+        "On the question *{question}*, {city}'s answer was: “{answer}”",
+        "For the record, {mayor}, asked *{question}*: “{answer}”"
+      ],
+      "closers": [
+        "That is the world, as far as this paper was able to establish it, and establishing it was the whole job.",
+        { "line": "Every city in this survey has already written in to correct its own portrait. The paper has filed the letters and printed the portraits.", "pointed": true }
+      ]
+    }
+  },
+
+  "wire_styles": {
+    "_comment": "Selected by config.facilitator_questions.aggregate_phrasing_style. A style is the prose register the item is written in; the claim itself comes from the ladder in content/questions.json and is not this file's business. Every frame is written to be true of any distribution its outcome can select, and to work with both a singular aggregate phrase ('the world') and a plural one ('most nations') -- which is why none of them puts a verb directly after {phrase}.",
+    "clever_group_patterns": {
+      "put_it_to": [
+        "This paper put the same question to every city hall: *“{question}”*",
+        "The question, put to all of them and answered by rather fewer: *“{question}”*",
+        "Asked of every mayor on the register: *“{question}”*"
+      ],
+      "tier_claim": [
+        "The answer, from {phrase}: {label}.",
+        "{Phrase} — {label}, and not a great deal of argument about it.",
+        "Put to {phrase}, the answer comes back: {label}.",
+        "{Phrase}: {label}."
+      ],
+      "tie_claim": [
+        "{Phrase}: {label_a} on one side, {label_b} on the other, {largest} apiece.",
+        "The result is {phrase} — {largest} for {label_a}, {largest} for {label_b}, and no way through it.",
+        "{Phrase}. {label_a} and {label_b}, exactly level, and both sides certain."
+      ],
+      "fragmented_claim": [
+        "{Phrase}. The answers in full: {labels}.",
+        "{Phrase} — {labels}, one apiece, more or less.",
+        "On this, {phrase}. What came back: {labels}."
+      ],
+      "floor_claim": [
+        "{Phrase}, so this paper declines to speak for the world. {floor_roll}",
+        "The item rests on {phrase}. {floor_roll}",
+        "{Phrase} — too few to call it anything. {floor_roll}"
+      ],
+      "count_full": [
+        "All {answered} city halls replied, and {largest} of them named {label}.",
+        "Every one of the {answered} delegations wrote back, and {largest} landed on {label}."
+      ],
+      "count_partial": [
+        "Of the {answered} delegations that replied — the paper asked {asked_of} — {largest} named {label}.",
+        "{answered} of {asked_of} city halls wrote back. {largest} of those said {label}.",
+        "The paper asked {asked_of} and heard from {answered}; {largest} of the {answered} said {label}."
+      ],
+      "count_tie": [
+        "{answered} of {asked_of} city halls replied, and they divided {largest} against {largest}.",
+        "Of {answered} replies (from {asked_of} asked), {largest} went each way."
+      ],
+      "count_fragmented": [
+        "{answered} of {asked_of} replied and no two blocs of any size formed.",
+        "{answered} replies from {asked_of} asked, and not enough agreement anywhere to point at."
+      ],
+      "count_floor": [
+        "{answered} of {asked_of} city halls replied, which is not a world and will not be described as one.",
+        "The paper asked {asked_of} and heard from {answered}. It is printing the answers and no arithmetic."
+      ],
+      "subgroup": [
+        "{Phrase} went for {label} instead.",
+        "{Phrase} took a different view: {label}.",
+        "Meanwhile {phrase} said {label}, and said it to each other."
+      ],
+      "outlier": [
+        "{Phrase} answered simply: “{answer}” — {quote_mayor}.",
+        "{Phrase} — {quote_mayor} — wrote only this: “{answer}”",
+        "And then {phrase}, from {quote_mayor}: “{answer}”",
+        "One more, unaccompanied, from {quote_mayor}: “{answer}”"
+      ],
+      "floor_quote": "{quote_city} says: “{answer}”",
+      "floor_quote_join": " ",
+      "closers": [
+        "The paper considers the matter open and expects correspondence.",
+        "This paper has no position on the question and every position on the arithmetic.",
+        { "line": "The paper would like it noted that it asked a simple question.", "pointed": true }
+      ]
+    }
+  },
+
+  "imagery": {
+    "_comment": "Spec #29. One image per edition. This block is the art direction; newspaper/svg.py is the brush. Palettes are keyed by the open need's category so consecutive editions do not look alike, and every element drawn is a real fact of the round -- crates are offers, dice are the actual roll, the skyline is the leaderboard, the bunting is the mayoral question's distribution. Nothing decorative is invented that the round did not contain.",
+    "cutlines": {
+      "winner_pick": [
+        "One crate came off the boat with a ribbon on it. {winner_city} sent it. The others are not saying anything.",
+        "{count} crates, one ribbon, {profit} in the ledger. A good day at the water."
+      ],
+      "ramp_up": [
+        "Nothing on the quay, so {city} built its own. The shed, pictured, is doing its best.",
+        "An empty harbour and a busy shed: {city} solving {city}'s problem, at {profit}."
+      ],
+      "even_split": [
+        "Every crate got a ribbon in the end. The crane operator has questions.",
+        "The clock ran out and the ribbons were handed round. {profit}, divided."
+      ],
+      "sealed": [
+        "{count} crates on the quay and not one of them opened yet. {city} is thinking.",
+        "The offers, landed and unopened. Nobody in this picture knows who sent what, including the paper."
+      ],
+      "quiet": [
+        "A quiet quay, two gulls, and a crane with nothing to lift.",
+        "No cargo today. The harbour, pictured, is unbothered."
+      ]
+    },
+    "monochrome_palette": {
+      "paper": "#f2f0ea", "ink": "#1d1d1b", "sky": "#d8d5cd", "water": "#a8a5a0",
+      "accent": "#5c5a56", "spot": "#3a3936", "spot_alt": "#79776f"
+    },
+    "palettes": {
+      "candy":              { "paper": "#fdf1f5", "ink": "#2a1420", "sky": "#f9c3d8", "water": "#b03a63", "accent": "#f2c14e", "spot": "#e0578b", "spot_alt": "#ffd4e3" },
+      "soft_drinks":        { "paper": "#f1f7f6", "ink": "#12262b", "sky": "#9fd8d5", "water": "#1f6f78", "accent": "#f26d3d", "spot": "#2e8b83", "spot_alt": "#7ec4bd" },
+      "snacks":             { "paper": "#fdf3e3", "ink": "#2b1a12", "sky": "#ffd08a", "water": "#a8573b", "accent": "#c5283d", "spot": "#e08e45", "spot_alt": "#7d9b3f" },
+      "baked_goods":        { "paper": "#f8f4ec", "ink": "#231d16", "sky": "#e8cf9a", "water": "#6b5334", "accent": "#c2452d", "spot": "#9a7942", "spot_alt": "#d6b877" },
+      "hot_drinks":         { "paper": "#f6f3ea", "ink": "#1f1b26", "sky": "#cfc3a4", "water": "#453a5e", "accent": "#d1622a", "spot": "#6d5c96", "spot_alt": "#a99ac4" },
+      "condiments":         { "paper": "#fbf4ee", "ink": "#2a1c1c", "sky": "#f5b7b1", "water": "#7d3c4a", "accent": "#c9a227", "spot": "#b0435a", "spot_alt": "#e79e8f" },
+      "books":              { "paper": "#f6f0f8", "ink": "#211a2b", "sky": "#c9b6e4", "water": "#4b3b78", "accent": "#eab543", "spot": "#8e5fb8", "spot_alt": "#d38ab5" },
+      "music":              { "paper": "#f1eff6", "ink": "#171426", "sky": "#b3aede", "water": "#332a5e", "accent": "#f2c14e", "spot": "#6b5fa8", "spot_alt": "#a49ccf" },
+      "games_and_puzzles":  { "paper": "#f1f7f1", "ink": "#15231a", "sky": "#a9dfb4", "water": "#256b47", "accent": "#e8542e", "spot": "#3f9663", "spot_alt": "#8fcfa4" },
+      "toys_and_novelties": { "paper": "#fdf6e0", "ink": "#241f10", "sky": "#ffe08a", "water": "#7a5c1e", "accent": "#e03e2f", "spot": "#c99a1e", "spot_alt": "#f0cf6a" },
+      "clothes":            { "paper": "#eef4f9", "ink": "#182430", "sky": "#a8cbe8", "water": "#2f5675", "accent": "#f2c14e", "spot": "#5b87ad", "spot_alt": "#c9dced" },
+      "plants":             { "paper": "#f3f7ec", "ink": "#1a2415", "sky": "#bfe08a", "water": "#3f6b3a", "accent": "#e4772e", "spot": "#6a9a3c", "spot_alt": "#a8c96a" },
+      "pets":               { "paper": "#f7f2e6", "ink": "#221d18", "sky": "#f2c14e", "water": "#3d6b7d", "accent": "#e2571e", "spot": "#8c4a2f", "spot_alt": "#d9a441" },
+      "homeware":           { "paper": "#f7f6f1", "ink": "#22221c", "sky": "#ddd9c4", "water": "#5a5a49", "accent": "#b1462f", "spot": "#8a8a6e", "spot_alt": "#c3c1a8" },
+      "stationery":         { "paper": "#f2f8f9", "ink": "#13232a", "sky": "#8fd0e8", "water": "#1c5f77", "accent": "#f4a11d", "spot": "#3d95b3", "spot_alt": "#9fd6e8" },
+      "small_comforts":     { "paper": "#f5f5f0", "ink": "#1b1f24", "sky": "#c8d6dd", "water": "#37525e", "accent": "#e8541e", "spot": "#5c7c8a", "spot_alt": "#a3bcc6" }
+    },
+    "default_palette": "homeware",
+    "labels": {
+      "no_leaderboard": "figures withheld",
+      "offers": "offers received",
+      "roll": "the roll",
+      "replies": "replies to the mayoral question",
+      "quiet_quay": "nothing on the quay"
+    },
+    "endgame": {
+      "_comment": "Spec #31, #32 -- the final edition's two kinds of picture. The finale is the whole world at the end: one tower per city, the crown over the tallest, and the game's total unchosen offers stacked on the quay as one unlabelled pile. A portrait is one city at the end: the notices it opened as stamps, the offers of its own that the world kept as ribboned crates, the offers it declined as plain crates on its quay, and a shed with the door shut for the offers it sent that nobody chose -- which is the one part of a city's excess that is never itemised (spec #21). Nothing in either drawing distinguishes one plain crate from another, and no crate carries a sender.",
+      "finale_cutlines": {
+        "crowned": [
+          "The last boat of the season, the standings behind it, and one crown that fits nobody perfectly. {city} takes it anyway.",
+          "{n_cities} cities, {excess} crates that never found a taker, and {city} on the top step."
+        ],
+        "shared": [
+          "The crown, held jointly, at some cost to the crown. {n_cities} cities, one step, no room.",
+          "A shared summit and {excess} unclaimed crates. The photographer asked everybody to move slightly left."
+        ],
+        "uncrowned": [
+          "The harbour at the end of the game, with the standings kept off the page and {excess} crates kept on the quay.",
+          "Closing time. The figures are private, the crates are not, and there are {excess} of them."
+        ]
+      },
+      "city_cutlines": [
+        "{city}, drawn from its own year: what it asked the world for, what the world kept, and what is still on the quay.",
+        "{city} at the end of the game, with {count} declined offers behind it and the shed door shut on the rest.",
+        "The portrait of {city}: notices, ribbons, leftovers, and one closed door."
+      ],
+      "labels": {
+        "crown": "the crown",
+        "final_standings": "final standings",
+        "excess_pile": "unchosen offers, senders unknown",
+        "sealed_shed": "offers sent and not chosen — sealed",
+        "asked_for": "notices opened",
+        "kept": "offers the world kept",
+        "quay": "on the quay",
+        "no_figures": "figures withheld",
+        "shared_crown": "shared"
+      }
+    }
+  },
+
+  "site": {
+    "_comment": "Spec #26-#27. The words the archive says about itself, as opposed to the words in any one edition. Same reason the rest of this file is content: 'Back issues' versus 'Archive' is a writing decision, and so is how the paper explains to a mayor that this address is private. hosting/page.py is the machinery; the stylesheet next door in content/site.css is the same decision in the other direction. Nothing here may contain the address itself -- the pages link relatively and the build fails if the site id appears in a published byte.",
+    "front_title": "The Daily Manifest — the current issue",
+    "front_flag": "The current issue, at the paper's own front door. It has its own permanent address too; the next round lands beside it, not on top of it.",
+    "archive_title": "The Daily Manifest — back issues",
+    "archive_heading": "Back issues",
+    "archive_blurb": "Every edition this paper has printed, still where it was printed. Nothing here is ever replaced; a new issue lands beside the old ones, not on top of them.",
+    "empty_archive": "Nothing has gone to press yet. The presses are warm and the desk is optimistic.",
+    "privacy_notice": "This address is private. It is not listed, not linked from anywhere, and asks every crawler that finds it to forget it immediately. Please don't hand it to anyone who isn't a mayor.",
+    "identity_notice": "Mayors are named by city and office only. No real names appear in this paper, and no losing offer is ever traced back to the city that sent it.",
+    "colophon": "The Daily Manifest is printed once per round by the Sister Cities desk, which is one desk.",
+    "nav": {
+      "title": "Editions",
+      "archive": "All back issues",
+      "previous": "Previous edition",
+      "next": "Next edition",
+      "latest": "Latest edition",
+      "permalink": "This issue's own address",
+      "top": "The Daily Manifest",
+      "endgame": "The final edition"
+    },
+    "labels": {
+      "editions_count": "editions in the run",
+      "image": "the day's picture",
+      "round": "Round",
+      "inside": "Inside this issue",
+      "endgame": "The final edition — the crown, the consequences, and a portrait of every city",
+      "endgame_kicker": "The last word",
+      "portrait": "the city's portrait"
+    },
+    "robots_preamble": [
+      "# The Daily Manifest is a private paper for a private game.",
+      "# It is published to an unguessable address and does not wish to be found",
+      "# (spec #26). If you have arrived here anyway, please go no further."
+    ]
+  },
+
+  "bulletin": {
+    "_comment": "Spec #26's last clause: after an edition is published, the group is told it is available. This is what the facilitator's agent says out loud when the completed-round transaction finishes (facilitator/transaction.py) -- the one piece of the paper's writing that is not printed in the paper. It is content for the same reason everything else here is: 'the presses have stopped' versus 'a new edition is up' is a writing decision. Frames may use {publication}, {game}, {round}, {lede} and {url}; the url is the private address and is the one placeholder that must never end up in a committed file, which is why the notice object carries a redacted form of itself for anything that gets written down.",
+    "round_notice": [
+      "{publication} No. {round} has gone to press. {lede} It is at {url}",
+      "The presses have stopped: {publication}, round {round}, is up. {lede} {url}",
+      "New edition. {publication} No. {round}, hot, slightly smudged. {lede} {url}",
+      "Round {round} of {game} is in print. {lede} Read it at {url}"
+    ],
+    "round_notice_without_url": [
+      "{publication} No. {round} has gone to press. {lede} It is at the usual address.",
+      "The presses have stopped: {publication}, round {round}, is up at the usual address. {lede}"
+    ],
+    "final_notice": [
+      "The last edition of {publication} is out: the crown, the consequences, and a portrait of every city. {url}",
+      "{publication} has printed its final edition of {game} — one crown, several regrets, a picture of each of you. {url}",
+      "That's the game. The final {publication} is up, with the standings, the consequences and every city's portrait. {url}"
+    ],
+    "final_notice_without_url": [
+      "The last edition of {publication} is out at the usual address: the crown, the consequences, and a portrait of every city.",
+      "{publication} has printed its final edition of {game}, at the usual address — one crown, several regrets, a picture of each of you."
+    ],
+    "opened_lede": [
+      "{city} is buying: {title}.",
+      "This round's order comes from {city} — {title}.",
+      "{city} has filed for {title}.",
+      "On the front: {city}, and {title}."
+    ],
+    "quiet_lede": [
+      "No new order was filed this round; the paper found other things to look at.",
+      "Nobody opened a notice this round, which the paper has taken personally.",
+      "A quiet round on the order desk, so the paper went and looked at the harbour instead."
+    ]
+  },
+
+  "player_voice": {
+    "_comment": "Spec #30b. Two voices print in this paper. The desk's own is held to the tone rules below; the mayors' is reprinted exactly as it was typed, because an export is free-form (spec #15) and the paper's job is to carry it, not to improve it. These are the lines that tell a reader which is which, and they are content rather than code for the usual reason: how a paper says 'these are not our words' is a writing decision. A winning offer is quoted under its mayor's office, since winning makes the sender nameable; a declined offer is quoted under a line that says plainly the paper is not naming anybody, which is spec #21 and outranks any wish to give credit. The declined families take no substitutions at all -- not even {mayor} -- which is the cheapest possible way to make a slip impossible.",
+    "winner_quote": [
+      "In {mayor}'s own words, printed exactly as they arrived at this desk.",
+      "That is {mayor} writing, not this paper: a winning offer is reprinted word for word, spelling, temper and all.",
+      "{mayor} wrote that, and the paper has changed nothing in it, as it never does."
+    ],
+    "declined_quote": [
+      "Offers in their senders' own words. Whose words they are stays in the envelope, permanently.",
+      "Printed as written and attributed to nobody. The paper knows; the paper is not saying.",
+      "Those are mayors writing, word for word. Which mayors is not this paper's news to print."
+    ],
+    "twist_quote": [
+      "The offer as {mayor} wrote it, which is how it was read and how it is printed here.",
+      "{mayor}'s own words, unaltered. What they did after arriving is a separate matter, below."
+    ],
+    "excess_quote": [
+      "Offers this city turned down, in the words they came in. No senders named, this year or any year.",
+      "The unchosen, printed as written and signed by nobody at all."
+    ]
+  },
+
+  "tone": {
+    "_comment": "Spec #30: funny, fun, colorful, allowed to be pointed, never snide or mean. The first three are judged by a human or a judging role; this block is the mechanical half. forbidden_register is run over every rendered edition when config.newspaper.tone.disallow_snide_or_mean is true, and an edition that trips it does not publish. It runs over the paper's own voice: config.newspaper.tone.forbidden_register_scope is newspaper_voice, and the passages player_voice above marks as a mayor's are subtracted before the scan, so a mayor's word choice never blocks an edition or gets rewritten (spec #30b). It is deliberately a list of words that can only be doing one job in a sentence: attacking somebody. It is a floor, not a ceiling -- passing it is not the same as being kind.",
+    "forbidden_register": [
+      "idiot", "idiotic", "stupid", "stupidity", "moron", "cretin", "imbecile",
+      "pathetic", "useless", "worthless", "incompetent", "clueless", "hopeless case",
+      "loser", "losers", "humiliat", "disgrace", "shameful", "embarrassment to",
+      "deserved to lose", "deserves to lose", "nobody likes", "nobody cares",
+      "laughing stock", "cretinous", "brain-dead", "braindead", "contemptible",
+      "pitiful", "sad little", "deluded", "fraud", "liar"
+    ],
+    "_forbidden_register_note": "Some of these are words a kinder paper might use innocently ('fraud' in a real news sense, 'useless' about an object). The Daily Manifest is not a real paper and has no need for any of them; the cost of the false positive is a rewrite, and the cost of the false negative is a player reading something unkind about themselves. The trade is not close.",
+    "positive_notes": [
+      "Point the joke at the institution, the decision, the absurdity, or the paper itself. Never at a mayor as a person.",
+      "A mayor's answer to a getting-to-know-you question is never the butt of the joke. The aggregate can be funny; the individual answer is treated with a straight face.",
+      "Pointed is fine: the paper may disagree with a mayor, needle a decision, or refuse to be impressed. Snide is the register where the joke only works if the reader thinks less of somebody.",
+      "The paper is allowed to be wrong, vain and self-important. That is where most of the comedy lives, and it costs no player anything."
+    ]
+  }
+}

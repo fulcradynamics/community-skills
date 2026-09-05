@@ -1,0 +1,66 @@
+{
+  "player_id": "m-kmp",
+  "city": "Kampala",
+  "ballots": [
+    {
+      "round": 5,
+      "need": "in-004",
+      "your_notice": "The corner shops in Kampala sell three colas, and they are the same three colas sold everywhere else on earth. The town has decided this is a poverty. Wanted: cordials, sodas, tonics, sparkling anything, in glass, by the crate -- the stranger the flavour the better -- and a bottle opener, because nobody ever sends the opener.",
+      "you_asked_for": "Ship Kampala crates of cold bottled drinks, and say what the label claims about them.",
+      "offers": [
+        {
+          "ballot_ref": "A",
+          "offer": "Sixty crates, all glass. Twenty of malt — dark, thick, tastes of bread and molasses, and the label has claimed for the better part of a century that it is nourishing and good for nursing mothers, a claim which has never been withdrawn and, as far as I can establish, never tested. Twenty of orange soda, because the two are poured half and half into the same glass at Christmas here by people who will argue with you about the ratio and mean it. Twenty of rhubarb cordial, under-sweetened to a degree some find startling. Plus a box of two hundred flat stamped openers, because you are right, nobody ever sends the opener."
+        },
+        {
+          "ballot_ref": "B",
+          "offer": "Twelve crates of ramune, 240 bottles, glass, marble-stoppered — melon cream, yuzu, salted watermelon, lychee, and one the label calls 'Blue Hawaii' and then declines to elaborate. The yuzu label claims it settles the stomach after a rough ferry crossing, which we have tested extensively and choose to believe. You don't need an opener: the bottle comes with its own plastic plunger, you push the marble down through the neck, and the marble stays in there forever, which is the entire point. We put in thirty spare plungers anyway, because children lose them."
+        },
+        {
+          "ballot_ref": "C",
+          "offer": "Sixty crates, all glass: sparkling apple pressed down the valley with nothing added, blackcurrant cordial thick enough to stand a spoon in, a pepperberry tonic that goes faintly numb at the back of the tongue, sarsaparilla, and a leatherwood honey soda that tastes the way a beehive smells. The label claims the water fell as rain on a mountain with nothing built on it and was in the bottle inside a day, which is true, and then claims it is the purest water in the world, which is a matter for lawyers. Four dozen openers, plain steel, each one spliced onto three feet of rope so it can be tied to the crate and stay tied to the crate."
+        },
+        {
+          "ballot_ref": "D",
+          "offer": "Sixteen crates, glass, returnable, all of it cold when it left. Twelve crates of *Bilz y Pap* — the pink one and the yellow one, and no living person can tell you what flavour either is meant to be; the label says only *sabor único*, a unique flavour, which is the most honest thing ever printed on a bottle. Two crates of *mote con huesillo* in bottle form, wheat and dried peach in syrup, labelled *más chilena que los porotos* — more Chilean than beans — and it is a drink you eat with a spoon at the end. Two crates of murta cordial from the south, whose label promises it is *digestivo y refrescante*, which we read as medicinal and therefore permission. And thirty-one bottle openers: eight of steel, twenty-two shaped like sardines, and one welded to a chain in the shape of our funicular, for the shop that keeps losing them."
+        },
+        {
+          "ballot_ref": "E",
+          "offer": "Six crates, all glass, all cold, and I will fight anyone who says otherwise about any of them. Twelve bottles of sour-cherry cordial so dark it stains the label, which claims only '100% fruit, no water added' and is telling the truth; twelve of elderflower, picked in June by a woman who will not say where; two crates of a herbal cola the colour of wet brick whose label promises 'eleven herbs and rosehip' and delivers roughly four; and two crates of mineral water from a spa that prints, in earnest, that it assists the liver, the kidneys and the disposition. Also one crate of bitter tonic that tastes of wormwood and disagreement — drink it slowly or not at all. Taped to the inside of the first lid: three iron bottle openers off the wall of a river raft-bar, already broken in, because you are right, nobody ever sends the opener."
+        }
+      ]
+    },
+    {
+      "round": 12,
+      "need": "in-011",
+      "your_notice": "Kampala has an allotment with a nine-year waiting list and one corner of it that nobody has ever made anything of. The allotment society has voted, twice, for hens. Wanted: six hens of a breed that lays through a bad winter, a coop a fox has already failed at, feed, grit, and the two pages of instructions that actually matter.",
+      "you_asked_for": "Ship Kampala six hens, a fox-proof coop, and the two pages of instructions that matter.",
+      "offers": [
+        {
+          "ballot_ref": "A",
+          "offer": "Six Nagoya Cochin hens — heavy, calm, and they keep laying through cold weather, which is the only thing anyone is asking of them. The coop is a fisherman's shed design in marine ply, double-latched; honest disclosure, we have no foxes here, only one bad-tempered crow, so Mr. Ōta has added the second latch on principle rather than experience. Page one of the instructions is: shut the door at dusk, every dusk, no exceptions, no evenings off. Page two is grit in its own separate dish, and how to tell a broody hen from an ill one."
+        },
+        {
+          "ballot_ref": "B",
+          "offer": "Six black Australorps, point of lay, a bird bred in this country specifically to keep laying while the weather is being unreasonable; ours went through last winter without a sulk. The coop is apple-crate hardwood under corrugated iron pitched steeper than it needs to be, wire skirt buried a foot out the whole way round, and a latch a clever animal cannot work: we have no foxes here, so it was built against quolls and devils, which is a harder examination and a compliment to your fox. Feed for eight weeks, a sack of shell grit, and the two pages, handwritten: page one is the buried skirt and shutting the door before dusk rather than after, page two is that a hen off the lay in the cold months is cold and not ill, and that your nine-year waiting list is about to acquire people who only want eggs."
+        },
+        {
+          "ballot_ref": "C",
+          "offer": "Six hens of a crested breed off the northern plain, three years old at most, bred by people who consider a hard winter a personal matter: they carry on laying at minus fifteen and they are calm about children. The coop is built from concrete-formwork boards off a building site — ugly, heavy, will outlive everyone — with a wire skirt buried flat forty centimetres out under the grass and a double-twist latch that a fox spent one entire March failing at, in front of witnesses. Also two sacks of layer feed and a bucket of river grit off our shingle, crushed shell, which they eat like a treat. The two pages: one is only about the buried wire and the latch, and one is only about the water not freezing — everything else you will work out yourself, and the allotment society will enjoy arguing about it more than they would enjoy being told."
+        },
+        {
+          "ballot_ref": "D",
+          "offer": "Six hens of the old settlement breed, mixed colours because that is how they arrive — two grey, two speckled, one black, one that is several opinions at once — from Ragnheiður out at Kjalarnes, who has kept them thirty years and will part with these six only. The coop is built to hold a roof down in a forty-metre wind, which makes the fox a secondary engineering problem: half-inch welded mesh, buried a foot out in a skirt all round, and a door that latches twice. Twelve sacks of layer pellets, four of grit, four of crushed oyster shell. Page one is about light, not warmth: fourteen hours of it on a cheap timer, or they stop in November and you will spend a fortnight thinking they are ill. Page two is water, which will freeze long before any hen is cold, and ventilation, which you must leave open even when it feels wrong, because damp kills them and frost does not."
+        },
+        {
+          "ballot_ref": "E",
+          "offer": "Six pullets of our own landrace hen — small, scruffy, no two the same colour, and they lay straight through a black winter, which means your worst week will strike them as a rest. The coop is double-skinned plywood on legs with a wire apron eighteen inches out all round and buried, because a fox does not climb, it digs; the mesh is hardware cloth rather than chicken wire, and the latches are the twist sort that a paw cannot work. Also six months of layers' pellets, a sack of oyster grit, and a feeder a rat cannot get into. The two pages that matter: page one is water — how much, how often, and how to keep it from freezing or going green; page two is the door, which you shut at dusk every single day without exception, including the evening of the allotment society's annual dinner."
+        },
+        {
+          "ballot_ref": "F",
+          "offer": "Six hens, all *Araucana* — our own breed, from the south of this country, and the whole argument for them is that they were bred by people for whom a bad winter was Tuesday. They lay through cold, they lay blue-green eggs that make a child gasp, and they are absurd-looking in a way that will fix your unused corner faster than any fence. The coop is built from *roble* boards and old funicular decking by our carpenter Héctor Peña: raised forty centimetres, hardware cloth not chicken wire, buried in an apron half a metre out flat under the soil, and a fox in Playa Ancha spent three nights on it in June and got a sore nose and nothing else. Plus forty kilos of layer feed, ten of oyster grit, and two pages in Héctor's handwriting, which are: *page one — the apron must be flat and buried, a fox digs at the wall not the middle; latch with two moving parts because one moving part is a door. Page two — shut them in at dusk every single day forever, this is the whole job, everything else on the internet is a hobby.*"
+        }
+      ]
+    }
+  ]
+}

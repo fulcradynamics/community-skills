@@ -1,0 +1,1801 @@
+{
+  "checked": 39,
+  "counts": {
+    "pass": 32,
+    "process": 3,
+    "judged": 4
+  },
+  "failures": [],
+  "findings": [
+    {
+      "spec": "#1",
+      "title": "3-10 players, from config",
+      "status": "pass",
+      "detail": "8 mayors, within config.players.min_players=3..max_players=10",
+      "evidence": {
+        "cities": [
+          "Belgrade",
+          "Hobart",
+          "Kampala",
+          "Kópavogur",
+          "Naoshima",
+          "Reykjavík",
+          "Trieste",
+          "Valparaíso"
+        ]
+      }
+    },
+    {
+      "spec": "#2",
+      "title": "unique cities, duplicates reassigned",
+      "status": "pass",
+      "detail": "8 city names, all distinct; 1 duplicate pick(s) reassigned and announced",
+      "evidence": {
+        "reassignments": [
+          {
+            "requested": "Reykjavik",
+            "city": "Kópavogur",
+            "held_by": "m-rvk",
+            "via": "nearby_list",
+            "distance_km": null,
+            "tried": [
+              "Kópavogur"
+            ],
+            "reason": "it is the closest neighbour of Reykjavik still unclaimed",
+            "announcement": "Reykjavik was already claimed, so you are the Mayor of Kópavogur instead -- it is the closest neighbour of Reykjavik still unclaimed. Say the word if you would rather pick somewhere else entirely.",
+            "spec": "#2"
+          }
+        ]
+      }
+    },
+    {
+      "spec": "#3",
+      "title": "players may join after the game starts",
+      "status": "pass",
+      "detail": "3 mayor(s) joined mid-game",
+      "evidence": {
+        "joined": [
+          [
+            "Belgrade",
+            4
+          ],
+          [
+            "Naoshima",
+            3
+          ],
+          [
+            "Trieste",
+            9
+          ]
+        ]
+      }
+    },
+    {
+      "spec": "#4",
+      "title": "facilitator holds queue position 1",
+      "status": "pass",
+      "detail": "Reykjavík is at position 1 and opened round 1's need"
+    },
+    {
+      "spec": "#5",
+      "title": "queued only on first export",
+      "status": "pass",
+      "detail": "every non-facilitator entered the queue in the round of their first export"
+    },
+    {
+      "spec": "#6",
+      "title": "one facilitator, fixed for the game",
+      "status": "pass",
+      "detail": "1 facilitator; the role has no rotation path in the engine"
+    },
+    {
+      "spec": "#7",
+      "title": "the facilitator plays under the same rules",
+      "status": "pass",
+      "detail": "Reykjavík exported 12 time(s), picked 2 winner(s) and answered 13 question(s), and served 2 import turn(s) like anybody else"
+    },
+    {
+      "spec": "#8",
+      "title": "the facilitator can relay for a player without their own agent",
+      "status": "process",
+      "detail": "not decidable from game state: every action in this run entered through the same public engine methods (join/checkin/submit_export/pick_winner/answer_question), which is the interface a relaying facilitator would use, and the engine has no per-player transport of its own to contradict it",
+      "evidence": {
+        "entry_points": [
+          "export",
+          "import_pick",
+          "mayor_question"
+        ]
+      }
+    },
+    {
+      "spec": "#9",
+      "title": "one timer; OPEN/CLOSE/RESOLVE every round",
+      "status": "pass",
+      "detail": "1 timer, 17 rounds each logging OPEN/CLOSE/RESOLVE in order",
+      "evidence": {
+        "timer": {
+          "round": {
+            "epoch": "2026-09-10T09:00:00+00:00",
+            "window_hours": 24.0
+          }
+        },
+        "structural_timer_scan": "clean"
+      }
+    },
+    {
+      "spec": "#10",
+      "title": "round window comes from config",
+      "status": "pass",
+      "detail": "24-hour rounds, from config.rounds.round_window_hours"
+    },
+    {
+      "spec": "#11",
+      "title": "one check-in per player per round, two slots",
+      "status": "pass",
+      "detail": "100 check-ins, none using more than two slots (max seen: 2)"
+    },
+    {
+      "spec": "#11a",
+      "title": "the open trade outranks a future import order",
+      "status": "pass",
+      "detail": "79 mayor-rounds were eligible for an open need and every one of them was offered it; 0 check-in(s) held an import order back to make room, and none of them cost a mayor the trade in front of them"
+    },
+    {
+      "spec": "#12",
+      "title": "two rotations; 2 import turns vs 1 by join timing",
+      "status": "pass",
+      "detail": "rotation 1 closed in round 8; allotments seen: [1, 2] -- both branches exercised",
+      "evidence": {
+        "rotation_closed_rounds": {
+          "1": 8,
+          "2": 16
+        }
+      }
+    },
+    {
+      "spec": "#13",
+      "title": "the importing mayor chooses their city's next import",
+      "status": "pass",
+      "detail": "15 needs opened, every one of them filed in advance by the mayor of the importing city (request sources: ['seed']); the engine holds a turn whose mayor has filed nothing rather than opening one for them (0 held this game) and owns no function that picks a need. A mayor is offered 4 eligible suggestions plus a freeform order, and may take any eligible seed shown or not",
+      "evidence": {
+        "unfiled": null,
+        "not_from_the_pool": null,
+        "filed_by_somebody_else": null,
+        "held_turns": null,
+        "offer_is_still_available_at_game_end": false
+      }
+    },
+    {
+      "spec": "#13a",
+      "title": "import needs are orders for everyday, relatable things",
+      "status": "pass",
+      "detail": "all 48 needs in the pool declare one of spec #13a's everyday kinds of tradable thing (['plants_and_pets', 'play_and_pastimes', 'reading_and_listening', 'snacks_and_bakes', 'sweets_and_drinks', 'wear_and_comfort']), and none of them -- nor any of the 15 notices this game actually opened -- reads as a request for advice, as civic procurement, or as a job for a specialist; this game's own orders covered ['plants_and_pets', 'play_and_pastimes', 'reading_and_listening', 'snacks_and_bakes', 'sweets_and_drinks', 'wear_and_comfort'] across ['baked_goods', 'candy', 'clothes', 'games_and_puzzles', 'pets', 'plants', 'snacks', 'soft_drinks', 'stationery', 'toys_and_novelties']",
+      "evidence": {
+        "refused": null,
+        "unplayable_notices": null
+      }
+    },
+    {
+      "spec": "#14",
+      "title": "a category repeats across cities, never within one",
+      "status": "pass",
+      "detail": "no city drew a category twice; 4 categories repeated across different cities",
+      "evidence": {
+        "repeated_across_cities": [
+          "candy",
+          "games_and_puzzles",
+          "plants",
+          "snacks"
+        ],
+        "within_a_city": "none"
+      }
+    },
+    {
+      "spec": "#15",
+      "title": "freeform exports, capped per player per need per round",
+      "status": "pass",
+      "detail": "79 freeform exports, none exceeding the configured cap of 1; 79 distinct texts"
+    },
+    {
+      "spec": "#16",
+      "title": "a missed round is a silent skip",
+      "status": "pass",
+      "detail": "15 player-rounds missed across 8 rounds, with no penalty or substitution recorded against any of them",
+      "evidence": {
+        "missed": [
+          [
+            2,
+            "m-kmp"
+          ],
+          [
+            4,
+            "m-kop"
+          ],
+          [
+            5,
+            "m-nao"
+          ],
+          [
+            6,
+            "m-rvk"
+          ],
+          [
+            6,
+            "m-vlp"
+          ],
+          [
+            6,
+            "m-hbt"
+          ],
+          [
+            6,
+            "m-kmp"
+          ],
+          [
+            6,
+            "m-kop"
+          ],
+          [
+            6,
+            "m-nao"
+          ],
+          [
+            6,
+            "m-bel"
+          ],
+          [
+            8,
+            "m-nao"
+          ],
+          [
+            9,
+            "m-hbt"
+          ]
+        ],
+        "extra_events": "none"
+      }
+    },
+    {
+      "spec": "#17",
+      "title": "zero submissions -> ramp up own industry, profit still paid",
+      "status": "pass",
+      "detail": "Naoshima received nothing in round 6 and was still paid {'exact': '7/1', 'approx': 7.0, 'display': '7'}",
+      "evidence": {
+        "needs": [
+          "in-006"
+        ]
+      }
+    },
+    {
+      "spec": "#18",
+      "title": "the importer picks the round AFTER collection, blind",
+      "status": "pass",
+      "detail": "13 ballots offered, each in the round after its export window closed, none naming an exporting city"
+    },
+    {
+      "spec": "#19",
+      "title": "no pick by the deadline -> every offer wins, profit splits",
+      "status": "pass",
+      "detail": "Kópavogur let its window lapse in round 6; 5 offers shared the roll",
+      "evidence": {
+        "awards": [
+          {
+            "city": "Reykjavík",
+            "profit": {
+              "exact": "7/5",
+              "approx": 1.4,
+              "display": "1.40"
+            }
+          },
+          {
+            "city": "Valparaíso",
+            "profit": {
+              "exact": "7/5",
+              "approx": 1.4,
+              "display": "1.40"
+            }
+          },
+          {
+            "city": "Hobart",
+            "profit": {
+              "exact": "7/5",
+              "approx": 1.4,
+              "display": "1.40"
+            }
+          },
+          {
+            "city": "Kampala",
+            "profit": {
+              "exact": "7/5",
+              "approx": 1.4,
+              "display": "1.40"
+            }
+          },
+          {
+            "city": "Belgrade",
+            "profit": {
+              "exact": "7/5",
+              "approx": 1.4,
+              "display": "1.40"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "spec": "#20",
+      "title": "2d6-style profit rolls, cumulative per city",
+      "status": "pass",
+      "detail": "15 rolls of 2d6, all inside [2, 12]; 110 awarded and 110 held on the leaderboard",
+      "evidence": {
+        "leaderboard": [
+          {
+            "rank": 1,
+            "city": "Valparaíso",
+            "mayor": "the Mayor of Valparaíso",
+            "profit": {
+              "exact": "202/5",
+              "approx": 40.4,
+              "display": "40.40"
+            },
+            "tied": false
+          },
+          {
+            "rank": 2,
+            "city": "Reykjavík",
+            "mayor": "the Mayor of Reykjavík",
+            "profit": {
+              "exact": "142/5",
+              "approx": 28.4,
+              "display": "28.40"
+            },
+            "tied": false
+          },
+          {
+            "rank": 3,
+            "city": "Hobart",
+            "mayor": "the Mayor of Hobart",
+            "profit": {
+              "exact": "82/5",
+              "approx": 16.4,
+              "display": "16.40"
+            },
+            "tied": false
+          },
+          {
+            "rank": 4,
+            "city": "Belgrade",
+            "mayor": "the Mayor of Belgrade",
+            "profit": {
+              "exact": "57/5",
+              "approx": 11.4,
+              "display": "11.40"
+            },
+            "tied": false
+          },
+          {
+            "rank": 5,
+            "city": "Naoshima",
+            "mayor": "the Mayor of Naoshima",
+            "profit": {
+              "exact": "7/1",
+              "approx": 7.0,
+              "display": "7"
+            },
+            "tied": false
+          },
+          {
+            "rank": 6,
+            "city": "Kampala",
+            "mayor": "the Mayor of Kampala",
+            "profit": {
+              "exact": "32/5",
+              "approx": 6.4,
+              "display": "6.40"
+            },
+            "tied": false
+          },
+          {
+            "rank": 7,
+            "city": "Kópavogur",
+            "mayor": "the Mayor of Kópavogur",
+            "profit": {
+              "exact": "0/1",
+              "approx": 0.0,
+              "display": "0"
+            },
+            "tied": true
+          },
+          {
+            "rank": 8,
+            "city": "Trieste",
+            "mayor": "the Mayor of Trieste",
+            "profit": {
+              "exact": "0/1",
+              "approx": 0.0,
+              "display": "0"
+            },
+            "tied": true
+          }
+        ]
+      }
+    },
+    {
+      "spec": "#21",
+      "title": "a losing offer's origin is never exposed, ever",
+      "status": "pass",
+      "detail": "61 non-winning offers; nothing published in this run -- archive, editions, site, published bytes -- ties any of them to a city, no ledger read went unaudited, and config.json holds no knob that could turn the rule off. Not audited, because it is the game's input rather than its output: recorded transcript, replay journal"
+    },
+    {
+      "spec": "#22",
+      "title": "the leaderboard and the exposure policy come from config",
+      "status": "pass",
+      "detail": "config.economy.leaderboard_visible_in_newspaper=True and the paper prints it; no gated key appears in anything published against the policy"
+    },
+    {
+      "spec": "#23",
+      "title": "two slots: pending game actions first, then a question",
+      "status": "pass",
+      "detail": "88 check-ins were offered the round's question; 12 had it crowded out by a second pending game action, which is the rule"
+    },
+    {
+      "spec": "#24",
+      "title": "freeform getting-to-know-you questions, framed at the mayor",
+      "status": "pass",
+      "detail": "17 distinct questions asked, scope 'freeform_getting_to_know_you', framings ['about_the_mayor', 'to_the_mayor'] -- all checked against config.facilitator_questions.framing over the whole bank",
+      "evidence": {
+        "asked": [
+          "q-never-understood",
+          "q-first-sight",
+          "q-real-compliment",
+          "q-coriander",
+          "q-time-capsule",
+          "q-longest-awake",
+          "q-ideal-tuesday",
+          "q-unofficial-teacher",
+          "q-good-news-call",
+          "q-exile-city",
+          "q-desk-object",
+          "q-tiebreak",
+          "q-childhood-room",
+          "q-hiding-place",
+          "q-entrance-music",
+          "q-refuse-to-discard",
+          "q-smell-of-home"
+        ]
+      }
+    },
+    {
+      "spec": "#25",
+      "title": "answers shared, phrased in clever aggregate",
+      "status": "judged",
+      "detail": "15 of 15 answered rounds produced an aggregate; each is listed with the distribution it claims to describe and the line the paper printed about it, so the wording can be checked against the arithmetic rather than admired on its own",
+      "evidence": {
+        "rounds": [
+          {
+            "round": 1,
+            "question": "Name a thing everybody else loves that you have never understood.",
+            "answered": 5,
+            "asked_of": 5,
+            "buckets": [
+              {
+                "label": "camping",
+                "size": 2,
+                "role": "headline"
+              },
+              {
+                "label": "barbecues",
+                "size": 1,
+                "role": "outlier"
+              },
+              {
+                "label": "swimming in the sea",
+                "size": 1,
+                "role": "outlier"
+              },
+              {
+                "label": "the northern lights",
+                "size": 1,
+                "role": "outlier"
+              }
+            ],
+            "measure": {
+              "largest_bucket_size": 2,
+              "share": {
+                "exact": "2/5",
+                "approx": 0.4,
+                "percent": 40.0
+              },
+              "largest_is_tied": false,
+              "tied_buckets": 1,
+              "bucket_count": 4,
+              "denominator": "respondents (5), not all mayors (5)"
+            },
+            "outcome": "plurality",
+            "licensed_phrases": [
+              "a good many countries",
+              "more capitals than name anything else",
+              "the largest single bloc"
+            ],
+            "must_disclose_partial_response": false,
+            "printed": [
+              "Correspondence from the mayors, counted before it was quoted.",
+              "What the world doesn't get",
+              "The question, put to all of them and answered by rather fewer: *“Name a thing everybody else loves that you have never understood.”*",
+              "The largest single bloc: camping.",
+              "Every one of the 5 delegations wrote back, and 2 landed on camping.",
+              "And then one lone municipality, from the Mayor of Reykjavík: “Barbecue as an occasion. I understand the food. I have never understood standing outdoors in a group for ninety minutes, waiting on it, everyone agreeing the wind is part of the charm.”",
+              "One more, unaccompanied, from the Mayor of Valparaíso: “Swimming in the sea. I have lived my entire life eighty metres above it and I have been in it twice, neither time on purpose.”",
+              "Exactly one city hall answered simply: “The northern lights. Half the town drives out to stand in a freezing ditch and comes back altered; I have looked up, seen green, said \"yes, green,\" and gone in for my supper.” — the Mayor of Kópavogur.",
+              "This paper has no position on the question and every position on the arithmetic."
+            ]
+          },
+          {
+            "round": 2,
+            "question": "Mayor, a visitor has four hours and no plan. What do you show them first?",
+            "answered": 3,
+            "asked_of": 5,
+            "buckets": [
+              {
+                "label": "the city seen from a distance",
+                "size": 2,
+                "role": "headline"
+              },
+              {
+                "label": "the public baths",
+                "size": 1,
+                "role": "outlier"
+              }
+            ],
+            "measure": {
+              "largest_bucket_size": 2,
+              "share": {
+                "exact": "2/3",
+                "approx": 0.6667,
+                "percent": 66.7
+              },
+              "largest_is_tied": false,
+              "tied_buckets": 1,
+              "bucket_count": 2,
+              "denominator": "respondents (3), not all mayors (5)"
+            },
+            "outcome": "supermajority",
+            "licensed_phrases": [
+              "most nations",
+              "the great majority of city halls",
+              "the prevailing international view"
+            ],
+            "must_disclose_partial_response": true,
+            "printed": [
+              "The paper puts one question to every city hall each round and prints what comes back, in aggregate, with the arithmetic showing.",
+              "What the world shows you first",
+              "Asked of every mayor on the register: *“Mayor, a visitor has four hours and no plan. What do you show them first?”*",
+              "Put to the great majority of city halls, the answer comes back: the city seen from a distance.",
+              "3 of 5 city halls wrote back. 2 of those said the city seen from a distance.",
+              "And then exactly one city hall, from the Mayor of Kópavogur: “The pool. Not the swimming — the hot tubs, in order, hottest last, where four hours is exactly long enough to learn everything worth knowing about this place from men who will tell you for free. Everyone assumes I'll drive them straight to the capital instead. It's eight minutes on the bus, they can manage that themselves later.”",
+              "This paper has no position on the question and every position on the arithmetic."
+            ]
+          },
+          {
+            "round": 3,
+            "question": "What compliment do you actually want to receive?",
+            "answered": 5,
+            "asked_of": 6,
+            "buckets": [
+              {
+                "label": "work nobody noticed",
+                "size": 4,
+                "role": "headline"
+              },
+              {
+                "label": "keeping my word",
+                "size": 1,
+                "role": "outlier"
+              }
+            ],
+            "measure": {
+              "largest_bucket_size": 4,
+              "share": {
+                "exact": "4/5",
+                "approx": 0.8,
+                "percent": 80.0
+              },
+              "largest_is_tied": false,
+              "tied_buckets": 1,
+              "bucket_count": 2,
+              "denominator": "respondents (5), not all mayors (6)"
+            },
+            "outcome": "near_unanimous",
+            "licensed_phrases": [
+              "nearly every nation",
+              "all but a stubborn minority",
+              "the world, give or take a dissenter or two"
+            ],
+            "must_disclose_partial_response": true,
+            "printed": [
+              "Correspondence from the mayors, counted before it was quoted.",
+              "What the world wants said about it",
+              "The question, put to all of them and answered by rather fewer: *“What compliment do you actually want to receive?”*",
+              "The world, with one hold-out: work nobody noticed.",
+              "The paper asked 6 and heard from 5; 4 of the 5 said work nobody noticed.",
+              "And then a single delegation, from the Mayor of Kampala: “That I did the thing I said I would do. Everyone calls me energetic — my mother calls me energetic, and she does not mean it kindly.”",
+              "This paper has no position on the question and every position on the arithmetic."
+            ]
+          },
+          {
+            "round": 4,
+            "question": "The mayoral position on coriander, please. For the record.",
+            "answered": 4,
+            "asked_of": 7,
+            "buckets": [
+              {
+                "label": "in favour",
+                "size": 3,
+                "role": "headline"
+              },
+              {
+                "label": "against",
+                "size": 1,
+                "role": "outlier"
+              }
+            ],
+            "measure": {
+              "largest_bucket_size": 3,
+              "share": {
+                "exact": "3/4",
+                "approx": 0.75,
+                "percent": 75.0
+              },
+              "largest_is_tied": false,
+              "tied_buckets": 1,
+              "bucket_count": 2,
+              "denominator": "respondents (4), not all mayors (7)"
+            },
+            "outcome": "supermajority",
+            "licensed_phrases": [
+              "most nations",
+              "the great majority of city halls",
+              "the prevailing international view"
+            ],
+            "must_disclose_partial_response": true,
+            "printed": [
+              "The paper puts one question to every city hall each round and prints what comes back, in aggregate, with the arithmetic showing.",
+              "The coriander question",
+              "Asked of every mayor on the register: *“The mayoral position on coriander, please. For the record.”*",
+              "The great majority of city halls — in favour, and not a great deal of argument about it.",
+              "Of the 4 delegations that replied — the paper asked 7 — 3 named in favour.",
+              "Exactly one city hall answered simply: “Against, and for the record it is chemistry, not taste. It comes at me like the inside of a new plastic bucket, and I'm told that reaction is genetic, which I choose to read as science taking my side rather than excusing me.” — the Mayor of Belgrade.",
+              "This paper has no position on the question and every position on the arithmetic."
+            ]
+          },
+          {
+            "round": 5,
+            "question": "Your city is burying a time capsule. What do you put in it personally?",
+            "answered": 5,
+            "asked_of": 7,
+            "buckets": [
+              {
+                "label": "something of my father's",
+                "size": 2,
+                "role": "headline"
+              },
+              {
+                "label": "a document about myself",
+                "size": 1,
+                "role": "outlier"
+              },
+              {
+                "label": "a piece of handwork",
+                "size": 1,
+                "role": "outlier"
+              },
+              {
+                "label": "a relic of a place that's gone",
+                "size": 1,
+                "role": "outlier"
+              }
+            ],
+            "measure": {
+              "largest_bucket_size": 2,
+              "share": {
+                "exact": "2/5",
+                "approx": 0.4,
+                "percent": 40.0
+              },
+              "largest_is_tied": false,
+              "tied_buckets": 1,
+              "bucket_count": 4,
+              "denominator": "respondents (5), not all mayors (7)"
+            },
+            "outcome": "plurality",
+            "licensed_phrases": [
+              "a good many countries",
+              "more capitals than name anything else",
+              "the largest single bloc"
+            ],
+            "must_disclose_partial_response": true,
+            "printed": [
+              "The paper puts one question to every city hall each round and prints what comes back, in aggregate, with the arithmetic showing.",
+              "What the world is burying",
+              "This paper put the same question to every city hall: *“Your city is burying a time capsule. What do you put in it personally?”*",
+              "More capitals than name anything else — something of my father's, and not a great deal of argument about it.",
+              "Of the 5 delegations that replied — the paper asked 7 — 2 named something of my father's.",
+              "A single delegation answered simply: “My original application form, where I had written the name of the town next door in the box, and the extremely kind letter that came back explaining it was taken. Let some future archivist work out how I felt about it, because I'm still not sure.” — the Mayor of Kópavogur.",
+              "Exactly one city hall — the Mayor of Hobart — wrote only this: “A metre of the eight-strand off the ferry cleats, spliced properly by hand, so whoever opens it knows somebody here could still do that.”",
+              "And then one lone municipality, from the Mayor of Belgrade: “The tin ashtray from the kafana on my corner, which shut in March. Everybody took something that last night and I took that, and somebody in fifty years ought to know a room like that existed and roughly what it smelled like.”",
+              "The paper would like it noted that it asked a simple question."
+            ]
+          },
+          {
+            "round": 7,
+            "question": "Describe your ideal Tuesday evening. Be specific.",
+            "answered": 6,
+            "asked_of": 7,
+            "buckets": [
+              {
+                "label": "a quiet night in",
+                "size": 4,
+                "role": "headline"
+              },
+              {
+                "label": "a chair outside, with company",
+                "size": 2,
+                "role": "subgroup"
+              }
+            ],
+            "measure": {
+              "largest_bucket_size": 4,
+              "share": {
+                "exact": "2/3",
+                "approx": 0.6667,
+                "percent": 66.7
+              },
+              "largest_is_tied": false,
+              "tied_buckets": 1,
+              "bucket_count": 2,
+              "denominator": "respondents (6), not all mayors (7)"
+            },
+            "outcome": "supermajority",
+            "licensed_phrases": [
+              "most nations",
+              "the great majority of city halls",
+              "the prevailing international view"
+            ],
+            "must_disclose_partial_response": true,
+            "printed": [
+              "Correspondence from the mayors, counted before it was quoted.",
+              "The world's Tuesday",
+              "Asked of every mayor on the register: *“Describe your ideal Tuesday evening. Be specific.”*",
+              "The great majority of city halls — a quiet night in, and not a great deal of argument about it.",
+              "6 of 7 city halls wrote back. 4 of those said a quiet night in.",
+              "A handful of nations took a different view: a chair outside, with company.",
+              "The paper would like it noted that it asked a simple question."
+            ]
+          },
+          {
+            "round": 8,
+            "question": "Who taught you how to do this job — not the person who was supposed to?",
+            "answered": 5,
+            "asked_of": 7,
+            "buckets": [
+              {
+                "label": "a lifer in the works depot",
+                "size": 2,
+                "role": "headline"
+              },
+              {
+                "label": "somebody at a counter who hears everything",
+                "size": 2,
+                "role": "headline"
+              },
+              {
+                "label": "an unofficial authority in the street",
+                "size": 1,
+                "role": "outlier"
+              }
+            ],
+            "measure": {
+              "largest_bucket_size": 2,
+              "share": {
+                "exact": "2/5",
+                "approx": 0.4,
+                "percent": 40.0
+              },
+              "largest_is_tied": true,
+              "tied_buckets": 2,
+              "bucket_count": 3,
+              "denominator": "respondents (5), not all mayors (7)"
+            },
+            "outcome": "tie_case",
+            "licensed_phrases": [
+              "two camps of exactly equal size",
+              "level pegging, and the levelness is the story",
+              "a tie that neither side will concede"
+            ],
+            "must_disclose_partial_response": true,
+            "printed": [
+              "The paper puts one question to every city hall each round and prints what comes back, in aggregate, with the arithmetic showing.",
+              "The world's unofficial curriculum",
+              "The question, put to all of them and answered by rather fewer: *“Who taught you how to do this job — not the person who was supposed to?”*",
+              "The result is level pegging, and the levelness is the story — 2 for a lifer in the works depot, 2 for somebody at a counter who hears everything, and no way through it.",
+              "Of 5 replies (from 7 asked), 2 went each way.",
+              "And then one lone municipality, from the Mayor of Kampala: “A boda stage chairman called Kizito, who has never held an office in his life and settles about forty disputes a day with no budget and no minutes. He taught me the entire job in one sentence: decide out loud, in front of everybody, and then do not move.”",
+              "The paper would like it noted that it asked a simple question."
+            ]
+          },
+          {
+            "round": 9,
+            "question": "Good news arrives. Who do you call first?",
+            "answered": 5,
+            "asked_of": 8,
+            "buckets": [
+              {
+                "label": "a relative who won't be impressed",
+                "size": 4,
+                "role": "headline"
+              },
+              {
+                "label": "nobody, for an hour",
+                "size": 1,
+                "role": "outlier"
+              }
+            ],
+            "measure": {
+              "largest_bucket_size": 4,
+              "share": {
+                "exact": "4/5",
+                "approx": 0.8,
+                "percent": 80.0
+              },
+              "largest_is_tied": false,
+              "tied_buckets": 1,
+              "bucket_count": 2,
+              "denominator": "respondents (5), not all mayors (8)"
+            },
+            "outcome": "near_unanimous",
+            "licensed_phrases": [
+              "nearly every nation",
+              "all but a stubborn minority",
+              "the world, give or take a dissenter or two"
+            ],
+            "must_disclose_partial_response": true,
+            "printed": [
+              "The paper puts one question to every city hall each round and prints what comes back, in aggregate, with the arithmetic showing.",
+              "The world's first phone call",
+              "The question, put to all of them and answered by rather fewer: *“Good news arrives. Who do you call first?”*",
+              "The world, with one hold-out — a relative who won't be impressed, and not a great deal of argument about it.",
+              "5 of 8 city halls wrote back. 4 of those said a relative who won't be impressed.",
+              "Exactly one city hall — the Mayor of Trieste — wrote only this: “Nobody, for about an hour. I take it down to the counter at the café and say it out loud to a man who has heard better news than mine and doesn't look up — then I call my sister, who asks what the catch is.”",
+              "The paper considers the matter open and expects correspondence."
+            ]
+          },
+          {
+            "round": 10,
+            "question": "If your city vanished overnight, where would you go?",
+            "answered": 6,
+            "asked_of": 8,
+            "buckets": [
+              {
+                "label": "somewhere just like home",
+                "size": 4,
+                "role": "headline"
+              },
+              {
+                "label": "somewhere I already know people",
+                "size": 1,
+                "role": "outlier"
+              },
+              {
+                "label": "the town next door",
+                "size": 1,
+                "role": "outlier"
+              }
+            ],
+            "measure": {
+              "largest_bucket_size": 4,
+              "share": {
+                "exact": "2/3",
+                "approx": 0.6667,
+                "percent": 66.7
+              },
+              "largest_is_tied": false,
+              "tied_buckets": 1,
+              "bucket_count": 3,
+              "denominator": "respondents (6), not all mayors (8)"
+            },
+            "outcome": "supermajority",
+            "licensed_phrases": [
+              "most nations",
+              "the great majority of city halls",
+              "the prevailing international view"
+            ],
+            "must_disclose_partial_response": true,
+            "printed": [
+              "The paper puts one question to every city hall each round and prints what comes back, in aggregate, with the arithmetic showing.",
+              "The world's contingency plans",
+              "The question, put to all of them and answered by rather fewer: *“If your city vanished overnight, where would you go?”*",
+              "Most nations: somewhere just like home.",
+              "The paper asked 8 and heard from 6; 4 of the 6 said somewhere just like home.",
+              "And then one lone municipality, from the Mayor of Kampala: “Mombasa. I know the road, I know three people on it, and I would be selling something by Thursday.”",
+              "One more, unaccompanied, from the Mayor of Kópavogur: “Next door, obviously. I have had my eye on it since the beginning. I'd want it noted in the record that I'd be arriving as a resident and not as a claimant.”",
+              "The paper considers the matter open and expects correspondence."
+            ]
+          },
+          {
+            "round": 11,
+            "question": "What is on the mayoral desk that has absolutely no business being there?",
+            "answered": 5,
+            "asked_of": 8,
+            "buckets": [
+              {
+                "label": "a joke somebody else left there",
+                "size": 3,
+                "role": "headline"
+              },
+              {
+                "label": "a broken piece of the city",
+                "size": 1,
+                "role": "outlier"
+              },
+              {
+                "label": "something of my father's",
+                "size": 1,
+                "role": "outlier"
+              }
+            ],
+            "measure": {
+              "largest_bucket_size": 3,
+              "share": {
+                "exact": "3/5",
+                "approx": 0.6,
+                "percent": 60.0
+              },
+              "largest_is_tied": false,
+              "tied_buckets": 1,
+              "bucket_count": 3,
+              "denominator": "respondents (5), not all mayors (8)"
+            },
+            "outcome": "supermajority",
+            "licensed_phrases": [
+              "most nations",
+              "the great majority of city halls",
+              "the prevailing international view"
+            ],
+            "must_disclose_partial_response": true,
+            "printed": [
+              "The paper puts one question to every city hall each round and prints what comes back, in aggregate, with the arithmetic showing.",
+              "Contents of the world's desks",
+              "Asked of every mayor on the register: *“What is on the mayoral desk that has absolutely no business being there?”*",
+              "The prevailing international view — a joke somebody else left there, and not a great deal of argument about it.",
+              "The paper asked 8 and heard from 5; 3 of the 5 said a joke somebody else left there.",
+              "One more, unaccompanied, from the Mayor of Reykjavík: “A gearbox housing off a snowplough, cracked in 2018 in a way our workshop still describes as impossible. It stops paper from moving and it stops me being confident, and both are useful.”",
+              "A single delegation answered simply: “A tide table for 1994. Wrong year entirely, but it's in my father's handwriting, so it stays.” — the Mayor of Naoshima.",
+              "The paper would like it noted that it asked a simple question."
+            ]
+          },
+          {
+            "round": 12,
+            "question": "Both options are genuinely fine. How do you decide?",
+            "answered": 6,
+            "asked_of": 8,
+            "buckets": [
+              {
+                "label": "whichever is easier to undo",
+                "size": 4,
+                "role": "headline"
+              },
+              {
+                "label": "the better story",
+                "size": 1,
+                "role": "outlier"
+              },
+              {
+                "label": "whichever is quicker to explain",
+                "size": 1,
+                "role": "outlier"
+              }
+            ],
+            "measure": {
+              "largest_bucket_size": 4,
+              "share": {
+                "exact": "2/3",
+                "approx": 0.6667,
+                "percent": 66.7
+              },
+              "largest_is_tied": false,
+              "tied_buckets": 1,
+              "bucket_count": 3,
+              "denominator": "respondents (6), not all mayors (8)"
+            },
+            "outcome": "supermajority",
+            "licensed_phrases": [
+              "most nations",
+              "the great majority of city halls",
+              "the prevailing international view"
+            ],
+            "must_disclose_partial_response": true,
+            "printed": [
+              "The paper puts one question to every city hall each round and prints what comes back, in aggregate, with the arithmetic showing.",
+              "How the world breaks a tie",
+              "This paper put the same question to every city hall: *“Both options are genuinely fine. How do you decide?”*",
+              "Put to the great majority of city halls, the answer comes back: whichever is easier to undo.",
+              "6 of 8 city halls wrote back. 4 of those said whichever is easier to undo.",
+              "Exactly one city hall — the Mayor of Trieste — wrote only this: “If both are genuinely fine then it isn't a decision, it's a choice of story. I take the one that will be harder to explain in ten years.”",
+              "And then one lone municipality, from the Mayor of Valparaíso: “Whichever one I can explain faster to somebody standing on a street corner in the wind. If it takes more than two sentences it was never the fine option, I just hadn't noticed yet.”",
+              "The paper would like it noted that it asked a simple question."
+            ]
+          },
+          {
+            "round": 13,
+            "question": "Describe one room of the house you lived in at twelve.",
+            "answered": 7,
+            "asked_of": 8,
+            "buckets": [
+              {
+                "label": "the kitchen, where everything happened",
+                "size": 2,
+                "role": "subgroup"
+              },
+              {
+                "label": "the laundry nobody came into",
+                "size": 2,
+                "role": "subgroup"
+              },
+              {
+                "label": "the corridor",
+                "size": 1,
+                "role": "outlier"
+              },
+              {
+                "label": "the good room nobody used",
+                "size": 1,
+                "role": "outlier"
+              },
+              {
+                "label": "the room we all slept in",
+                "size": 1,
+                "role": "outlier"
+              }
+            ],
+            "measure": {
+              "largest_bucket_size": 2,
+              "share": {
+                "exact": "2/7",
+                "approx": 0.2857,
+                "percent": 28.6
+              },
+              "largest_is_tied": true,
+              "tied_buckets": 2,
+              "bucket_count": 5,
+              "denominator": "respondents (7), not all mayors (8)"
+            },
+            "outcome": "fragmented_case",
+            "licensed_phrases": [
+              "the world is divided",
+              "the community of cities has failed to reach consensus",
+              "as many answers as there are answerers, very nearly"
+            ],
+            "must_disclose_partial_response": true,
+            "printed": [
+              "The paper puts one question to every city hall each round and prints what comes back, in aggregate, with the arithmetic showing.",
+              "The world at twelve",
+              "This paper put the same question to every city hall: *“Describe one room of the house you lived in at twelve.”*",
+              "As many answers as there are answerers, very nearly — the kitchen, where everything happened, the laundry nobody came into, the corridor, the good room nobody used and the room we all slept in, one apiece, more or less.",
+              "7 replies from 8 asked, and not enough agreement anywhere to point at.",
+              "Certain territories took a different view: the kitchen, where everything happened.",
+              "Meanwhile some countries said the laundry nobody came into, and said it to each other.",
+              "One more, unaccompanied, from the Mayor of Naoshima: “The corridor, which I know isn't a room, but it's the one I can still walk. Boards laid over the gap where the house didn't quite meet the hill so it ran four degrees colder than either side, a shoe cupboard my father painted the wrong green twice, and a window at the end with nothing in it but a persimmon tree and the neighbour's television.”",
+              "One lone municipality answered simply: “The dining room, which we did not eat in. There was a table under a cloth my grandmother ironed on Fridays for guests who came perhaps twice a year, four chairs nobody sat in, and a sideboard with a locked drawer full of paper in three languages — a birth certificate from one country, a school record from a second, a pension letter from a third, all of them the same man. In winter the shutters knocked all night and I would lie on the good carpet working out which of the three I was supposed to be.” — the Mayor of Trieste.",
+              "A single delegation — the Mayor of Kampala — wrote only this: “The back room in Nsambya, two beds for four of us, a green metal window that only ever opened halfway because of a nail nobody would take out. My aunt's sewing machine lived in the corner and was the most valuable object in the house; we were told not to lean on it, so naturally we all leaned on it. There was a calendar photograph of a fjord taped above the door and no one could tell me how it got there, and I decided at about twelve that I was one day going to stand in it. Still haven't.”",
+              "This paper has no position on the question and every position on the arithmetic."
+            ]
+          },
+          {
+            "round": 14,
+            "question": "Where does the mayor go when the mayor wants to be left entirely alone?",
+            "answered": 7,
+            "asked_of": 8,
+            "buckets": [
+              {
+                "label": "the top of a building nobody goes to",
+                "size": 3,
+                "role": "headline"
+              },
+              {
+                "label": "among people who won't speak to me",
+                "size": 2,
+                "role": "subgroup"
+              },
+              {
+                "label": "somewhere too loud to talk",
+                "size": 2,
+                "role": "subgroup"
+              }
+            ],
+            "measure": {
+              "largest_bucket_size": 3,
+              "share": {
+                "exact": "3/7",
+                "approx": 0.4286,
+                "percent": 42.9
+              },
+              "largest_is_tied": false,
+              "tied_buckets": 1,
+              "bucket_count": 3,
+              "denominator": "respondents (7), not all mayors (8)"
+            },
+            "outcome": "plurality",
+            "licensed_phrases": [
+              "a good many countries",
+              "more capitals than name anything else",
+              "the largest single bloc"
+            ],
+            "must_disclose_partial_response": true,
+            "printed": [
+              "The paper puts one question to every city hall each round and prints what comes back, in aggregate, with the arithmetic showing.",
+              "The world's undisclosed locations",
+              "Asked of every mayor on the register: *“Where does the mayor go when the mayor wants to be left entirely alone?”*",
+              "Put to the largest single bloc, the answer comes back: the top of a building nobody goes to.",
+              "7 of 8 city halls wrote back. 3 of those said the top of a building nobody goes to.",
+              "Some countries took a different view: among people who won't speak to me.",
+              "Meanwhile a handful of nations said somewhere too loud to talk, and said it to each other.",
+              "The paper would like it noted that it asked a simple question."
+            ]
+          },
+          {
+            "round": 15,
+            "question": "Something plays every time you walk into a room. What is it?",
+            "answered": 7,
+            "asked_of": 8,
+            "buckets": [
+              {
+                "label": "a vehicle's horn or bell",
+                "size": 4,
+                "role": "headline"
+              },
+              {
+                "label": "a closing-time chime",
+                "size": 1,
+                "role": "outlier"
+              },
+              {
+                "label": "an accordion in the street",
+                "size": 1,
+                "role": "outlier"
+              },
+              {
+                "label": "the noise of a café",
+                "size": 1,
+                "role": "outlier"
+              }
+            ],
+            "measure": {
+              "largest_bucket_size": 4,
+              "share": {
+                "exact": "4/7",
+                "approx": 0.5714,
+                "percent": 57.1
+              },
+              "largest_is_tied": false,
+              "tied_buckets": 1,
+              "bucket_count": 4,
+              "denominator": "respondents (7), not all mayors (8)"
+            },
+            "outcome": "plurality",
+            "licensed_phrases": [
+              "a good many countries",
+              "more capitals than name anything else",
+              "the largest single bloc"
+            ],
+            "must_disclose_partial_response": true,
+            "printed": [
+              "The paper puts one question to every city hall each round and prints what comes back, in aggregate, with the arithmetic showing.",
+              "Municipal entrance music",
+              "The question, put to all of them and answered by rather fewer: *“Something plays every time you walk into a room. What is it?”*",
+              "The largest single bloc: a vehicle's horn or bell.",
+              "7 of 8 city halls wrote back. 4 of those said a vehicle's horn or bell.",
+              "One lone municipality — the Mayor of Naoshima — wrote only this: “The three-note chime the museum plays fifteen minutes before closing. Everyone here hears it as go home now, and I'd be pleased to have that follow me around.”",
+              "And then a single delegation, from the Mayor of Valparaíso: “A cueca on an accordion, played slightly too fast by a man who fully expects to be paid for it. I would prefer a brass section, obviously, but one works with the city one has.”",
+              "One more, unaccompanied, from the Mayor of Trieste: “Not music — the hiss and knock of a portafilter being emptied. I suspect it follows me because I have almost always just come from a room where it was actually happening.”",
+              "The paper would like it noted that it asked a simple question."
+            ]
+          },
+          {
+            "round": 16,
+            "question": "The least practical thing you refuse to throw away?",
+            "answered": 8,
+            "asked_of": 8,
+            "buckets": [
+              {
+                "label": "a key to a door that's gone",
+                "size": 3,
+                "role": "subgroup"
+              },
+              {
+                "label": "paper for something that never existed",
+                "size": 2,
+                "role": "subgroup"
+              },
+              {
+                "label": "a charger for a lost phone",
+                "size": 1,
+                "role": "outlier"
+              },
+              {
+                "label": "a ticket punch from the old ferry",
+                "size": 1,
+                "role": "outlier"
+              },
+              {
+                "label": "a tin of a colour we stopped using",
+                "size": 1,
+                "role": "outlier"
+              }
+            ],
+            "measure": {
+              "largest_bucket_size": 3,
+              "share": {
+                "exact": "3/8",
+                "approx": 0.375,
+                "percent": 37.5
+              },
+              "largest_is_tied": false,
+              "tied_buckets": 1,
+              "bucket_count": 5,
+              "denominator": "respondents (8), not all mayors (8)"
+            },
+            "outcome": "fragmented_case",
+            "licensed_phrases": [
+              "the world is divided",
+              "the community of cities has failed to reach consensus",
+              "as many answers as there are answerers, very nearly"
+            ],
+            "must_disclose_partial_response": false,
+            "printed": [
+              "The paper puts one question to every city hall each round and prints what comes back, in aggregate, with the arithmetic showing.",
+              "The world's hoard",
+              "Asked of every mayor on the register: *“The least practical thing you refuse to throw away?”*",
+              "On this, the community of cities has failed to reach consensus. What came back: a key to a door that's gone, paper for something that never existed, a charger for a lost phone, a ticket punch from the old ferry and a tin of a colour we stopped using.",
+              "8 of 8 replied and no two blocs of any size formed.",
+              "Certain territories went for a key to a door that's gone instead.",
+              "Some countries took a different view: paper for something that never existed.",
+              "One lone municipality answered simply: “A charger for a Nokia I lost in 2011. It is in the drawer. It will never be needed. It is not going anywhere.” — the Mayor of Kampala.",
+              "A single delegation — the Mayor of Naoshima — wrote only this: “A ticket punch from the old ferry gate. It doesn't punch anymore. It still clicks, and the click was always most of it.”",
+              "And then exactly one city hall, from the Mayor of Valparaíso: “A tin of paint from a colour we stopped using in 1998. It has been solid for twenty years and has followed me through three offices, but if one house on that hill ever needs touching up I would like to be able to say what the colour was called.”",
+              "The paper would like it noted that it asked a simple question."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "spec": "#26",
+      "title": "one edition per completed round, automatically, at one private address",
+      "status": "pass",
+      "detail": "17 editions for 17 completed rounds -- each one written by the round ending, in the facilitator's completed-round transaction (render_edition, publish_editions, build_site, notify_group), and each followed by one notice to the group that it is up; published to one unguessable unguessable_subdomain address with robots noindex in three places",
+      "evidence": {
+        "privacy": {
+          "robots_txt": true,
+          "meta_robots": "noindex, nofollow, noarchive, nosnippet, noimageindex",
+          "x_robots_tag": "noindex, nofollow, noarchive, nosnippet, noimageindex",
+          "referrer_policy": "no-referrer",
+          "cache_control": "private, no-store",
+          "content_security_policy": "default-src 'none'; img-src 'self'; style-src 'self'; base-uri 'none'; form-action 'none'"
+        },
+        "transactions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "notices": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "example_notice": {
+          "round": 1,
+          "kind": "round",
+          "channel": "group",
+          "text": "The Daily Manifest No. 1 has gone to press. This round's order comes from Reykjavík — Window boxes for one long grey street. It is at <the paper's private address>",
+          "carries_url": true,
+          "address_withheld": true,
+          "spec": "#26"
+        },
+        "address_in_published_bytes": false,
+        "address_in_the_written_down_notices": false
+      }
+    },
+    {
+      "spec": "#27",
+      "title": "every prior edition still browsable at the same address",
+      "status": "pass",
+      "detail": "17 back issues plus the final edition, each at its own permanent name and all listed on the shelf at archive.html, at the one address; rounds published: 1..17"
+    },
+    {
+      "spec": "#28",
+      "title": "mayors named by city and office only",
+      "status": "pass",
+      "detail": "49 published files; none contains any of the 8 real handles at the table (config.newspaper.player_identity_style='city_mayor_only')"
+    },
+    {
+      "spec": "#29",
+      "title": "every edition carries a generated image",
+      "status": "pass",
+      "detail": "17 editions plus the final one, each with an image; modality ['svg_procedural'], chosen from the configured preference ['raster', 'svg_procedural'] (no raster provider is registered in this deployment, which is the documented fallback case)",
+      "evidence": {
+        "final_image": "svg_procedural",
+        "portraits": 8
+      }
+    },
+    {
+      "spec": "#30",
+      "title": "funny, colourful, pointed but never mean",
+      "status": "judged",
+      "detail": "the tone gate (config.newspaper.tone, content/newspaper.json's forbidden register) passed every edition -- a failure there refuses publication rather than printing. 533 printed passages are attached for judgement",
+      "evidence": {
+        "tone_policy": {
+          "funny": true,
+          "colorful": true,
+          "allow_pointed_humor": true,
+          "disallow_snide_or_mean": true,
+          "forbidden_register_scope": "newspaper_voice"
+        },
+        "sample": [
+          {
+            "round": 1,
+            "text": "One city wants something. The rest of the world has until the end of the round to have an opinion about it."
+          },
+          {
+            "round": 1,
+            "text": "Window boxes for one long grey street"
+          },
+          {
+            "round": 1,
+            "text": "**PUBLIC NOTICE**. The Mayor of Reykjavík has taken out an advertisement. This paper has read it three times and remains impressed."
+          },
+          {
+            "round": 1,
+            "text": "Reykjavík's longest street is nine hundred metres of grey render and four hundred window sills, every one of them empty. The residents have agreed in principle and have nothing whatsoever to put in them. Wanted: four hundred window boxes, the compost to fill them, and plants that forgive an owner who forgets."
+          },
+          {
+            "round": 1,
+            "text": "The office asks, and the paper repeats verbatim: *Ship Reykjavík four hundred window boxes with something forgiving in them, and say what it forgives.*"
+          },
+          {
+            "round": 1,
+            "text": "The rules, as ever: one offer per city, anything at all, in by 11 September, 09:00 UTC, and nobody's name on anything."
+          },
+          {
+            "round": 1,
+            "text": "The desk has been asked not to speculate. The desk has speculated."
+          },
+          {
+            "round": 1,
+            "text": "Nothing to report from the bids desk, which has used the time to reorganise the pile."
+          },
+          {
+            "round": 1,
+            "text": "Nothing cleared customs today. The harbour is quiet, the clerks are up to date, and the paper has been reduced to describing the weather, which it has done above."
+          },
+          {
+            "round": 1,
+            "text": "Correspondence from the mayors, counted before it was quoted."
+          },
+          {
+            "round": 1,
+            "text": "What the world doesn't get"
+          },
+          {
+            "round": 1,
+            "text": "The question, put to all of them and answered by rather fewer: *“Name a thing everybody else loves that you have never understood.”*"
+          },
+          {
+            "round": 1,
+            "text": "The largest single bloc: camping."
+          },
+          {
+            "round": 1,
+            "text": "Every one of the 5 delegations wrote back, and 2 landed on camping."
+          },
+          {
+            "round": 1,
+            "text": "And then one lone municipality, from the Mayor of Reykjavík: “Barbecue as an occasion. I understand the food. I have never understood standing outdoors in a group for ninety minutes, waiting on it, everyone agreeing the wind is part of the charm.”"
+          },
+          {
+            "round": 1,
+            "text": "One more, unaccompanied, from the Mayor of Valparaíso: “Swimming in the sea. I have lived my entire life eighty metres above it and I have been in it twice, neither time on purpose.”"
+          },
+          {
+            "round": 1,
+            "text": "Exactly one city hall answered simply: “The northern lights. Half the town drives out to stand in a freezing ditch and comes back altered; I have looked up, seen green, said \"yes, green,\" and gone in for my supper.” — the Mayor of Kópavogur."
+          },
+          {
+            "round": 1,
+            "text": "This paper has no position on the question and every position on the arithmetic."
+          },
+          {
+            "round": 1,
+            "text": "The running total. Compiled carefully, printed reluctantly."
+          },
+          {
+            "round": 1,
+            "text": "5 cities are level on 0 and each has written in separately to say they are not."
+          },
+          {
+            "round": 1,
+            "text": "Several cities are still on nothing at all. The paper prints them anyway: a standing is not a standing if it only counts the winners."
+          },
+          {
+            "round": 1,
+            "text": "Figures are cumulative from the first round and are not adjusted for anything, least of all sentiment."
+          },
+          {
+            "round": 1,
+            "text": "The paper's errors, reported with the gravity they deserve and then some."
+          },
+          {
+            "round": 1,
+            "text": "This paper is called The Daily Manifest and publishes once per round. The two facts are only occasionally the same fact."
+          }
+        ]
+      }
+    },
+    {
+      "spec": "#30b",
+      "title": "a mayor's own words are printed as typed and marked as theirs",
+      "status": "pass",
+      "detail": "71 quoted passages across 18 editions, every one byte-identical to what a player typed and every one cited (config.newspaper.tone.forbidden_register_scope='newspaper_voice', so the register grades the paper's copy and not a mayor's). none of them contains a term from the paper's own forbidden register, so this recording did not need the exemption; the committed sample run (newspaper/sample.py) carries an offer that does, and tests/test_player_voice.py proves the publish-anyway, no-rewrite and no-blocking behaviour directly",
+      "evidence": {
+        "passages": 71,
+        "register_terms_in_player_passages": 0,
+        "declined_passages_cited_without_a_city": true
+      }
+    },
+    {
+      "spec": "#30a",
+      "title": "the front door opens the newest issue; every issue can be navigated",
+      "status": "pass",
+      "detail": "index.html carries the same issue as final.html, byte for byte, and links it at its permanent name; all 18 issues offer the latest edition and the shelf at archive.html, and each names exactly the neighbours it has",
+      "evidence": {
+        "front_page": "index.html",
+        "carries": "final.html",
+        "shelf": "archive.html",
+        "issues": 18,
+        "judged_separately": "whether these pages read as a newspaper rather than as a plain document is spec #30a's other half, and a judgement for the Evaluator"
+      }
+    },
+    {
+      "spec": "#31",
+      "title": "the cumulative-profit winner is crowned; a twist article runs",
+      "status": "pass",
+      "detail": "the crown column names Valparaíso, which is who the leaderboard puts first; the consequences column follows up on 4 arrival(s), every one of them an export that actually won a need in this game",
+      "evidence": {
+        "leaderboard_head": [
+          {
+            "rank": 1,
+            "city": "Valparaíso",
+            "mayor": "the Mayor of Valparaíso",
+            "profit": {
+              "exact": "202/5",
+              "approx": 40.4,
+              "display": "40.40"
+            },
+            "tied": false
+          },
+          {
+            "rank": 2,
+            "city": "Reykjavík",
+            "mayor": "the Mayor of Reykjavík",
+            "profit": {
+              "exact": "142/5",
+              "approx": 28.4,
+              "display": "28.40"
+            },
+            "tied": false
+          },
+          {
+            "rank": 3,
+            "city": "Hobart",
+            "mayor": "the Mayor of Hobart",
+            "profit": {
+              "exact": "82/5",
+              "approx": 16.4,
+              "display": "16.40"
+            },
+            "tied": false
+          }
+        ],
+        "crown_column": [
+          "Two rotations, 15 notices, and one column of numbers that will now be quoted locally for years.",
+          "**Valparaíso takes the crown.** 40.40 in cumulative profit across 17 rounds, every unit of it awarded by somebody else.",
+          "The margin over Reykjavík was 12, which is one good roll and a small number of firmly held opinions.",
+          "The total is built on six chosen offers, each of them picked blind by a mayor who did not know where it came from.",
+          "Final figures, cumulative from the first round, unadjusted for luck, weather, or the strength of anybody's feelings.",
+          "The other 7 delegations have been thanked in writing, at length, by a paper with column inches to spare.",
+          "This paper thanks every city hall for its patience, its cargo and its opinions about this paper."
+        ],
+        "twist_quotes": [
+          "Four hundred apple crates out of the Huon Valley, second-hand, dovetailed by people who expected them to be dropped, lined with hessian and drilled for drainage, filled two parts leaf mould to one part washed river grit. Planted: eight house leeks and a fistful of creeping thyme per box, plus chives, because chives forgive. What they forgive is neglect, salt, wind off the water, a fortnight with nothing at all, being frozen solid, being watered with the cold end of somebody's tea, and being carried indoors in October by a resident who has decided they look cold. What they do not forgive is daily watering, so we have written that on the underside of every crate where it cannot get lost.",
+          "Forty thousand postcards, printed on card thick enough to stand up in a rack, and not one of them the view from the top of the mountain. The image is the town seen from the middle of the river on a grey afternoon, the mountain entirely inside a cloud, one ferry crossing left to right. Half our residents say this is a slander and we should have waited for a clear day; the other half say we have been waiting for a clear day since 1804 and this is the honest one. Both arguments are printed on the reverse in small type, so your shopkeeper has something to say instead of apologising.",
+          "Sixteen crates, glass, returnable, all of it cold when it left. Twelve crates of *Bilz y Pap* — the pink one and the yellow one, and no living person can tell you what flavour either is meant to be; the label says only *sabor único*, a unique flavour, which is the most honest thing ever printed on a bottle. Two crates of *mote con huesillo* in bottle form, wheat and dried peach in syrup, labelled *más chilena que los porotos* — more Chilean than beans — and it is a drink you eat with a spoon at the end. Two crates of murta cordial from the south, whose label promises it is *digestivo y refrescante*, which we read as medicinal and therefore permission. And thirty-one bottle openers: eight of steel, twenty-two shaped like sardines, and one welded to a chain in the shape of our funicular, for the shop that keeps losing them.",
+          "Forty cases. Twenty-eight of paprika, which is what gets eaten here without anyone deciding to, ten of plain salted, and two of a barbecue flavour that exists mainly so there is something to reject. The bag is red and yellow and has not been redesigned since about 1985, and on the back it prints the weight in grams, a nutritional table nobody has ever read, and the name of the village the potatoes were grown in — population three hundred, also the factory address, and if you ring the number on it you get somebody's mother. Open one case immediately. They do not travel forever and I would rather you ate them than stored them."
+        ],
+        "quotes_not_from_this_game": [],
+        "arrivals_printed": 4
+      }
+    },
+    {
+      "spec": "#32",
+      "title": "a description and an image per city, from its own history",
+      "status": "judged",
+      "detail": "8 of 8 cities carry a portrait and 8 carry a description; whether each is *informed by that city's actual history* -- and whether its excess is portrayed as offers it declined rather than offers it sent -- is the judged part, and the material is attached",
+      "evidence": {
+        "cities": [
+          "Belgrade",
+          "Hobart",
+          "Kampala",
+          "Kópavogur",
+          "Naoshima",
+          "Reykjavík",
+          "Trieste",
+          "Valparaíso"
+        ],
+        "portraits": {
+          "Belgrade": "city-belgrade.svg",
+          "Hobart": "city-hobart.svg",
+          "Kampala": "city-kampala.svg",
+          "Kópavogur": "city-kopavogur.svg",
+          "Naoshima": "city-naoshima.svg",
+          "Reykjavík": "city-reykjavik.svg",
+          "Trieste": "city-trieste.svg",
+          "Valparaíso": "city-valparaiso.svg"
+        },
+        "descriptions": {
+          "Belgrade": [
+            "Belgrade, fourth on 11.40, drawn here from its own record and nobody else's.",
+            "Belgrade's notices this game: Biscuits, by the tin, for a hall with three bookings and The sweet nobody else has. Two in total, each one a thing it wanted and could not get at home.",
+            "Two of Belgrade's offers were chosen across the game, each of them picked by a mayor who did not know whose it was.",
+            "Chosen, in Naoshima, from Belgrade: *Five hundred small ones out of one stall in our biggest market, bought in a single afternoon of hard bargaining: wind-up tin frogs, plastic combs shaped like fish, whistles that do a convincing bird, keyring torches, magnets of a bridge nobody there will recognise, glitter hair clips in colours that do not occur in nature, and one hundred and forty foil-wrapped chocolate coins that must not go anywhere warm. Gaudy, plastic, faintly baffling — correct on all three counts, and I checked. The one good prize is a red 96-bass piano accordion, forty years old, mother-of-pearl on the keys, in a hard case with a strap that has been sweated into by better musicians than me; a man who repairs them for a living will tune and re-wax it the week before it ships. In the case there is a card with three tunes on it, and the third one is easy on purpose. Grown adults will queue in the rain. Sell them two tickets each.*",
+            "On Belgrade's own quay: eleven offers, arrived, read, and not chosen. All of it still there. The clerk's file calls the pile biscuits, broken, at the bottom of the tin and regional specialities, admired and uneaten.",
+            "From that pile, unattributed as ever:",
+            "Belgrade's own unchosen offers exist, are somewhere in Belgrade, and are nobody's business. The portrait draws the door and stops there.",
+            "For the record, the Mayor of Belgrade, asked *The mayoral position on coriander, please. For the record.*: “Against, and for the record it is chemistry, not taste. It comes at me like the inside of a new plastic bucket, and I'm told that reaction is genetic, which I choose to read as science taking my side rather than excusing me.”"
+          ],
+          "Hobart": [
+            "Hobart finishes third, on 16.40, and looks — the illustrator is firm about this — exactly like a city that finished third on 16.40.",
+            "What Hobart asked for, in order: Something to eat off a balcony and The game your city plays in the street.",
+            "Three times this game, a city read an unsigned offer and it turned out to be Hobart's.",
+            "Reykjavík looked at a desk of unsigned offers and took Hobart's: *Four hundred apple crates out of the Huon Valley, second-hand, dovetailed by people who expected them to be dropped, lined with hessian and drilled for drainage, filled two parts leaf mould to one part washed river grit. Planted: eight house leeks and a fistful of creeping thyme per box, plus chives, because chives forgive. What they forgive is neglect, salt, wind off the water, a fortnight with nothing at all, being frozen solid, being watered with the cold end of somebody's tea, and being carried indoors in October by a resident who has decided they look cold. What they do not forgive is daily watering, so we have written that on the underside of every crate where it cannot get lost.*",
+            "Nine offers reached Hobart and went unchosen. Hobart kept the pile anyway — seedlings, hardened off, unplanted and rule sheets, for games nobody learned — because nobody has ever worked out how to send an offer back.",
+            "From that pile, unattributed as ever:",
+            "Hobart's own unchosen offers exist, are somewhere in Hobart, and are nobody's business. The portrait draws the door and stops there.",
+            "For the record, the Mayor of Hobart, asked *Name a thing everybody else loves that you have never understood.*: “Camping. I went to considerable trouble to own a house with a roof on it, and the proposal is that I go and sleep outside on purpose.”"
+          ],
+          "Kampala": [
+            "Kampala finishes sixth, on 6.40, and looks — the illustrator is firm about this — exactly like a city that finished sixth on 6.40.",
+            "Kampala came to the world two times, over Something cold, in a glass bottle and Hens, and something to keep them in.",
+            "Two times this game, a city read an unsigned offer and it turned out to be Kampala's.",
+            "Chosen, in Kópavogur, from Kampala: *Forty cases coming, split three ways: twenty of cassava crisps sliced thin enough to read a newspaper through and salted while still spitting, fifteen of sweet plantain crisps that go dark at the edges and taste like toffee that changed its mind, and five of green banana crisps dusted with chilli and lime for people who need convincing. They are packed in brown paper bags hand-stamped at a printer's off the taxi park, and what is printed on the bag is a boda rider giving a thumbs up, the words EAT WHILE HOT, SHARE WHILE WARM, and a phone number. The number is mine. The printer put it there by mistake in 2019 and I have never corrected him, so if a bag disappoints you, ring me and I will answer.*",
+            "The excess at Kampala: nine offers, declined, filed under crates, warm, stacked in the shade and coops, built, unoccupied, occupying a quay that has other uses.",
+            "Two offers, reprinted without a sender, because the writing deserves a second reading:",
+            "What Kampala sent that nobody chose is not itemised here and cannot be: this paper has never known which offers were Kampala's, and the one ledger that does know is not something the last edition gets to open. There is a shed for it in the portrait, with the door shut.",
+            "On the question *Name a thing everybody else loves that you have never understood.*, Kampala's answer was: “Camping. You own a bed. You own a roof. You paid for both of them, and then you drive out of town to sleep on the ground and tell me about it for a week.”"
+          ],
+          "Kópavogur": [
+            "Kópavogur finishes joint seventh, on 0, and looks — the illustrator is firm about this — exactly like a city that finished joint seventh on 0.",
+            "What Kópavogur asked for, in order: Crisps in a flavour nobody here has met and Cake for a birthday nobody will admit to.",
+            "Kópavogur appears nowhere in the year's arrivals. The paper offers no theory and has several.",
+            "One of Kópavogur's decisions was made by the clock instead, to the profit of 5 cities.",
+            "The excess at Kópavogur: six offers, declined, filed under cake, cut, under a tea towel, occupying a quay that has other uses.",
+            "Two offers, reprinted without a sender, because the writing deserves a second reading:",
+            "Kópavogur's own unchosen offers exist, are somewhere in Kópavogur, and are nobody's business. The portrait draws the door and stops there.",
+            "For the record, the Mayor of Kópavogur, asked *Name a thing everybody else loves that you have never understood.*: “The northern lights. Half the town drives out to stand in a freezing ditch and comes back altered; I have looked up, seen green, said \"yes, green,\" and gone in for my supper.”"
+          ],
+          "Naoshima": [
+            "Fifth: Naoshima, 7, and a harbour that has seen things this year.",
+            "Naoshima came to the world two times, over Board games for a wet fortnight and Prizes for a fête, and nothing sensible.",
+            "Nothing in this paper's whole arrivals column came from Naoshima. The column is the poorer for it and has said so.",
+            "Naoshima once put out a notice the whole world ignored, and then quietly did it itself, at full price.",
+            "On Naoshima's own quay: six offers, arrived, read, and not chosen. All of it still there. The clerk's file calls the pile prizes, unclaimed, back in the box.",
+            "From that pile, unattributed as ever:",
+            "Naoshima's own unchosen offers exist, are somewhere in Naoshima, and are nobody's business. The portrait draws the door and stops there.",
+            "For the record, the Mayor of Naoshima, asked *What compliment do you actually want to receive?*: “That a room I made decisions about was quiet. Not beautiful. Quiet.”"
+          ],
+          "Reykjavík": [
+            "Second: Reykjavík, 28.40, and a harbour that has seen things this year.",
+            "Reykjavík came to the world two times, over Window boxes for one long grey street and Outfitting for a swimming club that swims in March.",
+            "Five of Reykjavík's offers were chosen across the game, each of them picked by a mayor who did not know whose it was.",
+            "Hobart looked at a desk of unsigned offers and took Reykjavík's: *Thirty balls of the soft-seamed sort that will not go through a window, and thirty sticks of chalk you will not end up needing. The game is called yfir — 'over' — and it is played against a roof rather than a wall, which puts us, by my count, one storey ahead of you. Two teams stand either side of a house; you shout the name of the game, throw the ball over the ridge, and if the far side catches it they come round the corner at speed and the running begins. Coming to demonstrate: Sigrún Halldórsdóttir, sixty-eight, school caretaker for thirty-one years and the only authority anyone accepts on whether a throw counted. She has asked for an afternoon with some wind in it; a car park is fine.*",
+            "Seven offers reached Reykjavík and went unchosen. Reykjavík kept the pile anyway — window boxes, planted, unwatered and swimming kit, dry, folded, unused — because nobody has ever worked out how to send an offer back.",
+            "From that pile, unattributed as ever:",
+            "Reykjavík's own unchosen offers exist, are somewhere in Reykjavík, and are nobody's business. The portrait draws the door and stops there.",
+            "On the question *Name a thing everybody else loves that you have never understood.*, Reykjavík's answer was: “Barbecue as an occasion. I understand the food. I have never understood standing outdoors in a group for ninety minutes, waiting on it, everyone agreeing the wind is part of the charm.”"
+          ],
+          "Trieste": [
+            "Joint eighth: Trieste, 0, and a harbour that has seen things this year.",
+            "What Trieste asked for, in order: The thing you eat standing up at eleven at night.",
+            "Trieste appears nowhere in the year's arrivals. The paper offers no theory and has several.",
+            "The excess at Trieste: six offers, declined, filed under late suppers, arriving at the wrong hour, occupying a quay that has other uses.",
+            "From that pile, unattributed as ever:",
+            "What Trieste sent that nobody chose is not itemised here and cannot be: this paper has never known which offers were Trieste's, and the one ledger that does know is not something the last edition gets to open. There is a shed for it in the portrait, with the door shut.",
+            "For the record, the Mayor of Trieste, asked *Good news arrives. Who do you call first?*: “Nobody, for about an hour. I take it down to the counter at the café and say it out loud to a man who has heard better news than mine and doesn't look up — then I call my sister, who asks what the catch is.”"
+          ],
+          "Valparaíso": [
+            "Valparaíso finishes first, on 40.40, and looks — the illustrator is firm about this — exactly like a city that finished first on 40.40.",
+            "Valparaíso's notices this game: Postcards of somewhere else entirely and Nine hundred paper bags, and something to put in them. Two in total, each one a thing it wanted and could not get at home.",
+            "Six times this game, a city read an unsigned offer and it turned out to be Valparaíso's.",
+            "The world kept this, from Valparaíso: *Kópavogur, *querido* — four hundred years and only cake? Valparaíso salutes the discipline. Loading tomorrow on the *ascensor* Artillería, hand-cranked down the hill by Doña Inés Carvajal, who has been baking on Cerro Alegre through four earthquakes, eleven winters of horizontal rain and three changes of paint on the same bakery wall, and has never once let a *torta* fall: eighteen tall *tortas de mil hojas*, forty layers each, thin as a gull's patience; twenty-four flat almond *kuchen* from the German bakers down at Puerto Varas, my cousins by marriage and rivals by nature; and nine *borrachos* soaked in *pisco* until they can barely stand, much like certain councillors after our budget votes. The boxes: three hundred, corrugated, painted by the mural collective of Cerro Concepción in the exact blues we use on the funicular sheds, so your rubbish bins will look better than most of our streets. Icing: sixty kilos, twelve colours, enough to write nonsense until 2426. Eat the *borrachos* first. They travel badly and improve everything.* — chosen in Kópavogur.",
+            "The excess at Valparaíso: seven offers, declined, filed under postcards, written, never posted and sweets, unwrapped, going soft in the jar, occupying a quay that has other uses.",
+            "From that pile, unattributed as ever:",
+            "What Valparaíso sent that nobody chose is not itemised here and cannot be: this paper has never known which offers were Valparaíso's, and the one ledger that does know is not something the last edition gets to open. There is a shed for it in the portrait, with the door shut.",
+            "On the question *Name a thing everybody else loves that you have never understood.*, Valparaíso's answer was: “Swimming in the sea. I have lived my entire life eighty metres above it and I have been in it twice, neither time on purpose.”",
+            "That is the world, as far as this paper was able to establish it, and establishing it was the whole job."
+          ]
+        }
+      }
+    },
+    {
+      "spec": "#33",
+      "title": "a good name, and a seeded import list that is varied and gameable",
+      "status": "judged",
+      "detail": "the game is 'Sister Cities' and the paper is 'The Daily Manifest' (see NAME.md); the seed list holds 48 orders across 16 categories and 6 kinds of tradable thing, 48 distinct briefs, of which 15 were ordered in this game. Whether the name reads as chosen rather than placeheld, and whether the list is varied and gameable rather than repetitive, is the judged part",
+      "evidence": {
+        "categories": [
+          "baked_goods",
+          "books",
+          "candy",
+          "clothes",
+          "condiments",
+          "games_and_puzzles",
+          "homeware",
+          "hot_drinks",
+          "music",
+          "pets",
+          "plants",
+          "small_comforts",
+          "snacks",
+          "soft_drinks",
+          "stationery",
+          "toys_and_novelties"
+        ],
+        "trade_families": [
+          "plants_and_pets",
+          "play_and_pastimes",
+          "reading_and_listening",
+          "snacks_and_bakes",
+          "sweets_and_drinks",
+          "wear_and_comfort"
+        ],
+        "ordered_this_game": [
+          [
+            "Belgrade",
+            "candy",
+            "The sweet nobody else has"
+          ],
+          [
+            "Belgrade",
+            "snacks",
+            "Biscuits, by the tin, for a hall with three bookings"
+          ],
+          [
+            "Hobart",
+            "games_and_puzzles",
+            "The game your city plays in the street"
+          ],
+          [
+            "Hobart",
+            "plants",
+            "Something to eat off a balcony"
+          ],
+          [
+            "Kampala",
+            "pets",
+            "Hens, and something to keep them in"
+          ],
+          [
+            "Kampala",
+            "soft_drinks",
+            "Something cold, in a glass bottle"
+          ],
+          [
+            "Kópavogur",
+            "baked_goods",
+            "Cake for a birthday nobody will admit to"
+          ],
+          [
+            "Kópavogur",
+            "snacks",
+            "Crisps in a flavour nobody here has met"
+          ],
+          [
+            "Naoshima",
+            "games_and_puzzles",
+            "Board games for a wet fortnight"
+          ],
+          [
+            "Naoshima",
+            "toys_and_novelties",
+            "Prizes for a fête, and nothing sensible"
+          ],
+          [
+            "Reykjavík",
+            "clothes",
+            "Outfitting for a swimming club that swims in March"
+          ],
+          [
+            "Reykjavík",
+            "plants",
+            "Window boxes for one long grey street"
+          ],
+          [
+            "Trieste",
+            "snacks",
+            "The thing you eat standing up at eleven at night"
+          ],
+          [
+            "Valparaíso",
+            "candy",
+            "Nine hundred paper bags, and something to put in them"
+          ],
+          [
+            "Valparaíso",
+            "stationery",
+            "Postcards of somewhere else entirely"
+          ]
+        ]
+      }
+    },
+    {
+      "spec": "#34",
+      "title": "every role and every simulated player is a separate session",
+      "status": "process",
+      "detail": "not decidable from game state. This run's evidence: 8 mayors, each played by its own separately-spawned agent given only its own city's brief, plus a separate facilitator session for the answer clustering; the Generator and Evaluator are separate sessions by the harness's own construction. See docs/m8-integration.md",
+      "evidence": {
+        "seats": [
+          "m-rvk",
+          "m-vlp",
+          "m-hbt",
+          "m-kmp",
+          "m-kop",
+          "m-nao",
+          "m-bel",
+          "m-tri"
+        ]
+      }
+    },
+    {
+      "spec": "#35",
+      "title": "committed once per run, in a repository separate from the harness",
+      "status": "process",
+      "detail": "not decidable from game state: this is the deliverable repository (badralbudur/game-night), which shares no commit history with the harness repository (badralbudur/game-night-harness). Verifiable from `git log` in each, not from a played game"
+    }
+  ]
+}

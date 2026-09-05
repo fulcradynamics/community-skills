@@ -1,0 +1,13 @@
+[project]
+name = "fulcra-sister-cities"
+version = "0.1.0"
+description = "Sister Cities asynchronous social game runtime for Fulcra agents"
+requires-python = ">=3.11"
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["engine", "newspaper", "hosting", "playtest"]

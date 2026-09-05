@@ -1,0 +1,42 @@
+{
+  "player_id": "m-nao",
+  "city": "Naoshima",
+  "ballots": [
+    {
+      "round": 14,
+      "need": "in-013",
+      "your_notice": "Naoshima's summer fête has eleven stalls and a prize table currently holding a tin of peaches. Wanted: prizes -- plastic, gaudy, faintly baffling -- five hundred of them, plus one single prize so good that grown adults will queue in the rain for a raffle ticket.",
+      "you_asked_for": "Send Naoshima five hundred small gaudy prizes and one absurdly good one, and say which is which.",
+      "offers": [
+        {
+          "ballot_ref": "A",
+          "offer": "Five hundred plastic puffins on keyrings. They squeak, they are made nowhere near here and sold on every street here, and grown adults will complain about them and then take three. The one good prize is a hand-knitted wool sweater with the yoke pattern, undyed grey and cream, made by Guðrún Sigurjónsdóttir, seventy-four, of the Grafarvogur estate, who takes three weeks over one and has never sold a single one in her life. It will keep the rain off you for forty years, which the puffins will not do for eleven minutes. Draw that raffle last, and outdoors."
+        },
+        {
+          "ballot_ref": "B",
+          "offer": "Five hundred small ones out of one stall in our biggest market, bought in a single afternoon of hard bargaining: wind-up tin frogs, plastic combs shaped like fish, whistles that do a convincing bird, keyring torches, magnets of a bridge nobody there will recognise, glitter hair clips in colours that do not occur in nature, and one hundred and forty foil-wrapped chocolate coins that must not go anywhere warm. Gaudy, plastic, faintly baffling — correct on all three counts, and I checked. The one good prize is a red 96-bass piano accordion, forty years old, mother-of-pearl on the keys, in a hard case with a strap that has been sweated into by better musicians than me; a man who repairs them for a living will tune and re-wax it the week before it ships. In the case there is a card with three tunes on it, and the third one is easy on purpose. Grown adults will queue in the rain. Sell them two tickets each."
+        },
+        {
+          "ballot_ref": "C",
+          "offer": "Port towns run on gaudy rubbish and we have been accumulating ours for a century. Five hundred small prizes: plastic lighthouse keyrings, thimble-sized espresso cups that hold exactly one mouthful, wind-up tin sailors that only walk left, whistles shaped like sardines, and snow globes in which the snow goes sideways, because here it does. The one good prize is a marble-topped cafe table with two bentwood chairs, carried out of a coffee house that closed in March — the marble holds fifty years of cup rings and cannot be cleaned, which is the entire point — plus a kilo of coffee posted to the winner every month for a year. Grown adults will stand in the rain for that. They stood in the rain for the closing."
+        },
+        {
+          "ballot_ref": "D",
+          "offer": "Five hundred prizes straight off the second-hand market: a hundred and twenty pairs of plastic sunglasses in colours not occurring in nature, a hundred tin whistles, eighty keyrings shaped like a minibus taxi with a sliding door that actually slides, sixty wind-up chickens, eighty glitter hair clips and sixty little mirrors with a comb stuck in the back. Those are the plastic, gaudy, faintly baffling ones, and the wind-up chickens are the ones that will cause the only argument of the afternoon. The one good prize is a bicycle, hand-painted by Kizito who letters taxis for a living — flames down the frame, a crested crane on the mudguard, gold lettering across the crossbar with a shadow on it, a chrome horn that works, tassels, and a padded pillion seat so whoever wins can carry somebody home. Grown adults will stand in rain for that bicycle. I have watched them do it."
+        },
+        {
+          "ballot_ref": "E",
+          "offer": "Five hundred small gaudy prizes, and every one of them is a thing our port already makes too many of: two hundred tin sardines with a hinged tail that clack when you shake them, hand-painted in nine colours; a hundred and fifty miniature funicular cars, wooden, the size of a matchbox, wheels that actually roll; a hundred rubber stray dogs, because we have thirty thousand real ones and the children over there deserve at least a hundred; and fifty enamel pins of a staircase going nowhere. All of it faintly baffling, which was the brief and is also our municipal character. And the one prize: a working hand-cranked barrel organ, *organillo*, restored by the Lizana family who have kept the last three in this country alive, with forty-one tunes on the barrel and a strap so a child can carry it — and whoever pulls the winning ticket is taught to play it, on the spot, in the rain, badly, in front of everybody. Grown adults will queue. They queue here."
+        },
+        {
+          "ballot_ref": "F",
+          "offer": "Five hundred gaudy, sorted into eleven boxes so every stall gets a spread: wind-up plastic devils that jump sideways instead of forwards, glow bracelets, tin whistles we already regret, plastic magnifying glasses that genuinely work, and two hundred stickers of a mountain hidden in cloud that no child will understand and every child will want. The one good prize is a clinker-built rowing dinghy, nine foot six, celery-top pine on oak, built by hand down the valley at Franklin, with two oars, rowlocks and one coat of paint the colour of a wet morning. It floats, it is registered to nobody, and it should sit behind the prize table where people can put a hand on it. Grown adults will queue in the rain: ours did, and it was not even a raffle, it was just parked."
+        },
+        {
+          "ballot_ref": "G",
+          "offer": "Five hundred gaudy: two hundred glow-in-the-dark plastic trolls, four centimetres tall, with faces that will trouble a child at three in the morning; a hundred and fifty puffin whistles capable of exactly one note; a hundred and fifty keyrings shaped like a lump of lava, which is geologically accurate and completely baffling as an object. The one absurdly good prize is a hand-knitted wool sweater, the yoked kind in undyed grey and cream, made by Sigríður, 81, of the Thursday knitting circle, who wants the winner's chest measurement posted to her and will knit to it before it ships. Grown adults will stand in rain for that and will not stand in rain for a troll, and Sigríður is aware of this, which is why she has also asked for a photograph of the winner wearing it."
+        }
+      ]
+    }
+  ]
+}
