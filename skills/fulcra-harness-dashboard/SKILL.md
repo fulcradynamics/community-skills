@@ -134,9 +134,9 @@ approved spec/config reflects it. Do not retain stale “open” items forever.
 
 ## Post-terminal refresh contract (required)
 
-After **every** terminal milestone outcome (PASS, FAIL, escalation, or
-decision-required), refresh the local curated dashboard only after the
-Coordinator has successfully persisted the canonical Workspace
+After every terminal milestone outcome for an active
+`choice: create_and_publish` dashboard, refresh the local curated dashboard
+only after the Coordinator has successfully persisted the canonical Workspace
 `status-summary.md`, milestone progress, and any terminal verdict/decision
 record. A dashboard must never silently keep showing an earlier completed
 milestone as current.

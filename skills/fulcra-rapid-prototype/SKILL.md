@@ -201,12 +201,15 @@ Record the raw answer in `decisions.md`, then resolve
 `dashboard-decision.md` with one of:
 
 ```text
+status: resolved
 choice: create_and_publish
 publication: confirmed
 
+status: resolved
 choice: defer
 publication: deferred
 
+status: resolved
 choice: decline
 publication: declined
 ```
@@ -284,14 +287,12 @@ The non-negotiable operating rules are:
   roles patch deliverable code;
 - use the delayed verifier pattern for unattended schedules.
 
-When the dashboard decision is `create_and_publish`, treat dashboard refresh
-as a terminal-outcome obligation: after the Coordinator persists canonical
-Workspace status/progress/verdict state, invoke the harness-dashboard
-post-terminal refresh contract. Refresh local curated data on every terminal
-outcome; if that changes the public manifest, persist `refresh_pending` and
-ask the user to approve the exact new manifest before republishing. Never
-silently leave a published dashboard stale and never silently republish a
-changed manifest.
+When the dashboard decision is `create_and_publish`, `run_milestone.py`
+invokes `HARNESS_DASHBOARD_REFRESH_CMD` after each terminal status/progress/
+verdict update. The command refreshes local curated data; if that changes the
+public manifest, persist `refresh_pending` and ask the user to approve the
+exact new manifest before republishing. Never silently leave a published
+dashboard stale or silently republish a changed manifest.
 
 ## 7. Offer independent scheduled operation (one-time user decision)
 
