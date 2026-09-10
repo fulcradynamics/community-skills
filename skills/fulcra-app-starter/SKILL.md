@@ -15,6 +15,10 @@ Scaffolds a new web application project with a batteries-included Fulcra authent
 
 This skill offers a fairly involved set of steps and so a tone that favors concise, simple language that does not include made-up technical jargon lends itself well to a lower-friction / easy-flowing user experience.
 
+## Preferred Coding Style
+
+Because this skill uses a harness approach, the preferred coding style is to avoid over-engineering, avoid overly-defensive code, and avoid writing an unnecessariliy large number of tests so that milestones only require a reasonable amount of time to be attempted and maintained. The point is to add milestones and allow the project to evolve in a stable way. You'll still have the opportunity to author all the code you want, but use milestones as smaller lego bricks to build your empire.
+
 ## Overview
 
 This skill helps users start a Fulcra-backed web application by cloning one of the official app templates. These templates provide:
