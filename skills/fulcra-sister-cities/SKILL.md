@@ -180,9 +180,13 @@ for an edition. It is intentionally not replaced by a network call while a
 round is completing: an edition is an immutable, privacy-checked historical
 record, and an absent or failed image producer must never stop publication.
 
-For a deliberately commissioned raster illustration, use the upstream
+For **every planned future round**, the upstream
 [`image-upgrader`](https://github.com/kubla/a-particular-set-of-skills/tree/main/skills/image-upgrader)
-skill as an asynchronous producer workflow:
+skill is the **preferred image path**. Create that round's Request as soon as a
+safe, city-only brief exists, then use the verified Contribution if it arrives
+and passes review before publication. The SVG is only the non-blocking fallback
+when no verified candidate is ready by the round's publication deadline. Follow
+this asynchronous producer workflow:
 
 1. Create an `image-upgrade/v1` Request in the shared Fulcra owner context for
    the specific future edition, finale, or city portrait. Its brief must state

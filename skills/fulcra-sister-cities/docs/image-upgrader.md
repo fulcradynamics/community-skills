@@ -1,8 +1,11 @@
 # Image Upgrader integration
 
-Sister Cities prefers a colourful raster illustration when a working provider
-exists, but it must always publish a completed round. Its deterministic SVG is
-therefore the local fallback, not a placeholder to be silently replaced.
+For every planned future round, Sister Cities prefers Image Upgrader as its
+image path: create a Request as soon as a safe, city-only brief exists, and use
+a verified, reviewed Contribution when it is ready before publication. Sister
+Cities must still publish a completed round, so its deterministic SVG is the
+local fallback only when no verified candidate is ready by that deadline, not a
+placeholder to be silently replaced.
 
 The external [Image Upgrader](https://github.com/kubla/a-particular-set-of-skills/tree/main/skills/image-upgrader)
 skill provides a safe, asynchronous route to better raster artwork. It uses the
@@ -28,8 +31,10 @@ This boundary preserves two properties of the game:
 ## Request a candidate
 
 Use Image Upgrader only after its owner configuration and producer publication
-route have been set up according to the upstream skill. Create a Request for a
-future edition, finale, or city portrait with an exact visual brief. Include:
+route have been set up according to the upstream skill. For every future
+edition, create a Request as soon as its safe public brief is available; do not
+wait for the round to finish. Create a Request for a future edition, finale, or
+city portrait with an exact visual brief. Include:
 
 - the image kind and target dimensions (`1200×700` for a round image;
   `900×560` for a city portrait);

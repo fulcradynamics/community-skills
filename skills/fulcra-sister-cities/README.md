@@ -97,14 +97,15 @@ deployment has no image-generation provider configured, so every edition uses
 the permitted deterministic SVG fallback and records that in its own
 `image.provenance`.
 
-For a commissioned raster candidate, the hosting agent can use
+For every planned future round, the hosting agent should prefer
 [`image-upgrader`](https://github.com/kubla/a-particular-set-of-skills/tree/main/skills/image-upgrader)
-through Fulcra's versioned Image Upgrade protocol. This is deliberately an
-asynchronous, reviewed workflow rather than a renderer dependency: a missing
-producer cannot block a completed round, and a candidate may only use
-already-redacted, city-only facts. It never changes an already-published
-edition; the SVG remains the safe fallback unless a verified candidate is
-reviewed before publication. See
+through Fulcra's versioned Image Upgrade protocol: create a request as soon as
+the round has a safe, city-only brief and use a verified, reviewed Contribution
+when it is ready before publication. This is deliberately an asynchronous,
+reviewed workflow rather than a renderer dependency: a missing producer cannot
+block a completed round, and a candidate may only use already-redacted,
+city-only facts. It never changes an already-published edition; the SVG remains
+the safe fallback only when no verified candidate is ready by publication. See
 [`docs/image-upgrader.md`](docs/image-upgrader.md).
 
 [`hosting/`](hosting) publishes those editions as the paper itself: one fixed,
