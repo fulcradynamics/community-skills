@@ -97,6 +97,16 @@ deployment has no image-generation provider configured, so every edition uses
 the permitted deterministic SVG fallback and records that in its own
 `image.provenance`.
 
+For a commissioned raster candidate, the hosting agent can use
+[`image-upgrader`](https://github.com/kubla/a-particular-set-of-skills/tree/main/skills/image-upgrader)
+through Fulcra's versioned Image Upgrade protocol. This is deliberately an
+asynchronous, reviewed workflow rather than a renderer dependency: a missing
+producer cannot block a completed round, and a candidate may only use
+already-redacted, city-only facts. It never changes an already-published
+edition; the SVG remains the safe fallback unless a verified candidate is
+reviewed before publication. See
+[`docs/image-upgrader.md`](docs/image-upgrader.md).
+
 [`hosting/`](hosting) publishes those editions as the paper itself: one fixed,
 unguessable, `noindex` address with every back issue still browsable at it
 (spec #26–#27). That address opens the **current issue** — `index.html` is the

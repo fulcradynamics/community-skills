@@ -130,6 +130,21 @@ positions are used, never exporter identity. Every edition also carries alt
 text, built in code rather than content because it describes the drawing and
 should not be revisable independently of it.
 
+### Optional asynchronous raster upgrades
+
+The upstream [Image Upgrader](https://github.com/kubla/a-particular-set-of-skills/tree/main/skills/image-upgrader)
+skill is the supported route for commissioning a higher-fidelity raster
+candidate. It coordinates an image-capable producer through Fulcra's
+`image-upgrade/v1` Request/Contribution protocol, and records a fetchable
+HTTPS representation plus its digest rather than putting image bytes in Fulcra.
+It is intentionally **not** a synchronous raster-provider adapter: a completed
+round must still render and publish when no producer is available, and a
+Contribution is a reviewed candidate rather than a signal to overwrite a
+historical issue. The safe requester inputs are an already-redacted edition and
+city-only facts; private snapshots, identities, ballot order, losing-offer
+origins, and the private paper address do not cross that boundary. The operator
+workflow is documented in [`image-upgrader.md`](image-upgrader.md).
+
 ## The four tone flags are load-bearing
 
 Spec #30's judged half is the Evaluator's. The mechanical floor is a register of
