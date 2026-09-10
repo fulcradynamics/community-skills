@@ -173,6 +173,49 @@ For the normal group dashboard/publication flow:
 Do not publish Workspace inboxes, raw transcripts, private player mappings,
 credentials, or private deployment identifiers.
 
+## Image upgrades
+
+The built-in SVG illustrator remains the reliable, game-state-informed fallback
+for an edition. It is intentionally not replaced by a network call while a
+round is completing: an edition is an immutable, privacy-checked historical
+record, and an absent or failed image producer must never stop publication.
+
+For **every planned future round**, the upstream
+[`image-upgrader`](https://github.com/kubla/a-particular-set-of-skills/tree/main/skills/image-upgrader)
+skill is the **preferred image path**. Create that round's Request as soon as a
+safe, city-only brief exists, then use the verified Contribution if it arrives
+and passes review before publication. The SVG is only the non-blocking fallback
+when no verified candidate is ready by the round's publication deadline. Follow
+this asynchronous producer workflow:
+
+1. Create an `image-upgrade/v1` Request in the shared Fulcra owner context for
+   the specific future edition, finale, or city portrait. Its brief must state
+   the scene facts it may depict, the desired dimensions, the paper's warm,
+   colourful, pointed-but-never-mean house style, and the acceptance criteria.
+2. Do **not** include the private game snapshot, player IDs/handles, ballot
+   order, losing-export origins, the unguessable paper URL, or any private
+   Workspace record in the brief or an input representation. City-only public
+   facts and the already-redacted edition are the maximum safe inputs.
+3. Invoke `image-upgrader` with the exact Request ID. It verifies the Fulcra
+   protocol, produces a candidate when an image-capable producer and authorised
+   HTTPS publisher are available, and records the candidate's URL, media type,
+   SHA-256 digest, and provenance as a Contribution.
+4. Before adopting a Contribution, verify its final HTTPS host and digest as
+   required by that skill. Check that it meets the brief and run Sister Cities'
+   normal tone/redaction checks on its caption and surrounding edition copy.
+   A Contribution is a candidate, not an automatic approval.
+5. Keep the SVG fallback when no verified candidate exists. Never rewrite an
+   edition already published for a completed round; commission artwork before
+   the next edition/finale is published, or use it as a separately reviewed
+   style reference for a future game.
+
+`image-upgrader` is not a synchronous `newspaper.image.raster_providers`
+adapter. Do not add it to that config list: the renderer correctly treats an
+unknown adapter as a configuration error rather than silently claiming that a
+candidate has been generated. See
+[`docs/image-upgrader.md`](docs/image-upgrader.md) for the full boundary and
+operator checklist.
+
 ## Orientation
 
 - `engine/` — game state, timing, queue, ballots, economy, joining.
