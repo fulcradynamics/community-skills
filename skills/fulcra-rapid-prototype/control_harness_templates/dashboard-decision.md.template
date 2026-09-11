@@ -7,12 +7,16 @@ that path.
 
 ```text
 status: pending
-choice: create_and_publish | defer | decline
-publication: pending_manifest_confirmation | confirmed | deferred | declined
-recorded_at: <ISO-8601 UTC>
-workspace_team: team/<team-name>
-reason: <user's raw reason or concise decision reference>
+choice:
+publication:
+recorded_at:
+workspace_team:
+reason:
 ```
+
+When the user decides, set `status: resolved`; choose exactly one of
+`create_and_publish`, `defer`, or `decline`; and set `publication` to the
+matching `confirmed`, `deferred`, or `declined` value.
 
 ## Required flow
 
@@ -43,13 +47,16 @@ or raw Fulcra downloads.
 
 ## Ongoing refresh gate
 
-After every terminal milestone outcome, first persist canonical Workspace
-status/progress/verdict state, then refresh the local curated dashboard data.
-Record the deployed URL, manifest SHA-256, publication time, and either
-`current` or `refresh_pending` in `team/<team>/dashboard/state.md`.
+Apply this only when `choice: create_and_publish`. After every terminal
+milestone outcome, first persist canonical Workspace status/progress/verdict
+state, then run `HARNESS_DASHBOARD_REFRESH_CMD` to refresh the local curated
+dashboard data. The command receives `HARNESS_TEAM`, `HARNESS_MILESTONE`,
+`HARNESS_OUTCOME`, and `HARNESS_DASHBOARD_DECISION`.
 
-If a refresh changes the public manifest, do **not** silently deploy it. Print
-the exact manifest delta, restate the public-access warning, and obtain a new
-explicit user confirmation before republishing. A published dashboard that is
-known to be stale must be marked `refresh_pending` in durable state rather
-than presented as current.
+Record the deployed URL, manifest SHA-256, publication time, and either
+`current` or `refresh_pending` in `team/<team>/dashboard/state.md`. If a
+refresh changes the public manifest, do **not** silently deploy it: print the
+manifest delta, restate the public-access warning, and obtain a new explicit
+user confirmation before republishing.
+
+For `defer` or `decline`, no refresh command is required.
