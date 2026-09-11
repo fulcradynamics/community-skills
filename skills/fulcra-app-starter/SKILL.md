@@ -11,6 +11,14 @@ metadata: { "openclaw": { "emoji": "🛠️" } }
 
 Scaffolds a new web application project with a batteries-included Fulcra authentication flow. Use when the user wants to build a custom web application.
 
+## Preferred Tone
+
+This skill offers a fairly involved set of steps and so a tone that favors concise, simple language that does not include made-up technical jargon lends itself well to a lower-friction / easy-flowing user experience.
+
+## Preferred Coding Style
+
+Because this skill uses a harness approach, the preferred coding style is to avoid over-engineering, avoid overly-defensive code, and avoid writing an unnecessarily large number of tests so that milestones only require a reasonable amount of time to be attempted and maintained. The point is to add milestones and allow the project to evolve in a stable way. You'll still have the opportunity to author all the code you want, but use milestones as smaller lego bricks to build your empire.
+
 ## Overview
 
 This skill helps users start a Fulcra-backed web application by cloning one of the official app templates. These templates provide:
@@ -31,27 +39,44 @@ Choose between two frontend frameworks:
 
 ## Workflow
 
-1. **Ask the user which template** they prefer (React or Svelte), unless they've already specified.
+### 1. Interview and Create Spec
 
-2. **Clone the chosen template** into a new directory named for their project:
+Ask the user what they want to build. Based on their response, create a spec that describes the app and breaks it into milestones that fit the harness flow (see [`references/harness-control-flow.md`](references/harness-control-flow.md)). If you need to ask clarifying questions, ask one question at a time.
 
-   ```bash
-   git clone https://github.com/fulcradynamics/app-template-[react|svelte] <project-name>
-   cd <project-name>
-   rm -rf .git  # Remove template git history
-   git init     # Start fresh git history
-   ```
+### 2. Choose Template
 
-3. **Update placeholder strings** in the login flow. Each template includes placeholder text (like "Your App Name", "Your App Description", etc.) that should be replaced with content specific to what the user is building. Search for common placeholder patterns and update them based on the user's project description.
+Ask the user which template they prefer (React or Svelte), unless they've already specified.
 
-4. **Install, configure, and verify**: Follow the selected template's `README.md` ("Getting Started"): `npm install`, `cp .env.example .env`, then review and configure the Auth0 and Fulcra API values as directed by the README, and `npm run dev`. Confirm the app starts locally and the sign-in screen renders before handing off—this is what makes it a working authentication foundation rather than just cloned files.
+### 3. Clone and Initialize
 
-5. **Mention deployment**: Inform the user that these templates are designed to work seamlessly with Vercel for deployment. They can deploy by:
-   - Connecting their repository to Vercel
-   - Following Vercel's standard deployment flow for React or Svelte apps
-   - Setting the required environment variables in the deploy platform—these are named per framework (React uses `NEXT_PUBLIC_*`, Svelte uses `PUBLIC_*`) and listed in the template's README Deployment section.
+Clone the chosen template into a new directory named for their project:
 
-6. **Let the user take over**: After initial setup, the project structure and iteration is up to the user and their agent. This skill just gets them started with a working authentication foundation.
+```bash
+git clone https://github.com/fulcradynamics/app-template-[react|svelte] <project-name>
+cd <project-name>
+rm -rf .git  # Remove template git history
+git init     # Start fresh git history
+```
+
+### 4. Customize Placeholders
+
+Update placeholder strings in the login flow. Each template includes placeholder text (like "Your App Name", "Your App Description", etc.) that should be replaced with content from the spec.
+
+### 5. Install, Configure, and Verify
+
+Follow the template's `README.md` ("Getting Started"): `npm install`, `cp .env.example .env`, then review and configure the Auth0 and Fulcra API values as directed. Run `npm run dev` and confirm the app starts locally and the sign-in screen renders before handing off—this verifies a working authentication foundation.
+
+### 6. Mention Deployment
+
+Inform the user that these templates work seamlessly with Vercel for deployment:
+
+- Connect the repository to Vercel
+- Follow Vercel's standard deployment flow
+- Set environment variables in the deploy platform (named per framework: React uses `NEXT_PUBLIC_*`, Svelte uses `PUBLIC_*`)
+
+### 7. Hand Off to Harness
+
+With the spec, milestones, and working foundation in place, the harness (see [`references/harness-control-flow.md`](references/harness-control-flow.md)) can now process milestones sequentially to build out the app. The user and their agent drive iteration from here.
 
 ## Fulcra REST API
 
