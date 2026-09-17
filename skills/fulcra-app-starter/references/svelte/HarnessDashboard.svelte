@@ -23,6 +23,18 @@
   const hasStep = (step: string) => stepMap.has(step);
   const getStep = (step: string) => stepMap.get(step);
 
+  // Which branches of the constant flow chart this run actually took.
+  // The Nurse health-check at the top acts on the *previous* run, so a fix or
+  // escalation appearing in this run means the nurse intervened before the run.
+  $: nurseIntervened = stepMap.has('FIX_ATTEMPT') || stepMap.has('ESCALATE');
+  $: projectComplete = stepMap.has('FIND_MILESTONE') && !stepMap.has('GENERATE');
+  $: reviewFailed =
+    stepMap.has('REVIEW') &&
+    !stepMap.has('MARK_COMPLETE') &&
+    (stepMap.has('RUN_COMPLETE') || stepMap.has('RUN_INCOMPLETE'));
+  // Retries remaining => milestone left incomplete but the run still completes.
+  $: retryScheduled = reviewFailed && stepMap.has('RUN_COMPLETE');
+
   async function fetchRuns() {
     try {
       // Fetch records from backend API
@@ -65,7 +77,10 @@
         return bTime.localeCompare(aTime);
       });
 
-      currentRun = runs[0] || null;
+      // Preserve the user's selection across polls; only default to the
+      // latest run when nothing is selected yet or the selection disappeared.
+      const selectedId = currentRun?.run_id;
+      currentRun = runs.find((r) => r.run_id === selectedId) || runs[0] || null;
     } catch (e) {
       console.error('Failed to fetch runs:', e);
       runs = [];
@@ -146,97 +161,93 @@
           <span class="run-status status-{getRunStatus(currentRun)}">{getRunStatus(currentRun)}</span>
         </div>
 
+        {#snippet stepBox(key, name, extra = '')}
+          <div class="flow-step-box {extra}" class:active={hasStep(key)}>
+            <div class="step-header">
+              <span class="step-name">{name}</span>
+              {#if hasStep(key)}
+                <span class="status-badge status-{getStep(key).status}">{getStep(key).status}</span>
+              {/if}
+            </div>
+            {#if hasStep(key) && getStep(key).detail}
+              <div class="step-detail">{getStep(key).detail}</div>
+            {/if}
+          </div>
+        {/snippet}
+
         <div class="flow-chart">
-          <!-- Find Milestone -->
-          <div class="flow-step-box" class:active={hasStep('FIND_MILESTONE')}>
-            <div class="step-header">
-              <span class="step-name">Find Incomplete Milestone</span>
-              {#if hasStep('FIND_MILESTONE')}
-                <span class="status-badge status-{getStep('FIND_MILESTONE').status}">{getStep('FIND_MILESTONE').status}</span>
-              {/if}
+          <!-- Nurse pre-check: runs before the main loop; escalation ends the loop -->
+          <div class="flow-row nurse-band">
+            <div class="flow-terminal start">Run Start</div>
+            <div class="flow-h-arrow">→</div>
+            <div class="flow-decision-box nurse inline">
+              <div class="decision-text">🩺 Previous run completed?</div>
             </div>
-            {#if hasStep('FIND_MILESTONE') && getStep('FIND_MILESTONE').detail}
-              <div class="step-detail">{getStep('FIND_MILESTONE').detail}</div>
-            {/if}
+            <div class="flow-h-arrow labeled">No →</div>
+            <div class="flow-decision-box nurse inline">
+              <div class="decision-text">🩺 Fix attempts remain?</div>
+            </div>
+            <div class="branch-col">
+              <div class="branch-item" class:active={hasStep('FIX_ATTEMPT')}>
+                <span class="branch-tag">Yes</span>
+                {@render stepBox('FIX_ATTEMPT', '🩺 Attempt Fix', 'small')}
+              </div>
+              <div class="branch-item" class:active={hasStep('ESCALATE')}>
+                <span class="branch-tag">No</span>
+                {@render stepBox('ESCALATE', '🩺 Escalate', 'small')}
+                <div class="flow-terminal escalated small">Loop Ends</div>
+              </div>
+            </div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-passthrough">Previous run healthy or fixed — begin harness run</div>
+          <div class="flow-arrow">↓</div>
+
+          <!-- Milestone selection -->
+          <div class="flow-row">
+            {@render stepBox('FIND_MILESTONE', '🎛️ Find Incomplete Milestone', 'small')}
+            <div class="flow-h-arrow">→</div>
+            <div class="flow-decision-box inline">
+              <div class="decision-text">🎛️ Any incomplete milestone?</div>
+            </div>
+            <div class="flow-h-arrow labeled">No →</div>
+            <div class="branch-item" class:active={projectComplete}>
+              <div class="flow-terminal complete small">Project Complete</div>
+            </div>
           </div>
           <div class="flow-arrow">↓</div>
 
-          <!-- Generate -->
-          <div class="flow-step-box" class:active={hasStep('GENERATE')}>
-            <div class="step-header">
-              <span class="step-name">Generate Code</span>
-              {#if hasStep('GENERATE')}
-                <span class="status-badge status-{getStep('GENERATE').status}">{getStep('GENERATE').status}</span>
-              {/if}
-            </div>
-            {#if hasStep('GENERATE') && getStep('GENERATE').detail}
-              <div class="step-detail">{getStep('GENERATE').detail}</div>
-            {/if}
-          </div>
+          {@render stepBox('GENERATE', '✍️ Generate Code')}
+          <div class="flow-arrow">↓</div>
+          {@render stepBox('REVIEW', '⚖️ Review Code')}
           <div class="flow-arrow">↓</div>
 
-          <!-- Review -->
-          <div class="flow-step-box" class:active={hasStep('REVIEW')}>
-            <div class="step-header">
-              <span class="step-name">Review Code</span>
-              {#if hasStep('REVIEW')}
-                <span class="status-badge status-{getStep('REVIEW').status}">{getStep('REVIEW').status}</span>
-              {/if}
-            </div>
-            {#if hasStep('REVIEW') && getStep('REVIEW').detail}
-              <div class="step-detail">{getStep('REVIEW').detail}</div>
-            {/if}
-          </div>
-          <div class="flow-arrow">↓</div>
-
-          <!-- Decision Point -->
           <div class="flow-decision-box">
-            <div class="decision-text">Review Passed?</div>
+            <div class="decision-text">🎛️ Review passed?</div>
           </div>
-
-          <!-- Split paths -->
           <div class="flow-split">
-            <!-- Success path -->
+            <!-- Yes: milestone complete -->
             <div class="flow-path" class:active={hasStep('MARK_COMPLETE')}>
               <div class="path-label">Yes</div>
-              <div class="flow-step-box small" class:active={hasStep('MARK_COMPLETE')}>
-                <div class="step-header">
-                  <span class="step-name">Mark Complete</span>
-                  {#if hasStep('MARK_COMPLETE')}
-                    <span class="status-badge status-{getStep('MARK_COMPLETE').status}">{getStep('MARK_COMPLETE').status}</span>
-                  {/if}
-                </div>
-                {#if hasStep('MARK_COMPLETE') && getStep('MARK_COMPLETE').detail}
-                  <div class="step-detail">{getStep('MARK_COMPLETE').detail}</div>
-                {/if}
-              </div>
+              {@render stepBox('MARK_COMPLETE', '🎛️ Mark Milestone Complete', 'small')}
+              <div class="flow-arrow">↓</div>
+              <div class="flow-terminal complete small">Run Complete</div>
             </div>
-
-            <!-- Failure path -->
-            <div class="flow-path" class:active={hasStep('FIX_ATTEMPT') || hasStep('ESCALATE')}>
+            <!-- No: retry or exhaust -->
+            <div class="flow-path" class:active={reviewFailed}>
               <div class="path-label">No</div>
-              <div class="flow-step-box small" class:active={hasStep('FIX_ATTEMPT')}>
-                <div class="step-header">
-                  <span class="step-name">Fix Attempt</span>
-                  {#if hasStep('FIX_ATTEMPT')}
-                    <span class="status-badge status-{getStep('FIX_ATTEMPT').status}">{getStep('FIX_ATTEMPT').status}</span>
-                  {/if}
-                </div>
-                {#if hasStep('FIX_ATTEMPT') && getStep('FIX_ATTEMPT').detail}
-                  <div class="step-detail">{getStep('FIX_ATTEMPT').detail}</div>
-                {/if}
+              <div class="flow-decision-box small">
+                <div class="decision-text">🎛️ Retries remain?</div>
               </div>
-              <div class="flow-arrow">or</div>
-              <div class="flow-step-box small" class:active={hasStep('ESCALATE')}>
-                <div class="step-header">
-                  <span class="step-name">Escalate</span>
-                  {#if hasStep('ESCALATE')}
-                    <span class="status-badge status-{getStep('ESCALATE').status}">{getStep('ESCALATE').status}</span>
-                  {/if}
+              <div class="flow-split tight">
+                <div class="flow-path" class:active={retryScheduled}>
+                  <div class="path-label">Yes</div>
+                  <div class="flow-terminal retry small">Leave Incomplete — Retry Next Run</div>
                 </div>
-                {#if hasStep('ESCALATE') && getStep('ESCALATE').detail}
-                  <div class="step-detail">{getStep('ESCALATE').detail}</div>
-                {/if}
+                <div class="flow-path" class:active={hasStep('RUN_INCOMPLETE')}>
+                  <div class="path-label">No</div>
+                  <div class="flow-terminal incomplete small">End Run — Incomplete</div>
+                </div>
               </div>
             </div>
           </div>
@@ -391,10 +402,150 @@
     margin: 0.5rem 0;
   }
 
+  .flow-decision-box.small {
+    max-width: 340px;
+    padding: 0.6rem 1rem;
+  }
+
+  .flow-decision-box.nurse {
+    background: #ffe0b2;
+    border-color: #f57c00;
+  }
+
   .decision-text {
     font-weight: 600;
     font-size: 1rem;
     color: var(--color-fulcra-purple-100);
+  }
+
+  .flow-decision-box.small .decision-text {
+    font-size: 0.875rem;
+  }
+
+  .flow-decision-box.nurse .decision-text {
+    color: #e65100;
+  }
+
+  .flow-terminal {
+    padding: 0.6rem 1.25rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-align: center;
+    border: 2px solid var(--color-fulcra-black-25);
+    background: var(--color-fulcra-white);
+    color: var(--color-fulcra-black);
+  }
+
+  .flow-terminal.small {
+    font-size: 0.8rem;
+    padding: 0.45rem 1rem;
+  }
+
+  .flow-terminal.start {
+    background: var(--color-fulcra-black);
+    color: var(--color-fulcra-white);
+    border-color: var(--color-fulcra-black);
+  }
+
+  .flow-terminal.complete {
+    background: var(--color-fulcra-teal-10);
+    border-color: var(--color-fulcra-teal);
+    color: var(--color-fulcra-green-100);
+  }
+
+  .flow-terminal.retry {
+    background: var(--color-fulcra-lavender-25);
+    border-color: var(--color-fulcra-purple);
+    color: var(--color-fulcra-purple-100);
+  }
+
+  .flow-terminal.incomplete {
+    background: #ffcdd2;
+    border-color: var(--color-fulcra-error);
+    color: var(--color-fulcra-error);
+  }
+
+  .flow-terminal.escalated {
+    background: #ffe0b2;
+    border-color: #f57c00;
+    color: #e65100;
+  }
+
+  .flow-passthrough {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--color-fulcra-gray);
+    padding: 0.5rem 0;
+  }
+
+  .flow-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .nurse-band {
+    background: #fff8f0;
+    border: 1px dashed #f57c00;
+    border-radius: 10px;
+    padding: 0.75rem;
+  }
+
+  .flow-row .flow-step-box,
+  .branch-col .flow-step-box {
+    width: auto;
+    max-width: 230px;
+  }
+
+  .flow-h-arrow {
+    font-size: 1.25rem;
+    color: var(--color-fulcra-gray);
+    line-height: 1;
+  }
+
+  .flow-h-arrow.labeled {
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .flow-decision-box.inline {
+    max-width: 210px;
+    padding: 0.6rem 0.9rem;
+    margin: 0;
+  }
+
+  .flow-decision-box.inline .decision-text {
+    font-size: 0.85rem;
+  }
+
+  .branch-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .branch-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    opacity: 0.3;
+    transition: opacity 0.2s;
+  }
+
+  .branch-item.active {
+    opacity: 1;
+  }
+
+  .branch-tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-fulcra-gray);
   }
 
   .flow-split {
@@ -404,6 +555,11 @@
     width: 100%;
     max-width: 800px;
     justify-content: center;
+  }
+
+  .flow-split.tight {
+    gap: 1rem;
+    margin: 0.5rem 0 0;
   }
 
   .flow-path {
