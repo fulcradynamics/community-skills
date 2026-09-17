@@ -36,9 +36,13 @@ export async function GET_runs({ cookies, url }) {
     return json(records);
   } catch (err) {
     console.error('Error fetching harness runs:', err);
-    // Return empty result if no data exists yet
+    // No data yet for this annotation
     if (err.message?.includes('404')) {
       return json({ records: [] });
+    }
+    // Expired/invalid token: surface as 401 so the client can re-authenticate
+    if (err.message?.includes('401')) {
+      throw error(401, 'Session expired — please sign in again');
     }
     throw error(500, err.message || 'Failed to fetch harness runs');
   }
