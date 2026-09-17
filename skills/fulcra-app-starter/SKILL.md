@@ -111,15 +111,27 @@ Update placeholder strings in the login flow. Each template includes placeholder
 
 ### 7. Install, Configure, and Verify
 
-Follow the template's `README.md` ("Getting Started"): `npm install`, `cp .env.example .env`, then review and configure the Auth0 and Fulcra API values as directed. Run `npm run dev` and confirm the app starts locally and the sign-in screen renders before handing off—this verifies a working authentication foundation.
+Follow the template's `README.md` ("Getting Started"): `npm install`, `cp .env.example .env`, then review and configure the Auth0 and Fulcra API values as directed. Run `npm run dev` and confirm the app starts locally and the sign-in screen renders before deploying—this verifies a working authentication foundation.
 
-### 8. Mention Deployment
+### 8. Deploy Baseline
 
-Inform the user that these templates work seamlessly with Vercel for deployment:
+Deploy the customized, working template to Vercel so the user has a live baseline before feature development. Set environment variables from `.env` using `--env` flags (React uses `NEXT_PUBLIC_*` prefix, Svelte uses `PUBLIC_*`):
 
-- Connect the repository to Vercel
-- Follow Vercel's standard deployment flow
-- Set environment variables in the deploy platform (named per framework: React uses `NEXT_PUBLIC_*`, Svelte uses `PUBLIC_*`)
+```bash
+# For Svelte template:
+vercel --prod \
+  --env PUBLIC_AUTH0_DOMAIN=<value> \
+  --env PUBLIC_AUTH0_CLIENT_ID=<value> \
+  --env PUBLIC_FULCRA_API_URL=<value>
+
+# For React template:
+vercel --prod \
+  --env NEXT_PUBLIC_AUTH0_DOMAIN=<value> \
+  --env NEXT_PUBLIC_AUTH0_CLIENT_ID=<value> \
+  --env NEXT_PUBLIC_FULCRA_API_URL=<value>
+```
+
+Share the live deployment URL with the user. This gives the user a working deployed app to see before milestone-based building begins.
 
 ### 9. Hand Off to Harness
 
