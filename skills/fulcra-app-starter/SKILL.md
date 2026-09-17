@@ -101,7 +101,7 @@ Create `AGENTS.md` at the project root:
 **Workspace**: `workspace/<project-name>/`  
 **Skill**: fulcra-app-starter (fulcradynamics/community-skills)
 
-The Fulcra workspace is the primary source of truth. Download workspace files 
+The Fulcra workspace is the primary source of truth. Download workspace files
 (plan.md, spec.md, progress.md) to understand current state and continue work.
 ```
 
@@ -138,6 +138,7 @@ Share the live deployment URL with the user. This gives the user a working deplo
 Set up the harness tracking system and integrate the dashboard component:
 
 **Create custom annotation:**
+
 ```bash
 uvx fulcra-api annotation create \
   --name "Harness Runs: <project-name>" \
@@ -147,6 +148,7 @@ uvx fulcra-api annotation create \
 Save the annotation ID from the response.
 
 **Add environment variables to `.env`:**
+
 ```
 PUBLIC_OWNER_USER_ID=<your-fulcra-user-id>
 PUBLIC_HARNESS_ANNOTATION_ID=<annotation-id-from-above>
@@ -158,12 +160,24 @@ PUBLIC_WORKSPACE_PATH=workspace/<project-name>
 **Integrate dashboard component:**
 
 Add the appropriate dashboard component to your app:
+
 - For Svelte: Copy [`references/dashboard-svelte.svelte`](references/dashboard-svelte.svelte) to your `src/lib/components/` directory
 - For React: Copy [`references/dashboard-react.tsx`](references/dashboard-react.tsx) to your `components/` directory
 
-Add the dashboard component to your app's navigation or home page. It will only be visible to the owner (you) and will refresh every 5 seconds to show live harness progress.
+Create a separate route for the dashboard:
+
+- For Svelte: Create `src/routes/harness/+page.svelte` (see [`references/harness-page-svelte.svelte`](references/harness-page-svelte.svelte))
+- For React: Create a new page route for the harness dashboard
+
+Add an owner-only navigation bar:
+
+- For Svelte: Copy [`references/owner-nav-svelte.svelte`](references/owner-nav-svelte.svelte) to `src/lib/components/OwnerNav.svelte` and add it to `src/routes/+layout.svelte` before the main content
+- For React: Create a similar navigation component that checks if the current user matches `OWNER_USER_ID`
+
+The navigation bar will only appear when logged in as the owner and provides quick access to the home page and harness dashboard. The dashboard will refresh every 5 seconds to show live harness progress.
 
 **Deploy dashboard update:**
+
 ```bash
 vercel --prod
 ```

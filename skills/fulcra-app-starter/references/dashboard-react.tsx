@@ -198,19 +198,20 @@ export default function HarnessDashboard() {
           padding: 2rem;
           max-width: 1200px;
           margin: 0 auto;
-          color: #333;
+          color: var(--color-fulcra-black);
         }
 
         .harness-dashboard h2,
         .harness-dashboard h3 {
-          color: #222;
+          color: var(--color-fulcra-black);
         }
 
         .flow-diagram {
-          background: #f5f5f5;
+          background: var(--color-fulcra-teal-10);
           padding: 1.5rem;
           border-radius: 8px;
           margin-bottom: 2rem;
+          border: 1px solid var(--color-fulcra-teal-50);
         }
 
         .diagram {
@@ -222,25 +223,25 @@ export default function HarnessDashboard() {
 
         .flow-box {
           padding: 0.75rem 1.5rem;
-          background: white;
-          border: 2px solid #0288d1;
+          background: var(--color-fulcra-white);
+          border: 2px solid var(--color-fulcra-teal);
           border-radius: 4px;
           font-weight: 500;
-          color: #0288d1;
+          color: var(--color-fulcra-green-100);
         }
 
         .flow-decision {
           padding: 0.75rem 1.5rem;
-          background: #fff9c4;
-          border: 2px solid #f57f17;
+          background: var(--color-fulcra-lavender-25);
+          border: 2px solid var(--color-fulcra-purple);
           border-radius: 4px;
           font-weight: 500;
-          color: #f57f17;
+          color: var(--color-fulcra-purple-100);
         }
 
         .flow-arrow {
           font-size: 1.5rem;
-          color: #888;
+          color: var(--color-fulcra-gray);
         }
 
         .flow-split {
@@ -257,8 +258,8 @@ export default function HarnessDashboard() {
         }
 
         .current-run {
-          background: white;
-          border: 1px solid #ddd;
+          background: var(--color-fulcra-white);
+          border: 1px solid var(--color-fulcra-black-25);
           border-radius: 8px;
           padding: 1.5rem;
           margin-bottom: 2rem;
@@ -272,9 +273,9 @@ export default function HarnessDashboard() {
           margin-bottom: 1rem;
         }
 
-        .status-completed { background: #c8e6c9; color: #1b5e20; }
-        .status-in-progress { background: #bbdefb; color: #0d47a1; }
-        .status-incomplete { background: #ffcdd2; color: #b71c1c; }
+        .status-completed { background: var(--color-fulcra-teal-10); color: var(--color-fulcra-green-100); }
+        .status-in-progress { background: var(--color-fulcra-lavender-25); color: var(--color-fulcra-purple-100); }
+        .status-incomplete { background: #ffcdd2; color: var(--color-fulcra-error); }
         .status-escalated { background: #ffe0b2; color: #e65100; }
 
         .events {
@@ -285,15 +286,16 @@ export default function HarnessDashboard() {
 
         .event {
           padding: 0.75rem;
-          background: #f5f5f5;
+          background: var(--color-fulcra-teal-10);
           border-radius: 4px;
-          color: #333;
+          color: var(--color-fulcra-black);
+          border-left: 3px solid var(--color-fulcra-teal-50);
         }
 
         .step {
           font-weight: 600;
           margin-right: 0.5rem;
-          color: #222;
+          color: var(--color-fulcra-black);
         }
 
         .status-badge {
@@ -304,24 +306,24 @@ export default function HarnessDashboard() {
           margin-right: 0.5rem;
         }
 
-        .status-started { background: #e1f5ff; color: #01579b; }
-        .status-completed { background: #c8e6c9; color: #1b5e20; }
-        .status-failed { background: #ffcdd2; color: #b71c1c; }
+        .status-started { background: var(--color-fulcra-lavender-50); color: var(--color-fulcra-purple-100); }
+        .status-completed { background: var(--color-fulcra-teal-50); color: var(--color-fulcra-green-100); }
+        .status-failed { background: #ffcdd2; color: var(--color-fulcra-error); }
 
         .timestamp {
-          color: #666;
+          color: var(--color-fulcra-gray);
           font-size: 0.875rem;
         }
 
         .detail {
           margin-top: 0.5rem;
-          color: #444;
+          color: var(--color-fulcra-black);
           font-size: 0.875rem;
         }
 
         .run-timeline {
-          background: white;
-          border: 1px solid #ddd;
+          background: var(--color-fulcra-white);
+          border: 1px solid var(--color-fulcra-black-25);
           border-radius: 8px;
           padding: 1.5rem;
           margin-bottom: 2rem;
@@ -329,13 +331,13 @@ export default function HarnessDashboard() {
 
         .timeline-item {
           padding: 0.75rem;
-          border-left: 3px solid #ddd;
+          border-left: 3px solid var(--color-fulcra-black-25);
           margin-bottom: 0.75rem;
         }
 
         .timeline-item.active {
-          border-left-color: #0288d1;
-          background: #f5f5f5;
+          border-left-color: var(--color-fulcra-teal);
+          background: var(--color-fulcra-teal-10);
         }
 
         .run-header {
@@ -351,19 +353,20 @@ export default function HarnessDashboard() {
         }
 
         .run-time {
-          color: #666;
+          color: var(--color-fulcra-gray);
           font-size: 0.875rem;
         }
 
         .outstanding-issues {
-          background: #fff3e0;
-          border: 1px solid #f57c00;
+          background: var(--color-fulcra-lavender-25);
+          border: 1px solid var(--color-fulcra-purple);
           border-radius: 8px;
           padding: 1.5rem;
         }
 
         .issues-content {
           font-size: 0.875rem;
+          color: var(--color-fulcra-purple-100);
         }
       `}</style>
     </div>
