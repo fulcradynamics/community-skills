@@ -157,22 +157,27 @@ PUBLIC_WORKSPACE_PATH=workspace/<project-name>
 
 (For React, use `NEXT_PUBLIC_*` prefix instead of `PUBLIC_*`)
 
-**Integrate dashboard component:**
+**Create server endpoints:**
 
-Add the appropriate dashboard component to your app:
+The dashboard must fetch data through backend API endpoints (not directly from Fulcra API) to avoid CORS issues.
 
-- For Svelte: Copy [`references/dashboard-svelte.svelte`](references/dashboard-svelte.svelte) to your `src/lib/components/` directory
-- For React: Copy [`references/dashboard-react.tsx`](references/dashboard-react.tsx) to your `components/` directory
+- For Svelte: See [`references/svelte/harness-api-server.js`](references/svelte/harness-api-server.js) for the complete implementation. Create:
+  - `src/routes/api/harness/runs/+server.js` (export the GET_runs function as GET)
+  - `src/routes/api/harness/issues/+server.js` (export the GET_issues function as GET)
+- For React: Create equivalent API routes following the template's pattern in `src/lib/api-client.js`
 
-Create a separate route for the dashboard:
+**Integrate dashboard components:**
 
-- For Svelte: Create `src/routes/harness/+page.svelte` (see [`references/harness-page-svelte.svelte`](references/harness-page-svelte.svelte))
-- For React: Create a new page route for the harness dashboard
-
-Add an owner-only navigation bar:
-
-- For Svelte: Copy [`references/owner-nav-svelte.svelte`](references/owner-nav-svelte.svelte) to `src/lib/components/OwnerNav.svelte` and add it to `src/routes/+layout.svelte` before the main content
-- For React: Create a similar navigation component that checks if the current user matches `OWNER_USER_ID`
+- For Svelte:
+  - Copy [`references/svelte/HarnessDashboard.svelte`](references/svelte/HarnessDashboard.svelte) to `src/lib/components/HarnessDashboard.svelte`
+  - Copy [`references/svelte/OwnerNav.svelte`](references/svelte/OwnerNav.svelte) to `src/lib/components/OwnerNav.svelte`
+  - Create `src/routes/harness/+page.svelte` (see [`references/svelte/harness-page.svelte`](references/svelte/harness-page.svelte))
+  - Add `<OwnerNav />` to `src/routes/+layout.svelte` before the main content
+  
+- For React:
+  - Copy [`references/react/HarnessDashboard.tsx`](references/react/HarnessDashboard.tsx) to your `components/` directory
+  - Create a new page route for the harness dashboard
+  - Create a similar navigation component that checks if the current user matches `OWNER_USER_ID`
 
 The navigation bar will only appear when logged in as the owner and provides quick access to the home page and harness dashboard. The dashboard will refresh every 5 seconds to show live harness progress.
 

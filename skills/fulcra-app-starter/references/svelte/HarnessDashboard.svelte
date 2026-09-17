@@ -1,32 +1,26 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { env } from '$env/dynamic/public';
+  import { user } from '$lib/user';
 
   // Environment variables (set in .env)
   const OWNER_USER_ID = env.PUBLIC_OWNER_USER_ID;
   const HARNESS_ANNOTATION_ID = env.PUBLIC_HARNESS_ANNOTATION_ID;
   const WORKSPACE_PATH = env.PUBLIC_WORKSPACE_PATH;
-  const FULCRA_API_URL = env.PUBLIC_FULCRA_API_ENDPOINT;
 
-  let currentUser: any = null;
   let runs: any[] = [];
   let currentRun: any = null;
   let outstandingIssues: string = '';
   let refreshInterval: any;
 
   // Check if current user is owner
-  $: isOwner = currentUser?.id === OWNER_USER_ID;
-
-  async function fetchCurrentUser() {
-    const res = await fetch(`${FULCRA_API_URL}/me`);
-    currentUser = await res.json();
-  }
+  $: userId = $user.auth0UserInfo?.['fulcradynamics.com/userid'];
+  $: isOwner = userId === OWNER_USER_ID;
 
   async function fetchRuns() {
     try {
-      // Fetch records from the Fulcra API
-      const dataType = HARNESS_ANNOTATION_ID.replace('/', '%2F');
-      const res = await fetch(`${FULCRA_API_URL}v1/records/${dataType}?start_date=2026-09-01&end_date=2026-09-30`);
+      // Fetch records from backend API
+      const res = await fetch(`/api/harness/runs?annotation_id=${encodeURIComponent(HARNESS_ANNOTATION_ID)}&start_date=2026-09-01&end_date=2026-09-30`);
       const data = await res.json();
 
       // Extract records from the response
@@ -63,7 +57,7 @@
 
   async function fetchOutstandingIssues() {
     try {
-      const res = await fetch(`${FULCRA_API_URL}/files/${WORKSPACE_PATH}/outstanding-issues.md`);
+      const res = await fetch(`/api/harness/issues?workspace_path=${encodeURIComponent(WORKSPACE_PATH)}`);
       outstandingIssues = await res.text();
     } catch (e) {
       outstandingIssues = '';
@@ -71,7 +65,7 @@
   }
 
   onMount(async () => {
-    await fetchCurrentUser();
+    await user.init();
     if (isOwner) {
       await fetchRuns();
       await fetchOutstandingIssues();
