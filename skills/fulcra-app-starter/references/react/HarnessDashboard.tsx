@@ -51,10 +51,13 @@ export default function HarnessDashboard() {
 
   async function fetchRuns() {
     try {
-      // Fetch records from the Fulcra API
-      const dataType = HARNESS_ANNOTATION_ID!.replace('/', '%2F');
+      // Fetch through a backend API route (not the Fulcra API directly) to
+      // avoid CORS. This mirrors the Svelte harness-api-server.js contract:
+      // the route proxies GET data/v1alpha1/event/{annotation_id}.
       const res = await fetch(
-        `${FULCRA_API_URL}v1/records/${dataType}?start_date=2026-09-01&end_date=2026-09-30`
+        `/api/harness/runs?annotation_id=${encodeURIComponent(
+          HARNESS_ANNOTATION_ID!
+        )}&start_date=2026-09-01&end_date=2026-09-30`
       );
       const data = await res.json();
 
@@ -115,7 +118,9 @@ export default function HarnessDashboard() {
 
   async function fetchOutstandingIssues() {
     try {
-      const res = await fetch(`${FULCRA_API_URL}/files/${WORKSPACE_PATH}/outstanding-issues.md`);
+      const res = await fetch(
+        `/api/harness/issues?workspace_path=${encodeURIComponent(WORKSPACE_PATH!)}`
+      );
       const issues = await res.text();
       setOutstandingIssues(issues);
     } catch (e) {
