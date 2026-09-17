@@ -29,8 +29,10 @@ export async function GET_runs({ cookies, url }) {
 
   try {
     const apiClient = new FulcraAPI(env.PUBLIC_FULCRA_API_ENDPOINT, accessToken);
+    // See API docs: https://docs.fulcradynamics.com/rest-api/
+    // GET /data/v1alpha1/event/{data_type}?start_time=<ISO8601>&end_time=<ISO8601>
     const dataType = annotationId.replace('/', '%2F');
-    const records = await apiClient.get(`v1/records/${dataType}?start_date=${startDate}&end_date=${endDate}`);
+    const records = await apiClient.get(`data/v1alpha1/event/${dataType}?start_time=${startDate}T00:00:00Z&end_time=${endDate}T23:59:59Z`);
     return json(records);
   } catch (err) {
     console.error('Error fetching harness runs:', err);

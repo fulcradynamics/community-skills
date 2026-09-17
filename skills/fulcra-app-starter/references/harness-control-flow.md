@@ -101,16 +101,13 @@ Save the annotation ID from the response. This will be used in the dashboard com
 
 ## Recording Run Events
 
-Write annotation records at key points in the flow:
+Write annotation records at key points in the flow. Store harness data as JSON in the `note` field:
 
 ### Run Start
 ```json
 {
-  "run_id": "<unique-run-id>",
-  "step": "RUN_START",
-  "status": "started",
-  "timestamp": "<ISO-8601>",
-  "detail": "Starting harness run"
+  "note": "{\"run_id\": \"<unique-run-id>\", \"step\": \"RUN_START\", \"status\": \"started\", \"detail\": \"Starting harness run\"}",
+  "recorded_at": "<ISO-8601>"
 }
 ```
 
@@ -120,33 +117,24 @@ Write records when each step starts and completes:
 **Step Start:**
 ```json
 {
-  "run_id": "<run-id>",
-  "step": "<STEP_NAME>",
-  "status": "started",
-  "timestamp": "<ISO-8601>",
-  "detail": ""
+  "note": "{\"run_id\": \"<run-id>\", \"step\": \"<STEP_NAME>\", \"status\": \"started\", \"detail\": \"\"}",
+  "recorded_at": "<ISO-8601>"
 }
 ```
 
 **Step Complete:**
 ```json
 {
-  "run_id": "<run-id>",
-  "step": "<STEP_NAME>",
-  "status": "completed",
-  "timestamp": "<ISO-8601>",
-  "detail": "<result-summary>"
+  "note": "{\"run_id\": \"<run-id>\", \"step\": \"<STEP_NAME>\", \"status\": \"completed\", \"detail\": \"<result-summary>\"}",
+  "recorded_at": "<ISO-8601>"
 }
 ```
 
 **Step Failed:**
 ```json
 {
-  "run_id": "<run-id>",
-  "step": "<STEP_NAME>",
-  "status": "failed",
-  "timestamp": "<ISO-8601>",
-  "detail": "<error-message>"
+  "note": "{\"run_id\": \"<run-id>\", \"step\": \"<STEP_NAME>\", \"status\": \"failed\", \"detail\": \"<error-message>\"}",
+  "recorded_at": "<ISO-8601>"
 }
 ```
 

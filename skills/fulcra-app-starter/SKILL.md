@@ -159,9 +159,9 @@ PUBLIC_WORKSPACE_PATH=workspace/<project-name>
 
 **Create server endpoints:**
 
-The dashboard must fetch data through backend API endpoints (not directly from Fulcra API) to avoid CORS issues.
+The dashboard must fetch data through backend API endpoints (not directly from Fulcra API) to avoid CORS issues. See [`references/svelte/harness-api-server.js`](references/svelte/harness-api-server.js) for the complete implementation, which uses endpoints documented at https://docs.fulcradynamics.com/rest-api/.
 
-- For Svelte: See [`references/svelte/harness-api-server.js`](references/svelte/harness-api-server.js) for the complete implementation. Create:
+- For Svelte: Create:
   - `src/routes/api/harness/runs/+server.js` (export the GET_runs function as GET)
   - `src/routes/api/harness/issues/+server.js` (export the GET_issues function as GET)
 - For React: Create equivalent API routes following the template's pattern in `src/lib/api-client.js`

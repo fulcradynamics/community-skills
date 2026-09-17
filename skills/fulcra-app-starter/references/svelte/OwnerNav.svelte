@@ -8,9 +8,7 @@
   $: userId = $user.auth0UserInfo?.['fulcradynamics.com/userid'];
   $: isOwner = userId === OWNER_USER_ID;
 
-  onMount(async () => {
-    await user.init();
-  });
+  // User is initialized by the main layout - no need to init again
 </script>
 
 {#if $user.authenticated && isOwner}

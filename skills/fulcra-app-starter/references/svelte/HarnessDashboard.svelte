@@ -29,11 +29,22 @@
       // Group by run_id from the record data
       const runMap = new Map();
       records.forEach((record: any) => {
-        const runId = record.data?.run_id || record.run_id;
-        const step = record.data?.step || record.step;
-        const status = record.data?.status || record.status;
-        const detail = record.data?.detail || record.detail || '';
-        const timestamp = record.moment || record.timestamp;
+        // Parse the note field as JSON to get harness data
+        let harnessData;
+        try {
+          harnessData = record.note ? JSON.parse(record.note) : {};
+        } catch (e) {
+          console.error('Failed to parse note as JSON:', record.note);
+          return;
+        }
+
+        const runId = harnessData.run_id;
+        const step = harnessData.step;
+        const status = harnessData.status;
+        const detail = harnessData.detail || '';
+        const timestamp = record.recorded_at;
+
+        if (!runId || !step) return; // Skip records without required fields
 
         if (!runMap.has(runId)) {
           runMap.set(runId, { run_id: runId, events: [] });
@@ -65,7 +76,8 @@
   }
 
   onMount(async () => {
-    await user.init();
+    // User should already be initialized by the main layout
+    // Just check if owner and fetch data
     if (isOwner) {
       await fetchRuns();
       await fetchOutstandingIssues();
