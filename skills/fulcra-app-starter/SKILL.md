@@ -133,7 +133,7 @@ vercel --prod \
 
 Share the live deployment URL with the user. This gives the user a working deployed app to see before milestone-based building begins.
 
-### 9. Setup Harness and Dashboard
+### 9. Set Up Harness and Dashboard
 
 Set up the harness tracking system and integrate the dashboard component:
 
