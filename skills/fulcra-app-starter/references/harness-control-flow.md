@@ -150,6 +150,25 @@ Write records when each step starts and completes:
 }
 ```
 
+### Progress Updates (long-running steps)
+
+`FIX_ATTEMPT`, `GENERATE`, and `REVIEW` can each run for a long time. To keep the
+dashboard live while they run, emit an extra progress record for the currently
+running step every few minutes — reuse `status: "started"` and update `detail`
+with what is happening now:
+
+```json
+{
+  "note": "{\"run_id\": \"<run-id>\", \"step\": \"<STEP_NAME>\", \"status\": \"started\", \"detail\": \"<progress-summary>\"}",
+  "recorded_at": "<ISO-8601>"
+}
+```
+
+Keep these coarse — every few minutes, not every action — so a run accumulates a
+handful of progress records, not hundreds. The dashboard keeps the newest record
+per step, so the step box shows the latest `detail` and switches to
+`status: "completed"` (or `"failed"`) when you write that step's final record.
+
 ### Key Steps to Track
 
 - `FIND_MILESTONE` — Coordinator finding next incomplete milestone

@@ -71,7 +71,14 @@
         runMap.get(runId).events.push({ step, status, timestamp, detail });
       });
 
-      runs = Array.from(runMap.values()).sort((a, b) => {
+      const runsArray = Array.from(runMap.values());
+      // Sort each run's events chronologically so the last event is the newest
+      // one — getRunStatus and the per-step lookup both rely on latest-wins,
+      // and long steps emit several records that may arrive out of order.
+      runsArray.forEach((r) =>
+        r.events.sort((a: any, b: any) => (a.timestamp || '').localeCompare(b.timestamp || ''))
+      );
+      runs = runsArray.sort((a, b) => {
         const aTime = a.events[0]?.timestamp || '';
         const bTime = b.events[0]?.timestamp || '';
         return bTime.localeCompare(aTime);
