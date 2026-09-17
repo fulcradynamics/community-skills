@@ -18,6 +18,7 @@ workspace/<project-name>/
 ├── plan.md              # Approved enhancement plan (from step 1)
 ├── spec.md              # Requirements and milestones (from interview)
 ├── progress.md          # Current state snapshot
+├── outstanding-issues.md # Issues requiring user attention
 └── history/             # Timestamped milestone completion records
     └── YYYYMMDD-HHMMSS_milestone-name.md
 ```
@@ -52,6 +53,27 @@ Suggested sections:
 - **Recent Completions** — Last 3-5 completed milestones with dates
 - **Open Questions** — Anything blocking or unclear
 - **Notes** — Context worth preserving
+
+### outstanding-issues.md
+
+Issues requiring user attention. Updated by Nurse when escalations occur.
+
+Format:
+```markdown
+# Outstanding Issues
+
+## [ISO-8601 timestamp] - Run <run-id>
+
+**Issue:** <description>
+**Action Needed:** <what user should do>
+
+---
+
+## [timestamp] - Run <older-run-id> [RESOLVED]
+
+**Issue:** <description>
+**Resolution:** <how it was resolved>
+```
 
 ### history/
 
