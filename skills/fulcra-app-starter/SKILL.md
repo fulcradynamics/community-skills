@@ -197,20 +197,6 @@ Keep this harness implementation as simple as possible: the Preferred Coding Sty
 
 **Track progress** using the workspace pattern (see [`references/workspace.md`](references/workspace.md)) and write annotation records at each step (see tracking system instructions in harness-control-flow.md). The Coordinator updates progress.md and the dashboard shows live status.
 
-## Fulcra REST API
-
-The Fulcra API provides a general-purpose backend for web applications. Full API documentation is available at:
-**https://docs.fulcradynamics.com/rest-api/**
-
-Key capabilities include:
-
-- User authentication and session management
-- Data storage and retrieval (annotations)
-- File storage
-- Custom tracking and analytics
-
-When building features for the user's app, consult the API docs to understand available endpoints and how to make authenticated requests from the frontend.
-
 ## Key Points
 
 - Keep setup minimal and straightforward
