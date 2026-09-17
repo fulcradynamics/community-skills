@@ -89,19 +89,31 @@ The custom annotation enables the harness dashboard to show live run status. Wor
 
 ## Setup
 
-When setting up the harness (before first run), create a custom annotation:
+When setting up the harness (before first run), create a custom data type to
+hold run events. Use `MomentAnnotation` as the base type — it stores a free-form
+`note` (where we pack each run event as JSON) plus a timestamp:
 
 ```bash
-uvx fulcra-api annotation create \
-  --name "Harness Runs: <project-name>" \
-  --schema '{"run_id": "string", "step": "string", "status": "string", "timestamp": "string", "detail": "string"}'
+uvx fulcra-api data-type create MomentAnnotation "Harness Runs: <project-name>"
 ```
 
-Save the annotation ID from the response. This will be used in the dashboard component's environment variables.
+Save the returned data type ID (of the form `MomentAnnotation/<UUID>`). This is
+used as `PUBLIC_HARNESS_ANNOTATION_ID` in the dashboard's environment variables.
 
 ## Recording Run Events
 
-Write annotation records at key points in the flow. Store harness data as JSON in the `note` field:
+Write records at key points in the flow with `fulcra-api record`. Pack the event
+fields (`run_id`, `step`, `status`, `detail`) into the `note` as a JSON string;
+the record's timestamp is set automatically:
+
+```bash
+uvx fulcra-api record MomentAnnotation/<UUID> \
+  --note='{"run_id": "<run-id>", "step": "GENERATE", "status": "started", "detail": ""}'
+```
+
+The dashboard reads each record's `recorded_at` for timing and parses `note` for
+the event fields, so nothing else needs to be set. The JSON shapes below show
+the `note` payload for each kind of event.
 
 ### Run Start
 ```json
@@ -148,6 +160,24 @@ Write records when each step starts and completes:
 - `FIX_ATTEMPT` — Nurse attempting fix
 - `RUN_COMPLETE` — Run finished successfully
 - `RUN_INCOMPLETE` — Run ended without completion
+
+### Run IDs and terminal steps
+
+The dashboard groups records by `run_id` and infers which branch of the flow a
+run took from the steps present, so record them consistently:
+
+- **Mint a new `run_id`** at the top of each run-loop iteration, before the
+  Nurse health-check. Record the Nurse's `FIX_ATTEMPT` or `ESCALATE` under that
+  new `run_id` — the dashboard treats them as the start of the run they precede.
+  An escalation writes only an `ESCALATE` record for that new `run_id` (no
+  harness run follows); the dashboard shows it as an "escalated" run.
+- When a review fails but **retries remain**, the run leaves the milestone
+  incomplete yet still ends with **`RUN_COMPLETE`** (flow: *Leave milestone
+  incomplete → COMPLETE HARNESS RUN*). Use **`RUN_INCOMPLETE`** only when retries
+  are **exhausted** (*End run → END RUN — INCOMPLETE*). The dashboard uses this
+  distinction to show "Retry Next Run" versus "End Run — Incomplete".
+- When no incomplete milestone remains, still write a `FIND_MILESTONE` record
+  (with no `GENERATE` after it) so the dashboard renders "Project Complete".
 
 ## Workspace Updates
 

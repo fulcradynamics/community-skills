@@ -137,15 +137,13 @@ Share the live deployment URL with the user. This gives the user a working deplo
 
 Set up the harness tracking system and integrate the dashboard component:
 
-**Create custom annotation:**
+**Create the harness data type:**
 
 ```bash
-uvx fulcra-api annotation create \
-  --name "Harness Runs: <project-name>" \
-  --schema '{"run_id": "string", "step": "string", "status": "string", "timestamp": "string", "detail": "string"}'
+uvx fulcra-api data-type create MomentAnnotation "Harness Runs: <project-name>"
 ```
 
-Save the annotation ID from the response.
+Save the returned data type ID (of the form `MomentAnnotation/<UUID>`) — it becomes `PUBLIC_HARNESS_ANNOTATION_ID` below. See [`references/harness-control-flow.md`](references/harness-control-flow.md) for how to write run-event records into it.
 
 **Add environment variables to `.env`:**
 
