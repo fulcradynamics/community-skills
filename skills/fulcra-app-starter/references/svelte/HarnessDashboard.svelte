@@ -176,77 +176,80 @@
         {/snippet}
 
         <div class="flow-chart">
-          <!-- Nurse pre-check: runs before the main loop; escalation ends the loop -->
-          <div class="flow-row nurse-band">
-            <div class="flow-terminal start">Run Start</div>
-            <div class="flow-h-arrow">→</div>
-            <div class="flow-decision-box nurse inline">
-              <div class="decision-text">🩺 Previous run completed?</div>
-            </div>
-            <div class="flow-h-arrow labeled">No →</div>
-            <div class="flow-decision-box nurse inline">
-              <div class="decision-text">🩺 Fix attempts remain?</div>
-            </div>
-            <div class="branch-col">
+          <div class="flow-body">
+            <!-- Nurse pre-check: its own column, runs before the main loop -->
+            <div class="nurse-band nurse-col">
+              <div class="nurse-label">🩺 Nurse pre-check</div>
+              <div class="flow-decision-box nurse">
+                <div class="decision-text">Previous run completed?</div>
+              </div>
+              <div class="flow-h-arrow labeled vert">No ↓</div>
+              <div class="flow-decision-box nurse">
+                <div class="decision-text">Fix attempts remain?</div>
+              </div>
               <div class="branch-item" class:active={hasStep('FIX_ATTEMPT')}>
-                <span class="branch-tag">Yes</span>
+                <span class="branch-tag">Yes ↓</span>
                 {@render stepBox('FIX_ATTEMPT', '🩺 Attempt Fix', 'small')}
               </div>
               <div class="branch-item" class:active={hasStep('ESCALATE')}>
-                <span class="branch-tag">No</span>
-                {@render stepBox('ESCALATE', '🩺 Escalate', 'small')}
-                <div class="flow-terminal escalated small">Loop Ends</div>
+                <span class="branch-tag">No ↓</span>
+                {@render stepBox('ESCALATE', '🩺 Escalate — Loop Ends', 'small')}
               </div>
             </div>
-          </div>
-          <div class="flow-arrow">↓</div>
-          <div class="flow-passthrough">Previous run healthy or fixed — begin harness run</div>
-          <div class="flow-arrow">↓</div>
 
-          <!-- Milestone selection -->
-          <div class="flow-row">
-            {@render stepBox('FIND_MILESTONE', '🎛️ Find Incomplete Milestone', 'small')}
-            <div class="flow-h-arrow">→</div>
-            <div class="flow-decision-box inline">
-              <div class="decision-text">🎛️ Any incomplete milestone?</div>
-            </div>
-            <div class="flow-h-arrow labeled">No →</div>
-            <div class="branch-item" class:active={projectComplete}>
-              <div class="flow-terminal complete small">Project Complete</div>
-            </div>
-          </div>
-          <div class="flow-arrow">↓</div>
+            <div class="flow-h-arrow labeled connector">Healthy<br />or fixed →</div>
 
-          {@render stepBox('GENERATE', '✍️ Generate Code')}
-          <div class="flow-arrow">↓</div>
-          {@render stepBox('REVIEW', '⚖️ Review Code')}
-          <div class="flow-arrow">↓</div>
-
-          <div class="flow-decision-box">
-            <div class="decision-text">🎛️ Review passed?</div>
-          </div>
-          <div class="flow-split">
-            <!-- Yes: milestone complete -->
-            <div class="flow-path" class:active={hasStep('MARK_COMPLETE')}>
-              <div class="path-label">Yes</div>
-              {@render stepBox('MARK_COMPLETE', '🎛️ Mark Milestone Complete', 'small')}
-              <div class="flow-arrow">↓</div>
-              <div class="flow-terminal complete small">Run Complete</div>
-            </div>
-            <!-- No: retry or exhaust -->
-            <div class="flow-path" class:active={reviewFailed}>
-              <div class="path-label">No</div>
-              <div class="flow-decision-box small">
-                <div class="decision-text">🎛️ Retries remain?</div>
-              </div>
-              <div class="flow-split tight">
-                <div class="flow-path" class:active={retryScheduled}>
-                  <div class="path-label">Yes</div>
-                  <div class="flow-terminal retry small">Leave Incomplete — Retry Next Run</div>
+            <!-- Main harness loop -->
+            <div class="main-flow">
+              <!-- Milestone selection -->
+              <div class="flow-grid">
+                {@render stepBox('FIND_MILESTONE', '🎛️ Find Incomplete Milestone', 'small')}
+                <div class="flow-h-arrow">→</div>
+                <div class="flow-decision-box inline">
+                  <div class="decision-text">🎛️ Any incomplete milestone?</div>
                 </div>
-                <div class="flow-path" class:active={hasStep('RUN_INCOMPLETE')}>
+                <div class="flow-h-arrow labeled">No →</div>
+                <div class="branch-item" class:active={projectComplete}>
+                  <div class="flow-terminal complete small">Project Complete</div>
+                </div>
+              </div>
+              <div class="flow-arrow">↓</div>
+
+              <!-- Generate → review → decision -->
+              <div class="flow-grid">
+                {@render stepBox('GENERATE', '✍️ Generate Code', 'small')}
+                <div class="flow-h-arrow">→</div>
+                {@render stepBox('REVIEW', '⚖️ Review Code', 'small')}
+                <div class="flow-h-arrow">→</div>
+                <div class="flow-decision-box inline">
+                  <div class="decision-text">🎛️ Review passed?</div>
+                </div>
+              </div>
+              <div class="flow-arrow">↓</div>
+
+              <!-- Review outcomes: Yes comes first; No spans the other two columns -->
+              <div class="flow-grid outcomes">
+                <div class="outcome-yes" class:active={hasStep('MARK_COMPLETE')}>
+                  <div class="path-label">Yes</div>
+                  {@render stepBox('MARK_COMPLETE', '🎛️ Mark Milestone Complete', 'small')}
+                  <div class="flow-arrow">↓</div>
+                  <div class="flow-terminal complete small">Run Complete</div>
+                </div>
+                <div class="outcome-no" class:active={reviewFailed}>
                   <div class="path-label">No</div>
-                  <div class="flow-terminal incomplete small">End Run — Incomplete</div>
+                  <div class="flow-decision-box small">
+                    <div class="decision-text">🎛️ Retries remain?</div>
+                  </div>
+                  <div class="flow-split tight">
+                    <div class="flow-path" class:active={retryScheduled}>
+                      <div class="path-label">Yes</div>
+                      <div class="flow-terminal retry small">Leave Incomplete — Retry Next Run</div>
+                    </div>
+                    <div class="flow-path" class:active={hasStep('RUN_INCOMPLETE')}>
+                      <div class="path-label">No</div>
+                      <div class="flow-terminal incomplete small">End Run — Incomplete</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -363,10 +366,16 @@
   .status-escalated { background: #ffe0b2; color: #e65100; }
 
   .flow-chart {
+    /* Three equal process columns with fixed arrow gutters between them.
+       Fixed track sizes mean every .flow-grid row is the same total width,
+       so the columns line up vertically across rows. */
+    --flow-col: 185px;
+    --arrow-w: 2.25rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0;
+    overflow-x: auto;
   }
 
   .flow-step-box {
@@ -442,12 +451,6 @@
     padding: 0.45rem 1rem;
   }
 
-  .flow-terminal.start {
-    background: var(--color-fulcra-black);
-    color: var(--color-fulcra-white);
-    border-color: var(--color-fulcra-black);
-  }
-
   .flow-terminal.complete {
     background: var(--color-fulcra-teal-10);
     border-color: var(--color-fulcra-teal);
@@ -466,12 +469,6 @@
     color: var(--color-fulcra-error);
   }
 
-  .flow-terminal.escalated {
-    background: #ffe0b2;
-    border-color: #f57c00;
-    color: #e65100;
-  }
-
   .flow-passthrough {
     font-size: 0.8rem;
     font-style: italic;
@@ -479,14 +476,44 @@
     padding: 0.5rem 0;
   }
 
-  .flow-row {
-    display: flex;
-    flex-wrap: wrap;
+  .flow-grid {
+    display: grid;
+    grid-template-columns:
+      var(--flow-col) var(--arrow-w) var(--flow-col) var(--arrow-w) var(--flow-col);
     align-items: center;
+    justify-items: center;
+    row-gap: 0.4rem;
+    width: max-content;
+    max-width: 100%;
+    margin: 0.15rem auto;
+  }
+
+  /* Direct children of a grid row fill their column exactly */
+  .flow-grid > .flow-step-box,
+  .flow-grid > .flow-decision-box {
+    width: var(--flow-col);
+    max-width: none;
+    box-sizing: border-box;
+    margin: 0;
+  }
+
+  /* Force the nurse fix/escalate branch and the success path into column 3 */
+  .col3 {
+    grid-column: 5;
+  }
+
+  /* Nurse pre-check lives in its own column to the left of the main loop */
+  .flow-body {
+    display: flex;
+    align-items: flex-start;
     justify-content: center;
-    gap: 0.75rem;
-    width: 100%;
-    max-width: 900px;
+    gap: 0.5rem;
+  }
+
+  .main-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .nurse-band {
@@ -496,10 +523,46 @@
     padding: 0.75rem;
   }
 
-  .flow-row .flow-step-box,
-  .branch-col .flow-step-box {
-    width: auto;
-    max-width: 230px;
+  .nurse-col {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.35rem;
+    width: calc(var(--flow-col) + 1.5rem);
+    box-sizing: border-box;
+  }
+
+  .nurse-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #e65100;
+    text-align: center;
+    margin-bottom: 0.15rem;
+  }
+
+  .nurse-col .flow-decision-box {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0.6rem 0.9rem;
+    box-sizing: border-box;
+  }
+
+  .nurse-col .flow-step-box {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+  }
+
+  .flow-h-arrow.vert {
+    text-align: center;
+  }
+
+  .flow-h-arrow.connector {
+    align-self: flex-start;
+    margin-top: 2.5rem;
+    text-align: center;
+    line-height: 1.2;
   }
 
   .flow-h-arrow {
@@ -514,9 +577,7 @@
   }
 
   .flow-decision-box.inline {
-    max-width: 210px;
     padding: 0.6rem 0.9rem;
-    margin: 0;
   }
 
   .flow-decision-box.inline .decision-text {
@@ -527,19 +588,13 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    width: var(--flow-col);
   }
 
-  .branch-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
-    opacity: 0.3;
-    transition: opacity 0.2s;
-  }
-
-  .branch-item.active {
-    opacity: 1;
+  .branch-col .flow-step-box {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
   }
 
   .branch-tag {
@@ -548,18 +603,67 @@
     color: var(--color-fulcra-gray);
   }
 
+  .branch-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    opacity: 0.3;
+    transition: opacity 0.2s;
+  }
+
+  .branch-item.active {
+    opacity: 1;
+  }
+
+  /* Review outcomes row: No spans two columns, Yes sits in column 3 */
+  .outcomes {
+    align-items: start;
+    row-gap: 0;
+  }
+
+  .outcome-no {
+    grid-column: 3 / span 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    width: 100%;
+    opacity: 0.3;
+    transition: opacity 0.2s;
+  }
+
+  .outcome-yes {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    width: var(--flow-col);
+    opacity: 0.3;
+    transition: opacity 0.2s;
+  }
+
+  .outcome-yes .flow-step-box {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+  }
+
+  .outcome-no.active,
+  .outcome-yes.active {
+    opacity: 1;
+  }
+
   .flow-split {
     display: flex;
-    gap: 2rem;
-    margin: 1rem 0;
-    width: 100%;
-    max-width: 800px;
+    gap: 1rem;
     justify-content: center;
   }
 
   .flow-split.tight {
     gap: 1rem;
-    margin: 0.5rem 0 0;
+    margin: 0.25rem 0 0;
   }
 
   .flow-path {
