@@ -77,3 +77,122 @@ flowchart TD
     style InnerLoop fill:#f5f5f5,stroke:#999999
     style Legend fill:#f5f5f5,stroke:#999999
 ```
+
+## Tracking System
+
+The harness tracks progress using two mechanisms:
+
+1. **Custom Annotation** — Append-only log of run events (step starts, completions, errors)
+2. **Workspace Files** — Persistent state (progress.md, outstanding-issues.md)
+
+The custom annotation enables the harness dashboard to show live run status. Workspace files enable resume capability and issue tracking.
+
+## Setup
+
+When setting up the harness (before first run), create a custom annotation:
+
+```bash
+uvx fulcra-api annotation create \
+  --name "Harness Runs: <project-name>" \
+  --schema '{"run_id": "string", "step": "string", "status": "string", "timestamp": "string", "detail": "string"}'
+```
+
+Save the annotation ID from the response. This will be used in the dashboard component's environment variables.
+
+## Recording Run Events
+
+Write annotation records at key points in the flow:
+
+### Run Start
+```json
+{
+  "run_id": "<unique-run-id>",
+  "step": "RUN_START",
+  "status": "started",
+  "timestamp": "<ISO-8601>",
+  "detail": "Starting harness run"
+}
+```
+
+### Step Transitions
+Write records when each step starts and completes:
+
+**Step Start:**
+```json
+{
+  "run_id": "<run-id>",
+  "step": "<STEP_NAME>",
+  "status": "started",
+  "timestamp": "<ISO-8601>",
+  "detail": ""
+}
+```
+
+**Step Complete:**
+```json
+{
+  "run_id": "<run-id>",
+  "step": "<STEP_NAME>",
+  "status": "completed",
+  "timestamp": "<ISO-8601>",
+  "detail": "<result-summary>"
+}
+```
+
+**Step Failed:**
+```json
+{
+  "run_id": "<run-id>",
+  "step": "<STEP_NAME>",
+  "status": "failed",
+  "timestamp": "<ISO-8601>",
+  "detail": "<error-message>"
+}
+```
+
+### Key Steps to Track
+
+- `FIND_MILESTONE` — Coordinator finding next incomplete milestone
+- `GENERATE` — Generator writing code
+- `REVIEW` — Evaluator reviewing code  
+- `MARK_COMPLETE` — Coordinator marking milestone complete
+- `ESCALATE` — Nurse escalating to user
+- `FIX_ATTEMPT` — Nurse attempting fix
+- `RUN_COMPLETE` — Run finished successfully
+- `RUN_INCOMPLETE` — Run ended without completion
+
+## Workspace Updates
+
+### outstanding-issues.md
+
+Update `workspace/<project-name>/outstanding-issues.md` when issues occur:
+
+**On Escalation:**
+Add issue with timestamp, run ID, and description. Include what the user needs to do.
+
+**On Resolution:**
+Remove or mark resolved when user addresses the issue or a subsequent run succeeds.
+
+**Format:**
+```markdown
+# Outstanding Issues
+
+## [ISO-8601 timestamp] - Run <run-id>
+
+**Issue:** <description>
+**Action Needed:** <what user should do>
+
+---
+
+## [timestamp] - Run <older-run-id> [RESOLVED]
+
+**Issue:** <description>
+**Resolution:** <how it was resolved>
+```
+
+### progress.md
+
+Update `workspace/<project-name>/progress.md` after each harness run (see workspace.md for full structure). Include:
+- Harness State section with current run status, retry count, last run timestamp
+- Active Milestone
+- Recent Completions (when milestones complete)
