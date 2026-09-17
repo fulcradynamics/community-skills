@@ -34,26 +34,43 @@ export default function HarnessDashboard() {
   }
 
   async function fetchRuns() {
-    const res = await fetch(`${FULCRA_API_URL}/annotations/${HARNESS_ANNOTATION_ID}/records`);
-    const records = await res.json();
+    try {
+      // Fetch records from the Fulcra API
+      const dataType = HARNESS_ANNOTATION_ID!.replace('/', '%2F');
+      const res = await fetch(`${FULCRA_API_URL}v1/records/${dataType}?start_date=2026-09-01&end_date=2026-09-30`);
+      const data = await res.json();
 
-    // Group by run_id and build timeline
-    const runMap = new Map<string, Run>();
-    records.forEach((r: Event) => {
-      if (!runMap.has(r.run_id)) {
-        runMap.set(r.run_id, { run_id: r.run_id, events: [] });
-      }
-      runMap.get(r.run_id)!.events.push(r);
-    });
+      // Extract records from the response
+      const records = data.records || data || [];
 
-    const runsArray = Array.from(runMap.values()).sort((a, b) => {
-      const aTime = a.events[0]?.timestamp || '';
-      const bTime = b.events[0]?.timestamp || '';
-      return bTime.localeCompare(aTime);
-    });
+      // Group by run_id from the record data
+      const runMap = new Map<string, Run>();
+      records.forEach((record: any) => {
+        const runId = record.data?.run_id || record.run_id;
+        const step = record.data?.step || record.step;
+        const status = record.data?.status || record.status;
+        const detail = record.data?.detail || record.detail || '';
+        const timestamp = record.moment || record.timestamp;
 
-    setRuns(runsArray);
-    setCurrentRun(runsArray[0] || null);
+        if (!runMap.has(runId)) {
+          runMap.set(runId, { run_id: runId, events: [] });
+        }
+        runMap.get(runId)!.events.push({ run_id: runId, step, status, timestamp, detail });
+      });
+
+      const runsArray = Array.from(runMap.values()).sort((a, b) => {
+        const aTime = a.events[0]?.timestamp || '';
+        const bTime = b.events[0]?.timestamp || '';
+        return bTime.localeCompare(aTime);
+      });
+
+      setRuns(runsArray);
+      setCurrentRun(runsArray[0] || null);
+    } catch (e) {
+      console.error('Failed to fetch runs:', e);
+      setRuns([]);
+      setCurrentRun(null);
+    }
   }
 
   async function fetchOutstandingIssues() {
@@ -181,6 +198,12 @@ export default function HarnessDashboard() {
           padding: 2rem;
           max-width: 1200px;
           margin: 0 auto;
+          color: #333;
+        }
+
+        .harness-dashboard h2,
+        .harness-dashboard h3 {
+          color: #222;
         }
 
         .flow-diagram {
@@ -203,6 +226,7 @@ export default function HarnessDashboard() {
           border: 2px solid #0288d1;
           border-radius: 4px;
           font-weight: 500;
+          color: #0288d1;
         }
 
         .flow-decision {
@@ -211,6 +235,7 @@ export default function HarnessDashboard() {
           border: 2px solid #f57f17;
           border-radius: 4px;
           font-weight: 500;
+          color: #f57f17;
         }
 
         .flow-arrow {
@@ -262,11 +287,13 @@ export default function HarnessDashboard() {
           padding: 0.75rem;
           background: #f5f5f5;
           border-radius: 4px;
+          color: #333;
         }
 
         .step {
           font-weight: 600;
           margin-right: 0.5rem;
+          color: #222;
         }
 
         .status-badge {
