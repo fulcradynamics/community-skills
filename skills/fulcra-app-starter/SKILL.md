@@ -133,11 +133,50 @@ vercel --prod \
 
 Share the live deployment URL with the user. This gives the user a working deployed app to see before milestone-based building begins.
 
-### 9. Hand Off to Harness
+### 9. Setup Harness and Dashboard
 
-With the spec, milestones, and working foundation in place, you should iterate on the milestones using the flow described in the [`references/harness-control-flow.md`](references/harness-control-flow.md) diagram. There's no prebuilt harness to run—it's up to you, the agent, to generate and run that flow (its roles and re-triggering) with whatever mechanism fits, just as you handled the interview and spec steps above. The diagram defines the principles of the harness and what a single iteration looks like. You might run it directly or through a schedule. Keep this harness implementation as simple as possible: the Preferred Coding Style intention applies to the harness too, so favor the smallest thing that works instead of an elaborate framework.
+Set up the harness tracking system and integrate the dashboard component:
 
-Track progress using the workspace pattern (see [`references/workspace.md`](references/workspace.md)). The Coordinator updates progress.md after each harness run to enable resume capability.
+**Create custom annotation:**
+```bash
+uvx fulcra-api annotation create \
+  --name "Harness Runs: <project-name>" \
+  --schema '{"run_id": "string", "step": "string", "status": "string", "timestamp": "string", "detail": "string"}'
+```
+
+Save the annotation ID from the response.
+
+**Add environment variables to `.env`:**
+```
+PUBLIC_OWNER_USER_ID=<your-fulcra-user-id>
+PUBLIC_HARNESS_ANNOTATION_ID=<annotation-id-from-above>
+PUBLIC_WORKSPACE_PATH=workspace/<project-name>
+```
+
+(For React, use `NEXT_PUBLIC_*` prefix instead of `PUBLIC_*`)
+
+**Integrate dashboard component:**
+
+Add the appropriate dashboard component to your app:
+- For Svelte: Copy [`references/dashboard-svelte.svelte`](references/dashboard-svelte.svelte) to your `src/lib/components/` directory
+- For React: Copy [`references/dashboard-react.tsx`](references/dashboard-react.tsx) to your `components/` directory
+
+Add the dashboard component to your app's navigation or home page. It will only be visible to the owner (you) and will refresh every 5 seconds to show live harness progress.
+
+**Deploy dashboard update:**
+```bash
+vercel --prod
+```
+
+Share the updated deployment URL with the user so they can see the harness dashboard.
+
+### 10. Run Harness
+
+Implement and run the harness following the flow described in [`references/harness-control-flow.md`](references/harness-control-flow.md). There's no prebuilt harness to run—it's up to you, the agent, to generate and run that flow (its roles and re-triggering) with whatever mechanism fits, just as you handled the interview and spec steps above. The diagram defines the principles of the harness and what a single iteration looks like. You might run it directly or through a schedule.
+
+Keep this harness implementation as simple as possible: the Preferred Coding Style intention applies to the harness too, so favor the smallest thing that works instead of an elaborate framework.
+
+**Track progress** using the workspace pattern (see [`references/workspace.md`](references/workspace.md)) and write annotation records at each step (see tracking system instructions in harness-control-flow.md). The Coordinator updates progress.md and the dashboard shows live status.
 
 ## Fulcra REST API
 
