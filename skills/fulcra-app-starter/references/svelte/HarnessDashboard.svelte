@@ -2,10 +2,9 @@
   import { onMount, onDestroy } from 'svelte';
   import { env } from '$env/dynamic/public';
 
-  import { user } from '$lib/user';
-
-  // Environment variables (set in .env)
-  const OWNER_USER_ID = env.PUBLIC_OWNER_USER_ID;
+  // Environment variables (set in .env). The owner's id is intentionally NOT
+  // here — it is a server-only var; the backend tells us whether we're the
+  // owner via /api/harness/owner so the id is never exposed to the browser.
   const HARNESS_ANNOTATION_ID = env.PUBLIC_HARNESS_ANNOTATION_ID;
   const WORKSPACE_PATH = env.PUBLIC_WORKSPACE_PATH;
 
@@ -14,9 +13,19 @@
   let outstandingIssues: string = '';
   let refreshInterval: any;
 
-  // Check if current user is owner
-  $: userId = $user.auth0UserInfo?.['fulcradynamics.com/userid'];
-  $: isOwner = userId === OWNER_USER_ID;
+  // Ownership is decided by the backend; starts false until confirmed.
+  let isOwner = false;
+
+  async function checkOwner() {
+    try {
+      const res = await fetch('/api/harness/owner');
+      if (!res.ok) return false;
+      const data = await res.json();
+      return data.isOwner === true;
+    } catch (e) {
+      return false;
+    }
+  }
 
   // Flow chart lookups for the currently selected run
   $: stepMap = new Map((currentRun?.events || []).map((e: any) => [e.step, e]));
@@ -109,8 +118,8 @@
   }
 
   onMount(async () => {
-    // User should already be initialized by the main layout
-    // Just check if owner and fetch data
+    // Ask the backend whether we're the owner, then fetch data if so.
+    isOwner = await checkOwner();
     if (isOwner) {
       await fetchRuns();
       await fetchOutstandingIssues();

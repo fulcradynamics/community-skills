@@ -1,14 +1,21 @@
 import { env } from '$env/dynamic/public';
 import { error, json } from '@sveltejs/kit';
 import { FulcraAPI } from '$lib/api-client.js';
+// See references/svelte/harness-owner.js — copy it to src/lib/server/harness-owner.js
+import { isOwner } from '$lib/server/harness-owner.js';
 
 /**
  * Server-side endpoints for harness dashboard
  *
  * Place at: src/routes/api/harness/
- * Create two files:
- * - runs/+server.js
- * - issues/+server.js
+ * Create three files:
+ * - runs/+server.js   (export GET_runs as GET)
+ * - issues/+server.js (export GET_issues as GET)
+ * - owner/+server.js  (export GET_owner as GET)
+ *
+ * The owner's user id is a server-only env var (OWNER_USER_ID, no PUBLIC_
+ * prefix). runs/issues enforce ownership; owner reports it to the client so the
+ * dashboard/nav can gate visibility without ever seeing the id.
  */
 
 // runs/+server.js
@@ -17,6 +24,11 @@ export async function GET_runs({ cookies, url }) {
 
   if (!accessToken) {
     throw error(401, 'Not authenticated');
+  }
+
+  // Only the harness owner may read run history.
+  if (!(await isOwner(accessToken))) {
+    throw error(403, 'Forbidden');
   }
 
   const annotationId = url.searchParams.get('annotation_id');
@@ -60,6 +72,11 @@ export async function GET_issues({ cookies, url }) {
     throw error(401, 'Not authenticated');
   }
 
+  // Only the harness owner may read the outstanding-issues file.
+  if (!(await isOwner(accessToken))) {
+    throw error(403, 'Forbidden');
+  }
+
   const workspacePath = url.searchParams.get('workspace_path');
 
   if (!workspacePath) {
@@ -84,4 +101,11 @@ export async function GET_issues({ cookies, url }) {
       headers: { 'Content-Type': 'text/plain' }
     });
   }
+}
+
+// owner/+server.js
+// Reports whether the caller is the owner without exposing the owner id.
+export async function GET_owner({ cookies }) {
+  const accessToken = cookies.get('fulcra_access_token');
+  return json({ isOwner: await isOwner(accessToken) });
 }

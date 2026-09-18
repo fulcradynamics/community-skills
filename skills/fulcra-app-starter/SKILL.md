@@ -148,21 +148,27 @@ Save the returned data type ID (of the form `MomentAnnotation/<UUID>`) — it be
 **Add environment variables to `.env`:**
 
 ```
-PUBLIC_OWNER_USER_ID=<your-fulcra-user-id>
+# Server-only — NO PUBLIC_/NEXT_PUBLIC_ prefix. This must never reach the
+# browser; the backend compares it against the authenticated user's Fulcra id.
+OWNER_USER_ID=<your-fulcra-user-id>
+
+# Client-readable (Svelte PUBLIC_*, React NEXT_PUBLIC_*).
 PUBLIC_HARNESS_ANNOTATION_ID=<annotation-id-from-above>
 PUBLIC_WORKSPACE_PATH=workspace/<project-name>
 ```
 
-(For React, use `NEXT_PUBLIC_*` prefix instead of `PUBLIC_*`)
+(For React, use the `NEXT_PUBLIC_*` prefix for the two client-readable vars; keep `OWNER_USER_ID` server-only with no prefix.)
 
 **Create server endpoints:**
 
-The dashboard must fetch data through backend API endpoints (not directly from Fulcra API) to avoid CORS issues. See [`references/svelte/harness-api-server.js`](references/svelte/harness-api-server.js) for the complete implementation, which uses endpoints documented at https://docs.fulcradynamics.com/rest-api/.
+The dashboard must fetch data through backend API endpoints (not directly from Fulcra API) to avoid CORS issues. The Fulcra API must be called only from the backend — never from the browser. Ownership is also enforced on the backend: the owner's id (`OWNER_USER_ID`) stays server-only, and each route resolves the caller's Fulcra id from the Auth0 `/userinfo` `fulcradynamics.com/userid` claim (using the session token) and compares them. See [`references/svelte/harness-api-server.js`](references/svelte/harness-api-server.js) and [`references/svelte/harness-owner.js`](references/svelte/harness-owner.js) for the complete implementation, which uses endpoints documented at https://docs.fulcradynamics.com/rest-api/.
 
 - For Svelte: Create:
-  - `src/routes/api/harness/runs/+server.js` (export the GET_runs function as GET)
-  - `src/routes/api/harness/issues/+server.js` (export the GET_issues function as GET)
-- For React: Create equivalent API routes (e.g. `app/api/harness/runs/route.ts`, `app/api/harness/issues/route.ts`, and `app/api/me/route.ts`) that implement the same contract as [`references/svelte/harness-api-server.js`](references/svelte/harness-api-server.js). The dashboard calls `/api/harness/runs?annotation_id=<id>&start_date=<d>&end_date=<d>` (proxying `data/v1alpha1/event/{annotation_id}`), `/api/harness/issues?workspace_path=<path>`, and `/api/me` (returns the authenticated user, including the `id` matched against `OWNER_USER_ID`). The Fulcra API must be called only from the backend — never from the browser — so route every one of these through the server, using the token from the Fulcra session as `src/lib/api-client.js` does. (Svelte reads the current user from the auth store, so it only needs the two `/api/harness/*` routes.)
+  - `src/lib/server/harness-owner.js` (copy [`references/svelte/harness-owner.js`](references/svelte/harness-owner.js) — the shared `isOwner()` check)
+  - `src/routes/api/harness/runs/+server.js` (export the GET_runs function as GET — 403s non-owners)
+  - `src/routes/api/harness/issues/+server.js` (export the GET_issues function as GET — 403s non-owners)
+  - `src/routes/api/harness/owner/+server.js` (export the GET_owner function as GET — returns `{ isOwner }` so the dashboard/nav can gate visibility without seeing the id)
+- For React: **Deferred — leave the React dashboard as-is until it is tested.** When aligning it, mirror the same backend-only contract: `/api/harness/runs?annotation_id=<id>&start_date=<d>&end_date=<d>` (proxying `data/v1alpha1/event/{annotation_id}`), `/api/harness/issues?workspace_path=<path>`, and an owner check that keeps `OWNER_USER_ID` server-side (do not expose the owner id to the browser), using the session token as `src/lib/api-client.js`/`lib/api-client.ts` does.
 
 **Integrate dashboard components:**
 

@@ -1,17 +1,27 @@
 <script lang="ts">
   import { user } from '$lib/user';
-  import { onMount } from 'svelte';
-  import { env } from '$env/dynamic/public';
 
-  const OWNER_USER_ID = env.PUBLIC_OWNER_USER_ID;
+  // The owner's id lives server-side only; ask the backend whether we're the
+  // owner (re-checking whenever auth state changes) instead of comparing ids.
+  let isOwner = false;
 
-  $: userId = $user.auth0UserInfo?.['fulcradynamics.com/userid'];
-  $: isOwner = userId === OWNER_USER_ID;
+  async function checkOwner() {
+    try {
+      const res = await fetch('/api/harness/owner');
+      isOwner = res.ok && (await res.json()).isOwner === true;
+    } catch (e) {
+      isOwner = false;
+    }
+  }
 
-  // User is initialized by the main layout - no need to init again
+  $: if ($user.authenticated) {
+    checkOwner();
+  } else {
+    isOwner = false;
+  }
 </script>
 
-{#if $user.authenticated && isOwner}
+{#if isOwner}
   <nav class="bg-fulcra-black/50 border-b border-fulcra-gray/20">
     <div class="max-w-7xl mx-auto px-4 py-3">
       <div class="flex items-center justify-between">
