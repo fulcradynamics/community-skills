@@ -27,7 +27,7 @@ export async function GET_runs({ cookies, url }) {
   }
 
   // Only the harness owner may read run history.
-  if (!(await isOwner(accessToken))) {
+  if (!isOwner(accessToken)) {
     throw error(403, 'Forbidden');
   }
 
@@ -73,7 +73,7 @@ export async function GET_issues({ cookies, url }) {
   }
 
   // Only the harness owner may read the outstanding-issues file.
-  if (!(await isOwner(accessToken))) {
+  if (!isOwner(accessToken)) {
     throw error(403, 'Forbidden');
   }
 
@@ -107,5 +107,5 @@ export async function GET_issues({ cookies, url }) {
 // Reports whether the caller is the owner without exposing the owner id.
 export async function GET_owner({ cookies }) {
   const accessToken = cookies.get('fulcra_access_token');
-  return json({ isOwner: await isOwner(accessToken) });
+  return json({ isOwner: isOwner(accessToken) });
 }
