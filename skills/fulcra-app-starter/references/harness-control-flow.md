@@ -83,9 +83,9 @@ flowchart TD
 The harness tracks progress using two mechanisms:
 
 1. **Custom Annotation** — Append-only log of run events (step starts, completions, errors)
-2. **Workspace Files** — Persistent state (progress.md, outstanding-issues.md)
+2. **Workspace Files** — Persistent state (overview.md, progress.md, outstanding-issues.md)
 
-The custom annotation enables the harness dashboard to show live run status. Workspace files enable resume capability and issue tracking.
+The custom annotation enables the harness dashboard to show live run status. Workspace files enable resume capability, issue tracking, and the dashboard's human-readable overview.
 
 ## Setup
 
@@ -199,6 +199,47 @@ run took from the steps present, so record them consistently:
   (with no `GENERATE` after it) so the dashboard renders "Project Complete".
 
 ## Workspace Updates
+
+### overview.md
+
+The Nurse rewrites `workspace/<project-name>/overview.md` on **every loop** — a
+concise, human-readable summary the dashboard renders at the top as styled
+markdown. It is a snapshot, not a log: overwrite it each loop rather than
+appending. Keep it short (it is a summary, not progress.md) and cover:
+
+- **Overall status** — one line on whether the project is on track, and what the
+  harness is doing right now.
+- **Milestone list** — every milestone with its state (complete / in progress /
+  pending). A checklist with emoji reads well in the dashboard.
+- **Recent activity** — a sentence or two on what the last run(s) accomplished
+  and any blockers.
+
+Because the dashboard renders it as markdown, the Nurse can style it with
+headings, bold, lists, and links. Example:
+
+```markdown
+# Project Overview
+
+**Status:** On track — 3 of 7 milestones complete. Currently generating code for
+Milestone 4.
+
+## Milestones
+
+- ✅ **M1 — Auth & user shell** — complete
+- 🔄 **M4 — Leaderboard API** — in progress
+- ⬜ **M5 — Sharing** — pending
+
+## Recent activity
+
+Last run completed the entry-logging milestone after one review retry. No
+outstanding blockers.
+```
+
+Write it with `fulcra-api file upload`:
+
+```bash
+uvx fulcra-api file upload overview.md "workspace/<project-name>/overview.md"
+```
 
 ### outstanding-issues.md
 

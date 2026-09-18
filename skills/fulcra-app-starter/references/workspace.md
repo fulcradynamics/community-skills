@@ -17,6 +17,7 @@ All files live in Fulcra File Store under `workspace/<project-name>/`.
 workspace/<project-name>/
 ├── plan.md              # Approved enhancement plan (from step 1)
 ├── spec.md              # Requirements and milestones (from interview)
+├── overview.md          # Concise progress + milestone summary (nurse, each loop)
 ├── progress.md          # Current state snapshot
 ├── outstanding-issues.md # Issues requiring user attention
 └── history/             # Timestamped milestone completion records
@@ -40,6 +41,15 @@ Created during the interview step. Contains:
 - Key features and requirements
 
 Updated as requirements evolve.
+
+### overview.md
+
+Concise, human-readable summary the harness dashboard renders at the top as
+styled markdown. Rewritten (not appended) by the Nurse on every loop. Covers
+overall status, a milestone checklist, and recent activity. This is a snapshot
+for a human skimming the dashboard — keep it short; the detailed state lives in
+progress.md. See [`harness-control-flow.md`](harness-control-flow.md) for the
+suggested format.
 
 ### progress.md
 
@@ -134,6 +144,7 @@ uvx fulcra-api file list "workspace/<project-name>/"
 **Nurse** (during health checks):
 - Downloads progress.md to understand current state
 - May review history when diagnosing stuck runs
+- Rewrites overview.md each loop with the current status, milestone checklist, and recent activity
 
 ## Resume Pattern
 

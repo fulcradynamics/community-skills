@@ -1,6 +1,17 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { env } from '$env/dynamic/public';
+  import { marked } from 'marked';
+  import DOMPurify from 'dompurify';
+
+  // Render nurse-authored markdown (overview + outstanding issues) to safe HTML.
+  // marked turns the markdown into HTML; DOMPurify strips anything unsafe. Only
+  // ever called in the browser with non-empty content, so SSR never touches
+  // DOMPurify (which needs a DOM).
+  function renderMarkdown(md: string): string {
+    if (!md) return '';
+    return DOMPurify.sanitize(marked.parse(md, { async: false }) as string);
+  }
 
   // Environment variables (set in .env). The owner's id is intentionally NOT
   // here — it is a server-only var; the backend tells us whether we're the
@@ -10,6 +21,7 @@
 
   let runs: any[] = [];
   let currentRun: any = null;
+  let overview: string = '';
   let outstandingIssues: string = '';
   let refreshInterval: any;
 
@@ -108,6 +120,15 @@
     }
   }
 
+  async function fetchOverview() {
+    try {
+      const res = await fetch(`/api/harness/overview?workspace_path=${encodeURIComponent(WORKSPACE_PATH)}`);
+      overview = await res.text();
+    } catch (e) {
+      overview = '';
+    }
+  }
+
   async function fetchOutstandingIssues() {
     try {
       const res = await fetch(`/api/harness/issues?workspace_path=${encodeURIComponent(WORKSPACE_PATH)}`);
@@ -121,11 +142,13 @@
     // Ask the backend whether we're the owner, then fetch data if so.
     isOwner = await checkOwner();
     if (isOwner) {
+      await fetchOverview();
       await fetchRuns();
       await fetchOutstandingIssues();
 
       // Refresh every 5 seconds
       refreshInterval = setInterval(async () => {
+        await fetchOverview();
         await fetchRuns();
         await fetchOutstandingIssues();
       }, 5000);
@@ -152,6 +175,13 @@
 {#if isOwner}
   <div class="harness-dashboard">
     <h2>Harness Dashboard</h2>
+
+    <!-- Overview - concise progress + milestone summary (nurse-authored) -->
+    {#if overview}
+      <div class="overview">
+        <div class="markdown-body">{@html renderMarkdown(overview)}</div>
+      </div>
+    {/if}
 
     <!-- Run History - compact, scrollable -->
     <div class="run-history">
@@ -282,7 +312,7 @@
     {#if outstandingIssues}
       <div class="outstanding-issues">
         <h3>Outstanding Issues</h3>
-        <div class="issues-content">{@html outstandingIssues}</div>
+        <div class="markdown-body issues-content">{@html renderMarkdown(outstandingIssues)}</div>
       </div>
     {/if}
   </div>
@@ -750,6 +780,14 @@
     font-size: 0.75rem;
   }
 
+  .overview {
+    background: var(--color-fulcra-teal-25, #e6f7f5);
+    border: 1px solid var(--color-fulcra-teal, #14b8a6);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
   .outstanding-issues {
     background: var(--color-fulcra-lavender-25);
     border: 1px solid var(--color-fulcra-purple);
@@ -758,7 +796,47 @@
   }
 
   .issues-content {
-    font-size: 0.875rem;
     color: var(--color-fulcra-purple-100);
+  }
+
+  /* Rendered markdown. Styles must be :global — Svelte can't scope HTML
+     injected with {@html}. */
+  .markdown-body {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  .markdown-body :global(h1),
+  .markdown-body :global(h2),
+  .markdown-body :global(h3),
+  .markdown-body :global(h4) {
+    margin: 0.75em 0 0.35em;
+    line-height: 1.25;
+  }
+  .markdown-body :global(h1) { font-size: 1.35rem; }
+  .markdown-body :global(h2) { font-size: 1.15rem; }
+  .markdown-body :global(h3) { font-size: 1rem; }
+  .markdown-body :global(:first-child) { margin-top: 0; }
+  .markdown-body :global(p) { margin: 0.4em 0; }
+  .markdown-body :global(ul),
+  .markdown-body :global(ol) { margin: 0.4em 0; padding-left: 1.4rem; }
+  .markdown-body :global(li) { margin: 0.15em 0; }
+  .markdown-body :global(a) { color: var(--color-fulcra-teal, #14b8a6); }
+  .markdown-body :global(code) {
+    background: rgba(0, 0, 0, 0.06);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+  .markdown-body :global(pre) {
+    background: rgba(0, 0, 0, 0.06);
+    padding: 0.75rem;
+    border-radius: 6px;
+    overflow-x: auto;
+  }
+  .markdown-body :global(pre code) { background: none; padding: 0; }
+  .markdown-body :global(hr) {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 0.75em 0;
   }
 </style>

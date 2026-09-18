@@ -163,16 +163,20 @@ PUBLIC_WORKSPACE_PATH=workspace/<project-name>
 
 The dashboard must fetch data through backend API endpoints (not directly from Fulcra API) to avoid CORS issues. The Fulcra API must be called only from the backend — never from the browser. Ownership is also enforced on the backend: the owner's id (`OWNER_USER_ID`) stays server-only, and each route reads the caller's id from the `fulcradynamics.com/userid` claim already carried in their Fulcra access token (the JWT in the session cookie) and compares them — no extra network call, so the identity provider is only hit once, at login. See [`references/svelte/harness-api-server.js`](references/svelte/harness-api-server.js) and [`references/svelte/harness-owner.js`](references/svelte/harness-owner.js) for the complete implementation, which uses endpoints documented at https://docs.fulcradynamics.com/rest-api/.
 
+The `issues` and `overview` routes read markdown files from the workspace. Fulcra's file API is two-step: list the folder (`GET /input/v1/file?path=/<workspace-path>`, absolute path with a leading slash) to resolve a file's input id, then download by id (`GET /input/v1/file/{input_id}/download`, which returns raw text). The reference `fetchWorkspaceFileText()` helper does both.
+
 - For Svelte: Create:
   - `src/lib/server/harness-owner.js` (copy [`references/svelte/harness-owner.js`](references/svelte/harness-owner.js) — the shared `isOwner()` check)
   - `src/routes/api/harness/runs/+server.js` (export the GET_runs function as GET — 403s non-owners)
-  - `src/routes/api/harness/issues/+server.js` (export the GET_issues function as GET — 403s non-owners)
+  - `src/routes/api/harness/issues/+server.js` (export the GET_issues function as GET — 403s non-owners; serves `outstanding-issues.md`)
+  - `src/routes/api/harness/overview/+server.js` (export the GET_overview function as GET — 403s non-owners; serves the nurse-authored `overview.md`)
   - `src/routes/api/harness/owner/+server.js` (export the GET_owner function as GET — returns `{ isOwner }` so the dashboard/nav can gate visibility without seeing the id)
-- For React: **Deferred — leave the React dashboard as-is until it is tested.** When aligning it, mirror the same backend-only contract: `/api/harness/runs?annotation_id=<id>&start_date=<d>&end_date=<d>` (proxying `data/v1alpha1/event/{annotation_id}`), `/api/harness/issues?workspace_path=<path>`, and an owner check that keeps `OWNER_USER_ID` server-side (do not expose the owner id to the browser), using the session token as `src/lib/api-client.js`/`lib/api-client.ts` does.
+- For React: **Deferred — leave the React dashboard as-is until it is tested.** When aligning it, mirror the same backend-only contract: `/api/harness/runs?annotation_id=<id>&start_date=<d>&end_date=<d>` (proxying `data/v1alpha1/event/{annotation_id}`), `/api/harness/issues?workspace_path=<path>`, `/api/harness/overview?workspace_path=<path>`, and an owner check that keeps `OWNER_USER_ID` server-side (do not expose the owner id to the browser), using the session token as `src/lib/api-client.js`/`lib/api-client.ts` does.
 
 **Integrate dashboard components:**
 
 - For Svelte:
+  - Install the markdown renderer used for the overview and issues panels: `npm install marked dompurify`. The dashboard runs `marked` to turn the nurse-authored markdown into HTML and `DOMPurify` to sanitize it before injecting with `{@html}`.
   - Copy [`references/svelte/HarnessDashboard.svelte`](references/svelte/HarnessDashboard.svelte) to `src/lib/components/HarnessDashboard.svelte`
   - Copy [`references/svelte/OwnerNav.svelte`](references/svelte/OwnerNav.svelte) to `src/lib/components/OwnerNav.svelte`
   - Create `src/routes/harness/+page.svelte` (see [`references/svelte/harness-page.svelte`](references/svelte/harness-page.svelte))

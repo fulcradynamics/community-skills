@@ -8,15 +8,46 @@ import { isOwner } from '$lib/server/harness-owner.js';
  * Server-side endpoints for harness dashboard
  *
  * Place at: src/routes/api/harness/
- * Create three files:
- * - runs/+server.js   (export GET_runs as GET)
- * - issues/+server.js (export GET_issues as GET)
- * - owner/+server.js  (export GET_owner as GET)
+ * Create four files:
+ * - runs/+server.js     (export GET_runs as GET)
+ * - issues/+server.js   (export GET_issues as GET)
+ * - overview/+server.js (export GET_overview as GET)
+ * - owner/+server.js    (export GET_owner as GET)
  *
  * The owner's user id is a server-only env var (OWNER_USER_ID, no PUBLIC_
- * prefix). runs/issues enforce ownership; owner reports it to the client so the
- * dashboard/nav can gate visibility without ever seeing the id.
+ * prefix). runs/issues/overview enforce ownership; owner reports it to the
+ * client so the dashboard/nav can gate visibility without ever seeing the id.
  */
+
+/**
+ * Read the text contents of a file stored under a workspace folder.
+ *
+ * Fulcra's file API is two-step: list the folder to resolve the file's input
+ * id, then download by that id. Folder paths are absolute, so a leading slash
+ * is added when missing. The download endpoint returns raw text (not JSON), so
+ * it is fetched directly rather than through the JSON-parsing client. Returns
+ * null when the file doesn't exist yet.
+ *
+ * See: GET /input/v1/file?path=<folder> and
+ *      GET /input/v1/file/{input_id}/download
+ */
+async function fetchWorkspaceFileText(endpoint, accessToken, workspacePath, fileName) {
+  const folder = workspacePath.startsWith('/') ? workspacePath : `/${workspacePath}`;
+  const apiClient = new FulcraAPI(endpoint, accessToken);
+  const listing = await apiClient.get(`input/v1/file?path=${encodeURIComponent(folder)}`);
+  const file = (listing?.files || []).find((f) => f.name === fileName);
+  if (!file) {
+    return null;
+  }
+
+  const response = await fetch(`${endpoint}input/v1/file/${file.id}/download`, {
+    headers: { Authorization: `Bearer ${accessToken}` }
+  });
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+  }
+  return await response.text();
+}
 
 // runs/+server.js
 export async function GET_runs({ cookies, url }) {
@@ -84,19 +115,58 @@ export async function GET_issues({ cookies, url }) {
   }
 
   try {
-    const apiClient = new FulcraAPI(env.PUBLIC_FULCRA_API_ENDPOINT, accessToken);
-    const content = await apiClient.get(`files/${workspacePath}/outstanding-issues.md`);
-    return new Response(content, {
+    const content = await fetchWorkspaceFileText(
+      env.PUBLIC_FULCRA_API_ENDPOINT,
+      accessToken,
+      workspacePath,
+      'outstanding-issues.md'
+    );
+    // Empty string when there are no outstanding issues recorded yet.
+    return new Response(content ?? '', {
       headers: { 'Content-Type': 'text/plain' }
     });
   } catch (err) {
-    // Return empty string if file doesn't exist (expected for 404)
-    if (err.message?.includes('404')) {
-      return new Response('', {
-        headers: { 'Content-Type': 'text/plain' }
-      });
-    }
     console.error('Error fetching outstanding issues:', err);
+    return new Response('', {
+      headers: { 'Content-Type': 'text/plain' }
+    });
+  }
+}
+
+// overview/+server.js
+// The nurse rewrites overview.md each loop: a concise summary of overall
+// progress plus the milestone list. The dashboard renders it at the top.
+export async function GET_overview({ cookies, url }) {
+  const accessToken = cookies.get('fulcra_access_token');
+
+  if (!accessToken) {
+    throw error(401, 'Not authenticated');
+  }
+
+  // Only the harness owner may read the overview file.
+  if (!isOwner(accessToken)) {
+    throw error(403, 'Forbidden');
+  }
+
+  const workspacePath = url.searchParams.get('workspace_path');
+
+  if (!workspacePath) {
+    throw error(400, 'workspace_path parameter required');
+  }
+
+  try {
+    const content = await fetchWorkspaceFileText(
+      env.PUBLIC_FULCRA_API_ENDPOINT,
+      accessToken,
+      workspacePath,
+      'overview.md'
+    );
+    // Empty string when the nurse hasn't written the overview yet.
+    return new Response(content ?? '', {
+      headers: { 'Content-Type': 'text/plain' }
+    });
+  } catch (err) {
+    console.error('Error fetching overview:', err);
     return new Response('', {
       headers: { 'Content-Type': 'text/plain' }
     });
