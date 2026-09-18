@@ -70,7 +70,7 @@ Get high-level approval from the user on this enhanced vision before proceeding.
 
 If the login command fails with a network error, inform the user that CLI authentication cannot be used in this environment and that MCP connector is an alternative option.
 
-**Initialize workspace**: Upload the approved plan to `workspace/<project-name>/plan.md` and initialize the workspace structure (see [`references/workspace.md`](references/workspace.md)).
+**Initialize workspace**: Upload the approved plan to `workspace/<project-name>/plan.md`, and create `workspace/<project-name>/progress.md` with the empty starting state, which step 10 updates after each run so work can resume. See [`references/workspace.md`](references/workspace.md) for both files' structure.
 
 ### 3. Interview for Spec
 
@@ -119,7 +119,7 @@ Inform the user that these templates work seamlessly with Vercel for deployment:
 
 - Connect the repository to Vercel
 - Follow Vercel's standard deployment flow
-- Set environment variables in the deploy platform (named per framework: React uses `NEXT_PUBLIC_*`, Svelte uses `PUBLIC_*`)
+- Set environment variables in the deploy platform. Both templates use the `PUBLIC_*` prefix: `PUBLIC_AUTH0_DOMAIN`, `PUBLIC_AUTH0_CLIENT_ID` and `PUBLIC_FULCRA_API_ENDPOINT`. Read the template's own `.env.example` for the current list rather than assuming a prefix from the framework.
 
 ### 9. Hand Off to Harness
 
