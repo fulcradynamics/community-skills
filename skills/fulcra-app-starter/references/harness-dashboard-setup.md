@@ -58,7 +58,21 @@ slash) to resolve a file's input id, then download by id
   - `src/routes/api/harness/issues/+server.js` (export the GET_issues function as GET — 403s non-owners; serves `outstanding-issues.md`)
   - `src/routes/api/harness/overview/+server.js` (export the GET_overview function as GET — 403s non-owners; serves the nurse-authored `overview.md`)
   - `src/routes/api/harness/owner/+server.js` (export the GET_owner function as GET — returns `{ isOwner }` so the dashboard/nav can gate visibility without seeing the id)
-- For React: **Deferred — leave the React dashboard as-is until it is tested.** When aligning it, mirror the same backend-only contract: `/api/harness/runs?annotation_id=<id>&start_date=<d>&end_date=<d>` (proxying `data/v1alpha1/event/{annotation_id}`), `/api/harness/issues?workspace_path=<path>`, `/api/harness/overview?workspace_path=<path>`, and an owner check that keeps `OWNER_USER_ID` server-side (do not expose the owner id to the browser), using the session token as `src/lib/api-client.js`/`lib/api-client.ts` does.
+- For React (Next.js app router): the same four routes live in their own
+  `route.ts` files. See [`react/harness-api-server.ts`](react/harness-api-server.ts)
+  for all four handlers (named `GET_*` there only so they fit one file — rename
+  each to `GET` in its own route file) and
+  [`react/harness-owner.ts`](react/harness-owner.ts) for the shared `isOwner()`
+  check. Create:
+  - `lib/server/harness-owner.ts` (copy [`react/harness-owner.ts`](react/harness-owner.ts))
+  - `app/api/harness/runs/route.ts` (export the GET_runs body as GET — 403s non-owners)
+  - `app/api/harness/issues/route.ts` (export the GET_issues body as GET — 403s non-owners; serves `outstanding-issues.md`)
+  - `app/api/harness/overview/route.ts` (export the GET_overview body as GET — 403s non-owners; serves the nurse-authored `overview.md`)
+  - `app/api/harness/owner/route.ts` (export the GET_owner body as GET — returns `{ isOwner }` so the dashboard/nav can gate visibility without seeing the id)
+
+  Copy the shared `fetchWorkspaceFileText()` helper into a small module (e.g.
+  `lib/server/harness-files.ts`) or inline it in each route. Client-readable env
+  vars use the `NEXT_PUBLIC_*` prefix; `OWNER_USER_ID` stays server-only.
 
 ## Integrate dashboard components
 
@@ -70,9 +84,11 @@ slash) to resolve a file's input id, then download by id
   - Add `<OwnerNav />` to `src/routes/+layout.svelte` before the main content
 
 - For React:
+  - Install the markdown renderer used for the overview and issues panels: `npm install marked dompurify`. The dashboard runs `marked` to turn the nurse-authored markdown into HTML and `DOMPurify` to sanitize it before injecting with `dangerouslySetInnerHTML`.
   - Copy [`react/HarnessDashboard.tsx`](react/HarnessDashboard.tsx) to your `components/` directory
-  - Create a new page route for the harness dashboard
-  - Create a similar navigation component that checks if the current user matches `OWNER_USER_ID`
+  - Copy [`react/OwnerNav.tsx`](react/OwnerNav.tsx) to your `components/` directory
+  - Create the harness dashboard page route (e.g. `app/harness/page.tsx`) rendering `<HarnessDashboard />`
+  - Add `<OwnerNav />` inside `<UserProvider>` in `app/layout.tsx`, before the main content
 
 The navigation bar will only appear when logged in as the owner and provides
 quick access to the home page and harness dashboard. The dashboard will refresh

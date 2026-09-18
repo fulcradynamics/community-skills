@@ -1,9 +1,24 @@
-import { useState, useEffect, useMemo, type ReactNode } from 'react';
+'use client';
 
-// Environment variables (set in .env)
-const OWNER_USER_ID = process.env.NEXT_PUBLIC_OWNER_USER_ID;
+import { useState, useEffect, useMemo, type ReactNode } from 'react';
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
+
+// Client-readable environment variables (set in .env). The owner's id is
+// intentionally NOT here — it is a server-only var; the backend tells us whether
+// we're the owner via /api/harness/owner so the id is never exposed to the
+// browser.
 const HARNESS_ANNOTATION_ID = process.env.NEXT_PUBLIC_HARNESS_ANNOTATION_ID;
 const WORKSPACE_PATH = process.env.NEXT_PUBLIC_WORKSPACE_PATH;
+
+// Render nurse-authored markdown (overview + outstanding issues) to safe HTML.
+// marked turns the markdown into HTML; DOMPurify strips anything unsafe. Only
+// ever called with non-empty content, so the empty-string initial render (incl.
+// SSR) never touches DOMPurify, which needs a DOM.
+function renderMarkdown(md: string): string {
+  if (!md) return '';
+  return DOMPurify.sanitize(marked.parse(md, { async: false }) as string);
+}
 
 interface Event {
   step: string;
@@ -18,12 +33,13 @@ interface Run {
 }
 
 export default function HarnessDashboard() {
-  const [currentUser, setCurrentUser] = useState<any>(null);
   const [runs, setRuns] = useState<Run[]>([]);
   const [currentRun, setCurrentRun] = useState<Run | null>(null);
+  const [overview, setOverview] = useState<string>('');
   const [outstandingIssues, setOutstandingIssues] = useState<string>('');
 
-  const isOwner = currentUser?.id === OWNER_USER_ID;
+  // Ownership is decided by the backend; starts false until confirmed.
+  const [isOwner, setIsOwner] = useState(false);
 
   // Flow chart lookups for the currently selected run
   const stepMap = useMemo(
@@ -42,27 +58,22 @@ export default function HarnessDashboard() {
   // Retries remaining => milestone left incomplete but the run still completes.
   const retryScheduled = reviewFailed && hasStep('RUN_COMPLETE');
 
-  async function fetchCurrentUser() {
-    // Resolve the current user through a backend route (never the Fulcra API
-    // directly) so the browser holds no token and there is no CORS. The route
-    // returns the authenticated user, including the `id` we match against
-    // OWNER_USER_ID below.
+  async function checkOwner(): Promise<boolean> {
     try {
-      const res = await fetch('/api/me');
-      if (!res.ok) return;
-      const user = await res.json();
-      setCurrentUser(user);
-    } catch (e) {
-      console.error('Failed to fetch current user:', e);
+      const res = await fetch('/api/harness/owner');
+      if (!res.ok) return false;
+      const data = await res.json();
+      return data.isOwner === true;
+    } catch {
+      return false;
     }
   }
 
   async function fetchRuns() {
     try {
       // Fetch through a backend API route (not the Fulcra API directly) to
-      // avoid CORS. This mirrors the Svelte harness-api-server.js contract:
-      // the route proxies GET data/v1alpha1/event/{annotation_id}.
-      // Query a rolling 30-day window ending today.
+      // avoid CORS. The route proxies GET data/v1alpha1/event/{annotation_id}
+      // over a rolling 30-day window ending today.
       const end = new Date();
       const start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
       const startDate = start.toISOString().slice(0, 10);
@@ -83,7 +94,7 @@ export default function HarnessDashboard() {
       records.forEach((record: any) => {
         let harnessData: any;
         try {
-          harnessData = record.note ? JSON.parse(record.note) : record.data || record;
+          harnessData = record.note ? JSON.parse(record.note) : {};
         } catch (e) {
           console.error('Failed to parse note as JSON:', record.note);
           return;
@@ -93,7 +104,7 @@ export default function HarnessDashboard() {
         const step = harnessData.step;
         const status = harnessData.status;
         const detail = harnessData.detail || '';
-        const timestamp = record.recorded_at || record.moment || record.timestamp;
+        const timestamp = record.recorded_at;
 
         if (!runId || !step) return; // Skip records without required fields
 
@@ -129,35 +140,55 @@ export default function HarnessDashboard() {
     }
   }
 
+  async function fetchOverview() {
+    try {
+      const res = await fetch(
+        `/api/harness/overview?workspace_path=${encodeURIComponent(WORKSPACE_PATH!)}`
+      );
+      setOverview(await res.text());
+    } catch (e) {
+      setOverview('');
+    }
+  }
+
   async function fetchOutstandingIssues() {
     try {
       const res = await fetch(
         `/api/harness/issues?workspace_path=${encodeURIComponent(WORKSPACE_PATH!)}`
       );
-      const issues = await res.text();
-      setOutstandingIssues(issues);
+      setOutstandingIssues(await res.text());
     } catch (e) {
       setOutstandingIssues('');
     }
   }
 
+  // Ask the backend whether we're the owner once on mount.
   useEffect(() => {
-    fetchCurrentUser();
+    let cancelled = false;
+    (async () => {
+      const ok = await checkOwner();
+      if (!cancelled) setIsOwner(ok);
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
+  // Once confirmed owner, fetch data and refresh every 5 seconds.
   useEffect(() => {
-    if (isOwner) {
+    if (!isOwner) return;
+
+    fetchOverview();
+    fetchRuns();
+    fetchOutstandingIssues();
+
+    const interval = setInterval(() => {
+      fetchOverview();
       fetchRuns();
       fetchOutstandingIssues();
+    }, 5000);
 
-      // Refresh every 5 seconds
-      const interval = setInterval(() => {
-        fetchRuns();
-        fetchOutstandingIssues();
-      }, 5000);
-
-      return () => clearInterval(interval);
-    }
+    return () => clearInterval(interval);
   }, [isOwner]);
 
   function getRunStatus(run: Run): string {
@@ -191,6 +222,17 @@ export default function HarnessDashboard() {
   return (
     <div className="harness-dashboard">
       <h2>Harness Dashboard</h2>
+
+      {/* Outstanding Issues */}
+      {outstandingIssues && (
+        <div className="outstanding-issues">
+          <h3>Outstanding Issues</h3>
+          <div
+            className="markdown-body issues-content"
+            dangerouslySetInnerHTML={{ __html: renderMarkdown(outstandingIssues) }}
+          />
+        </div>
+      )}
 
       {/* Run History - compact, scrollable */}
       <div className="run-history">
@@ -313,15 +355,17 @@ export default function HarnessDashboard() {
         </div>
       )}
 
-      {/* Outstanding Issues */}
-      {outstandingIssues && (
-        <div className="outstanding-issues">
-          <h3>Outstanding Issues</h3>
-          <div className="issues-content" dangerouslySetInnerHTML={{ __html: outstandingIssues }} />
+      {/* Product Overview - concise progress + milestone summary (nurse-authored) */}
+      {overview && (
+        <div className="overview">
+          <div
+            className="markdown-body"
+            dangerouslySetInnerHTML={{ __html: renderMarkdown(overview) }}
+          />
         </div>
       )}
 
-      <style jsx>{`
+      <style jsx global>{`
         .harness-dashboard {
           padding: 2rem;
           max-width: 1200px;
@@ -334,18 +378,18 @@ export default function HarnessDashboard() {
           color: var(--color-fulcra-black);
         }
 
-        .run-history {
+        .harness-dashboard .run-history {
           margin-bottom: 2rem;
         }
 
-        .run-list {
+        .harness-dashboard .run-list {
           display: flex;
           gap: 1rem;
           overflow-x: auto;
           padding-bottom: 0.5rem;
         }
 
-        .run-item {
+        .harness-dashboard .run-item {
           flex: 0 0 300px;
           background: var(--color-fulcra-white);
           border: 2px solid var(--color-fulcra-black-25);
@@ -356,35 +400,35 @@ export default function HarnessDashboard() {
           text-align: left;
         }
 
-        .run-item:hover {
+        .harness-dashboard .run-item:hover {
           border-color: var(--color-fulcra-teal);
         }
 
-        .run-item.active {
+        .harness-dashboard .run-item.active {
           border-color: var(--color-fulcra-teal);
           background: var(--color-fulcra-teal-10);
         }
 
-        .run-header {
+        .harness-dashboard .run-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 0.5rem;
         }
 
-        .run-id {
+        .harness-dashboard .run-id {
           font-family: monospace;
           font-size: 0.875rem;
           font-weight: 600;
         }
 
-        .run-time {
+        .harness-dashboard .run-time {
           color: var(--color-fulcra-gray);
           font-size: 0.75rem;
           margin-top: 0.25rem;
         }
 
-        .current-run-flow {
+        .harness-dashboard .current-run-flow {
           background: var(--color-fulcra-white);
           border: 1px solid var(--color-fulcra-black-25);
           border-radius: 8px;
@@ -392,7 +436,7 @@ export default function HarnessDashboard() {
           margin-bottom: 2rem;
         }
 
-        .current-run-header {
+        .harness-dashboard .current-run-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -400,11 +444,11 @@ export default function HarnessDashboard() {
           margin-bottom: 1.5rem;
         }
 
-        .current-run-header h3 {
+        .harness-dashboard .current-run-header h3 {
           margin: 0;
         }
 
-        .run-status {
+        .harness-dashboard .run-status {
           display: inline-block;
           padding: 0.35rem 0.85rem;
           border-radius: 4px;
@@ -414,24 +458,24 @@ export default function HarnessDashboard() {
           white-space: nowrap;
         }
 
-        .status-completed {
+        .harness-dashboard .status-completed {
           background: var(--color-fulcra-teal-10);
           color: var(--color-fulcra-green-100);
         }
-        .status-in-progress {
+        .harness-dashboard .status-in-progress {
           background: var(--color-fulcra-lavender-25);
           color: var(--color-fulcra-purple-100);
         }
-        .status-incomplete {
+        .harness-dashboard .status-incomplete {
           background: #ffcdd2;
           color: var(--color-fulcra-error);
         }
-        .status-escalated {
+        .harness-dashboard .status-escalated {
           background: #ffe0b2;
           color: #e65100;
         }
 
-        .flow-chart {
+        .harness-dashboard .flow-chart {
           /* Three equal process columns with fixed arrow gutters between them.
              Fixed track sizes mean every .flow-grid row is the same total width,
              so the columns line up vertically across rows. */
@@ -444,7 +488,7 @@ export default function HarnessDashboard() {
           overflow-x: auto;
         }
 
-        .flow-step-box {
+        .harness-dashboard .flow-step-box {
           width: 100%;
           max-width: 600px;
           padding: 1.25rem;
@@ -455,18 +499,18 @@ export default function HarnessDashboard() {
           transition: all 0.2s;
         }
 
-        .flow-step-box.small {
+        .harness-dashboard .flow-step-box.small {
           max-width: 400px;
           padding: 1rem;
         }
 
-        .flow-step-box.active {
+        .harness-dashboard .flow-step-box.active {
           opacity: 1;
           border-color: var(--color-fulcra-teal);
           background: var(--color-fulcra-teal-10);
         }
 
-        .flow-decision-box {
+        .harness-dashboard .flow-decision-box {
           width: 100%;
           max-width: 600px;
           padding: 1rem 1.5rem;
@@ -477,31 +521,31 @@ export default function HarnessDashboard() {
           margin: 0.5rem 0;
         }
 
-        .flow-decision-box.small {
+        .harness-dashboard .flow-decision-box.small {
           max-width: 340px;
           padding: 0.6rem 1rem;
         }
 
-        .flow-decision-box.nurse {
+        .harness-dashboard .flow-decision-box.nurse {
           background: #ffe0b2;
           border-color: #f57c00;
         }
 
-        .decision-text {
+        .harness-dashboard .decision-text {
           font-weight: 600;
           font-size: 1rem;
           color: var(--color-fulcra-purple-100);
         }
 
-        .flow-decision-box.small .decision-text {
+        .harness-dashboard .flow-decision-box.small .decision-text {
           font-size: 0.875rem;
         }
 
-        .flow-decision-box.nurse .decision-text {
+        .harness-dashboard .flow-decision-box.nurse .decision-text {
           color: #e65100;
         }
 
-        .flow-terminal {
+        .harness-dashboard .flow-terminal {
           padding: 0.6rem 1.25rem;
           border-radius: 999px;
           font-weight: 700;
@@ -512,30 +556,30 @@ export default function HarnessDashboard() {
           color: var(--color-fulcra-black);
         }
 
-        .flow-terminal.small {
+        .harness-dashboard .flow-terminal.small {
           font-size: 0.8rem;
           padding: 0.45rem 1rem;
         }
 
-        .flow-terminal.complete {
+        .harness-dashboard .flow-terminal.complete {
           background: var(--color-fulcra-teal-10);
           border-color: var(--color-fulcra-teal);
           color: var(--color-fulcra-green-100);
         }
 
-        .flow-terminal.retry {
+        .harness-dashboard .flow-terminal.retry {
           background: var(--color-fulcra-lavender-25);
           border-color: var(--color-fulcra-purple);
           color: var(--color-fulcra-purple-100);
         }
 
-        .flow-terminal.incomplete {
+        .harness-dashboard .flow-terminal.incomplete {
           background: #ffcdd2;
           border-color: var(--color-fulcra-error);
           color: var(--color-fulcra-error);
         }
 
-        .flow-grid {
+        .harness-dashboard .flow-grid {
           display: grid;
           grid-template-columns:
             var(--flow-col) var(--arrow-w) var(--flow-col) var(--arrow-w) var(--flow-col);
@@ -548,8 +592,8 @@ export default function HarnessDashboard() {
         }
 
         /* Direct children of a grid row fill their column exactly */
-        .flow-grid > .flow-step-box,
-        .flow-grid > .flow-decision-box {
+        .harness-dashboard .flow-grid > .flow-step-box,
+        .harness-dashboard .flow-grid > .flow-decision-box {
           width: var(--flow-col);
           max-width: none;
           box-sizing: border-box;
@@ -557,27 +601,27 @@ export default function HarnessDashboard() {
         }
 
         /* Nurse pre-check lives in its own column to the left of the main loop */
-        .flow-body {
+        .harness-dashboard .flow-body {
           display: flex;
           align-items: flex-start;
           justify-content: center;
           gap: 0.5rem;
         }
 
-        .main-flow {
+        .harness-dashboard .main-flow {
           display: flex;
           flex-direction: column;
           align-items: center;
         }
 
-        .nurse-band {
+        .harness-dashboard .nurse-band {
           background: #fff8f0;
           border: 1px dashed #f57c00;
           border-radius: 10px;
           padding: 0.75rem;
         }
 
-        .nurse-col {
+        .harness-dashboard .nurse-col {
           display: flex;
           flex-direction: column;
           align-items: stretch;
@@ -586,7 +630,7 @@ export default function HarnessDashboard() {
           box-sizing: border-box;
         }
 
-        .nurse-label {
+        .harness-dashboard .nurse-label {
           font-size: 0.8rem;
           font-weight: 700;
           color: #e65100;
@@ -594,7 +638,7 @@ export default function HarnessDashboard() {
           margin-bottom: 0.15rem;
         }
 
-        .nurse-col .flow-decision-box {
+        .harness-dashboard .nurse-col .flow-decision-box {
           width: 100%;
           max-width: none;
           margin: 0;
@@ -602,49 +646,49 @@ export default function HarnessDashboard() {
           box-sizing: border-box;
         }
 
-        .nurse-col .flow-step-box {
+        .harness-dashboard .nurse-col .flow-step-box {
           width: 100%;
           max-width: none;
           box-sizing: border-box;
         }
 
-        .flow-h-arrow.vert {
+        .harness-dashboard .flow-h-arrow.vert {
           text-align: center;
         }
 
-        .flow-h-arrow.connector {
+        .harness-dashboard .flow-h-arrow.connector {
           align-self: flex-start;
           margin-top: 2.5rem;
           text-align: center;
           line-height: 1.2;
         }
 
-        .flow-h-arrow {
+        .harness-dashboard .flow-h-arrow {
           font-size: 1.25rem;
           color: var(--color-fulcra-gray);
           line-height: 1;
         }
 
-        .flow-h-arrow.labeled {
+        .harness-dashboard .flow-h-arrow.labeled {
           font-size: 0.8rem;
           font-weight: 600;
         }
 
-        .flow-decision-box.inline {
+        .harness-dashboard .flow-decision-box.inline {
           padding: 0.6rem 0.9rem;
         }
 
-        .flow-decision-box.inline .decision-text {
+        .harness-dashboard .flow-decision-box.inline .decision-text {
           font-size: 0.85rem;
         }
 
-        .branch-tag {
+        .harness-dashboard .branch-tag {
           font-size: 0.75rem;
           font-weight: 600;
           color: var(--color-fulcra-gray);
         }
 
-        .branch-item {
+        .harness-dashboard .branch-item {
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -653,17 +697,17 @@ export default function HarnessDashboard() {
           transition: opacity 0.2s;
         }
 
-        .branch-item.active {
+        .harness-dashboard .branch-item.active {
           opacity: 1;
         }
 
         /* Review outcomes row: Yes sits in column 1, No spans the other two */
-        .outcomes {
+        .harness-dashboard .outcomes {
           align-items: start;
           row-gap: 0;
         }
 
-        .outcome-no {
+        .harness-dashboard .outcome-no {
           grid-column: 3 / span 3;
           display: flex;
           flex-direction: column;
@@ -674,7 +718,7 @@ export default function HarnessDashboard() {
           transition: opacity 0.2s;
         }
 
-        .outcome-yes {
+        .harness-dashboard .outcome-yes {
           grid-column: 1;
           display: flex;
           flex-direction: column;
@@ -685,29 +729,29 @@ export default function HarnessDashboard() {
           transition: opacity 0.2s;
         }
 
-        .outcome-yes .flow-step-box {
+        .harness-dashboard .outcome-yes .flow-step-box {
           width: 100%;
           max-width: none;
           box-sizing: border-box;
         }
 
-        .outcome-no.active,
-        .outcome-yes.active {
+        .harness-dashboard .outcome-no.active,
+        .harness-dashboard .outcome-yes.active {
           opacity: 1;
         }
 
-        .flow-split {
+        .harness-dashboard .flow-split {
           display: flex;
           gap: 1rem;
           justify-content: center;
         }
 
-        .flow-split.tight {
+        .harness-dashboard .flow-split.tight {
           gap: 1rem;
           margin: 0.25rem 0 0;
         }
 
-        .flow-path {
+        .harness-dashboard .flow-path {
           flex: 1;
           display: flex;
           flex-direction: column;
@@ -717,37 +761,37 @@ export default function HarnessDashboard() {
           transition: opacity 0.2s;
         }
 
-        .flow-path.active {
+        .harness-dashboard .flow-path.active {
           opacity: 1;
         }
 
-        .path-label {
+        .harness-dashboard .path-label {
           font-weight: 600;
           color: var(--color-fulcra-gray);
           font-size: 0.875rem;
         }
 
-        .flow-arrow {
+        .harness-dashboard .flow-arrow {
           font-size: 1.5rem;
           color: var(--color-fulcra-gray);
           line-height: 1;
           padding: 0.25rem 0;
         }
 
-        .step-header {
+        .harness-dashboard .step-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 0.75rem;
         }
 
-        .step-name {
+        .harness-dashboard .step-name {
           font-weight: 600;
           font-size: 1rem;
           color: var(--color-fulcra-black);
         }
 
-        .status-badge {
+        .harness-dashboard .status-badge {
           display: inline-block;
           padding: 0.25rem 0.5rem;
           border-radius: 3px;
@@ -755,32 +799,101 @@ export default function HarnessDashboard() {
           font-weight: 500;
         }
 
-        .status-started {
+        .harness-dashboard .status-started {
           background: var(--color-fulcra-lavender-50);
           color: var(--color-fulcra-purple-100);
         }
-        .status-failed {
+        .harness-dashboard .status-failed {
           background: #ffcdd2;
           color: var(--color-fulcra-error);
         }
 
-        .step-detail {
+        .harness-dashboard .step-detail {
           color: var(--color-fulcra-black);
           font-size: 0.875rem;
           margin-bottom: 0.5rem;
           line-height: 1.5;
         }
 
-        .outstanding-issues {
+        .harness-dashboard .overview {
+          background: var(--color-fulcra-teal-25, #e6f7f5);
+          border: 1px solid var(--color-fulcra-teal, #14b8a6);
+          border-radius: 8px;
+          padding: 1.5rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .harness-dashboard .outstanding-issues {
           background: var(--color-fulcra-lavender-25);
           border: 1px solid var(--color-fulcra-purple);
           border-radius: 8px;
           padding: 1.5rem;
+          margin-bottom: 1.5rem;
         }
 
-        .issues-content {
-          font-size: 0.875rem;
+        .harness-dashboard .issues-content {
           color: var(--color-fulcra-purple-100);
+        }
+
+        /* Rendered markdown. Styles must be :global — styled-jsx can't scope the
+           HTML injected with dangerouslySetInnerHTML. */
+        .harness-dashboard .markdown-body {
+          font-size: 0.875rem;
+          line-height: 1.5;
+        }
+        .harness-dashboard .markdown-body h1,
+        .harness-dashboard .markdown-body h2,
+        .harness-dashboard .markdown-body h3,
+        .harness-dashboard .markdown-body h4 {
+          margin: 0.75em 0 0.35em;
+          line-height: 1.25;
+        }
+        .harness-dashboard .markdown-body h1 {
+          font-size: 1.35rem;
+        }
+        .harness-dashboard .markdown-body h2 {
+          font-size: 1.15rem;
+        }
+        .harness-dashboard .markdown-body h3 {
+          font-size: 1rem;
+        }
+        .harness-dashboard .markdown-body :first-child {
+          margin-top: 0;
+        }
+        .harness-dashboard .markdown-body p {
+          margin: 0.4em 0;
+        }
+        .harness-dashboard .markdown-body ul,
+        .harness-dashboard .markdown-body ol {
+          margin: 0.4em 0;
+          padding-left: 1.4rem;
+        }
+        .harness-dashboard .markdown-body li {
+          margin: 0.15em 0;
+        }
+        .harness-dashboard .markdown-body a {
+          color: var(--color-fulcra-teal, #14b8a6);
+        }
+        .harness-dashboard .markdown-body code {
+          background: rgba(0, 0, 0, 0.06);
+          padding: 0.1em 0.35em;
+          border-radius: 4px;
+          font-size: 0.85em;
+        }
+        .harness-dashboard .markdown-body pre {
+          background: rgba(0, 0, 0, 0.06);
+          padding: 0.75rem;
+          border-radius: 6px;
+          overflow-x: auto;
+        }
+        .harness-dashboard .markdown-body pre code {
+          background: none;
+          padding: 0;
+        }
+        .harness-dashboard .markdown-body hr {
+          border: none;
+          border-top: 1px solid rgba(0, 0, 0, 0.1);
+          margin: 0.75em 0;
         }
       `}</style>
     </div>
