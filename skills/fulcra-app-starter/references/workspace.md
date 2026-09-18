@@ -17,6 +17,7 @@ All files live in Fulcra File Store under `workspace/<project-name>/`.
 workspace/<project-name>/
 ├── plan.md              # Approved enhancement plan (from step 1)
 ├── spec.md              # Requirements and milestones (from interview)
+├── decisions.md         # Specific user decisions, preserved verbatim
 ├── overview.md          # Concise progress + milestone summary (nurse, each loop)
 ├── progress.md          # Current state snapshot
 ├── outstanding-issues.md # Issues requiring user attention
@@ -41,6 +42,41 @@ Created during the interview step. Contains:
 - Key features and requirements
 
 Updated as requirements evolve.
+
+### decisions.md
+
+An append-only log of **specific decisions the user has made**, preserved in the
+user's own terms rather than paraphrased or summarized away. This is the durable
+record of user intent that the spec and milestones must honor. Decisions come
+from three sources:
+
+- The **interview** (step 3) — concrete choices the user makes while shaping the
+  spec.
+- **Escalations** — how the user resolves an issue the Nurse escalated.
+- **New features or requirements** the user introduces later.
+
+Preserve the actual decision (the specific choice, value, or constraint), not a
+restatement. Never overwrite or reinterpret past entries — append new ones.
+Recording a decision here does not license changing `spec.md` on its own: the
+spec changes only through the user (a new requirement or an escalation
+response), and this file captures exactly what they decided.
+
+Format:
+```markdown
+# Decisions
+
+## [ISO-8601 timestamp] - Interview
+**Decision:** <the specific choice, in the user's terms>
+**Context:** <the question or situation that prompted it>
+
+## [ISO-8601 timestamp] - Escalation - Run <run-id>
+**Decision:** <what the user chose>
+**Context:** <the issue that was escalated>
+
+## [ISO-8601 timestamp] - New requirement
+**Decision:** <the new feature/requirement, specifically>
+**Context:** <where it came from>
+```
 
 ### overview.md
 
@@ -119,9 +155,14 @@ uvx fulcra-api file list "workspace/<project-name>/"
 - Initialize progress.md with empty state
 - Upload to `workspace/<project-name>/progress.md`
 
-### During Interview for Spec (Step 2)
+### During Interview for Spec (Step 3)
+- Keep a running local note of each specific decision the user makes (preserve their exact choice) — don't upload after every question, as that slows the interview
 - Create spec.md locally based on clarifying questions and plan
-- Upload to `workspace/<project-name>/spec.md`
+- At the end, upload both together: spec.md to `workspace/<project-name>/spec.md` and the collected decisions to `workspace/<project-name>/decisions.md`
+
+### When the user introduces a new feature or requirement
+- Append the specific new feature/requirement to decisions.md and upload it
+- Reflect it in spec.md (this user-introduced change is a valid reason to update the spec)
 
 ### During Harness Runs
 
@@ -145,6 +186,7 @@ uvx fulcra-api file list "workspace/<project-name>/"
 - Downloads progress.md to understand current state
 - May review history when diagnosing stuck runs
 - Rewrites overview.md each loop with the current status, milestone checklist, and recent activity
+- On escalation, records the user's resolution in decisions.md once they respond (preserve their specific decision), and uploads it
 
 ## Resume Pattern
 
@@ -152,9 +194,10 @@ When resuming work after interruption:
 
 1. Download and read `progress.md` → See active milestone, harness state, and current status
 2. Download and read `spec.md` → Find milestone requirements
-3. (Optional) Download `plan.md` → Understand original enhancement vision
-4. (Optional) Download recent history files → Understand patterns from past work
-5. Determine where to continue in the harness flow
+3. Download and read `decisions.md` → Honor the specific decisions the user has made
+4. (Optional) Download `plan.md` → Understand original enhancement vision
+5. (Optional) Download recent history files → Understand patterns from past work
+6. Determine where to continue in the harness flow
 
 The Coordinator uses this same pattern to find the next incomplete milestone.
 
