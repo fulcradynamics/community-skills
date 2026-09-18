@@ -76,7 +76,9 @@ If the login command fails with a network error, inform the user that CLI authen
 
 Ask only necessary clarifying questions one at a time to gather details needed for the spec and milestones. Keep questions concise and focused on what's needed to define milestones that fit the harness flow (see [`references/harness-control-flow.md`](references/harness-control-flow.md)).
 
-Once you have enough detail, create the spec with milestone breakdown and upload it to `workspace/<project-name>/spec.md`.
+As you go, note each specific decision the user makes — their actual choice, not a paraphrase.
+
+Once you have enough detail, create the spec with milestone breakdown, then upload to the workspace: the spec to `spec.md` and the collected decisions to `decisions.md` (at the end, not after each question). See [`references/workspace.md`](references/workspace.md).
 
 ### 4. Choose Template
 
