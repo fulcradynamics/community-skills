@@ -176,10 +176,11 @@
   <div class="harness-dashboard">
     <h2>Harness Dashboard</h2>
 
-    <!-- Overview - concise progress + milestone summary (nurse-authored) -->
-    {#if overview}
-      <div class="overview">
-        <div class="markdown-body">{@html renderMarkdown(overview)}</div>
+    <!-- Outstanding Issues -->
+    {#if outstandingIssues}
+      <div class="outstanding-issues">
+        <h3>Outstanding Issues</h3>
+        <div class="markdown-body issues-content">{@html renderMarkdown(outstandingIssues)}</div>
       </div>
     {/if}
 
@@ -308,11 +309,10 @@
       </div>
     {/if}
 
-    <!-- Outstanding Issues -->
-    {#if outstandingIssues}
-      <div class="outstanding-issues">
-        <h3>Outstanding Issues</h3>
-        <div class="markdown-body issues-content">{@html renderMarkdown(outstandingIssues)}</div>
+    <!-- Product Overview - concise progress + milestone summary (nurse-authored) -->
+    {#if overview}
+      <div class="overview">
+        <div class="markdown-body">{@html renderMarkdown(overview)}</div>
       </div>
     {/if}
   </div>
