@@ -37,8 +37,12 @@
 
   async function fetchRuns() {
     try {
-      // Fetch records from backend API
-      const res = await fetch(`/api/harness/runs?annotation_id=${encodeURIComponent(HARNESS_ANNOTATION_ID)}&start_date=2026-09-01&end_date=2026-09-30`);
+      // Fetch records from backend API over a rolling 30-day window ending today.
+      const end = new Date();
+      const start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
+      const startDate = start.toISOString().slice(0, 10);
+      const endDate = end.toISOString().slice(0, 10);
+      const res = await fetch(`/api/harness/runs?annotation_id=${encodeURIComponent(HARNESS_ANNOTATION_ID)}&start_date=${startDate}&end_date=${endDate}`);
       const data = await res.json();
 
       // Extract records from the response

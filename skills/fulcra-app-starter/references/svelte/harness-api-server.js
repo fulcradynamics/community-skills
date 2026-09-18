@@ -20,8 +20,12 @@ export async function GET_runs({ cookies, url }) {
   }
 
   const annotationId = url.searchParams.get('annotation_id');
-  const startDate = url.searchParams.get('start_date') || '2026-09-01';
-  const endDate = url.searchParams.get('end_date') || '2026-09-30';
+  // Default to a rolling 30-day window ending today when the client omits dates.
+  const now = new Date();
+  const startDate =
+    url.searchParams.get('start_date') ||
+    new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const endDate = url.searchParams.get('end_date') || now.toISOString().slice(0, 10);
 
   if (!annotationId) {
     throw error(400, 'annotation_id parameter required');

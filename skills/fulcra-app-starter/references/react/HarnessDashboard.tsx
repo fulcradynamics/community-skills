@@ -4,7 +4,6 @@ import { useState, useEffect, useMemo, type ReactNode } from 'react';
 const OWNER_USER_ID = process.env.NEXT_PUBLIC_OWNER_USER_ID;
 const HARNESS_ANNOTATION_ID = process.env.NEXT_PUBLIC_HARNESS_ANNOTATION_ID;
 const WORKSPACE_PATH = process.env.NEXT_PUBLIC_WORKSPACE_PATH;
-const FULCRA_API_URL = process.env.NEXT_PUBLIC_FULCRA_API_URL;
 
 interface Event {
   step: string;
@@ -44,9 +43,18 @@ export default function HarnessDashboard() {
   const retryScheduled = reviewFailed && hasStep('RUN_COMPLETE');
 
   async function fetchCurrentUser() {
-    const res = await fetch(`${FULCRA_API_URL}/me`);
-    const user = await res.json();
-    setCurrentUser(user);
+    // Resolve the current user through a backend route (never the Fulcra API
+    // directly) so the browser holds no token and there is no CORS. The route
+    // returns the authenticated user, including the `id` we match against
+    // OWNER_USER_ID below.
+    try {
+      const res = await fetch('/api/me');
+      if (!res.ok) return;
+      const user = await res.json();
+      setCurrentUser(user);
+    } catch (e) {
+      console.error('Failed to fetch current user:', e);
+    }
   }
 
   async function fetchRuns() {
@@ -54,10 +62,15 @@ export default function HarnessDashboard() {
       // Fetch through a backend API route (not the Fulcra API directly) to
       // avoid CORS. This mirrors the Svelte harness-api-server.js contract:
       // the route proxies GET data/v1alpha1/event/{annotation_id}.
+      // Query a rolling 30-day window ending today.
+      const end = new Date();
+      const start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
+      const startDate = start.toISOString().slice(0, 10);
+      const endDate = end.toISOString().slice(0, 10);
       const res = await fetch(
         `/api/harness/runs?annotation_id=${encodeURIComponent(
           HARNESS_ANNOTATION_ID!
-        )}&start_date=2026-09-01&end_date=2026-09-30`
+        )}&start_date=${startDate}&end_date=${endDate}`
       );
       const data = await res.json();
 

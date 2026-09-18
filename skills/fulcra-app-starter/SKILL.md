@@ -162,7 +162,7 @@ The dashboard must fetch data through backend API endpoints (not directly from F
 - For Svelte: Create:
   - `src/routes/api/harness/runs/+server.js` (export the GET_runs function as GET)
   - `src/routes/api/harness/issues/+server.js` (export the GET_issues function as GET)
-- For React: Create equivalent API routes (e.g. `app/api/harness/runs/route.ts` and `app/api/harness/issues/route.ts`) that implement the same contract as [`references/svelte/harness-api-server.js`](references/svelte/harness-api-server.js). The dashboard calls `/api/harness/runs?annotation_id=<id>&start_date=<d>&end_date=<d>` (proxying `data/v1alpha1/event/{annotation_id}`) and `/api/harness/issues?workspace_path=<path>`. Route through the backend to avoid CORS; use the token from the Fulcra session as `src/lib/api-client.js` does.
+- For React: Create equivalent API routes (e.g. `app/api/harness/runs/route.ts`, `app/api/harness/issues/route.ts`, and `app/api/me/route.ts`) that implement the same contract as [`references/svelte/harness-api-server.js`](references/svelte/harness-api-server.js). The dashboard calls `/api/harness/runs?annotation_id=<id>&start_date=<d>&end_date=<d>` (proxying `data/v1alpha1/event/{annotation_id}`), `/api/harness/issues?workspace_path=<path>`, and `/api/me` (returns the authenticated user, including the `id` matched against `OWNER_USER_ID`). The Fulcra API must be called only from the backend — never from the browser — so route every one of these through the server, using the token from the Fulcra session as `src/lib/api-client.js` does. (Svelte reads the current user from the auth store, so it only needs the two `/api/harness/*` routes.)
 
 **Integrate dashboard components:**
 
