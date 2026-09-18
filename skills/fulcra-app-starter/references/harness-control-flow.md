@@ -5,10 +5,15 @@ milestone; the Nurse re-triggers runs (cron, manual, etc.) to advance the projec
 
 Roles:
 
-- 🩺 **Nurse** — harness control: health-check, fix attempts, escalation.
-- ✍️ **Generator** — writes code for a milestone.
-- ⚖️ **Evaluator** — reviews the generated code and returns a verdict.
-- 🎛️ **Coordinator** — flow control and milestone state.
+- 🩺 **Nurse** — monitors and fixes the harness itself: health-check, fix attempts, escalation. The only role that modifies the harness.
+- 🎛️ **Coordinator** — operates each harness run (flow control and milestone state), but **cannot modify the harness itself**.
+- ✍️ **Generator** — builds the product (typically code) for the current milestone, including a reasonable — not excessive — number of tests.
+- ⚖️ **Evaluator** — independently evaluates what the Generator produced for the current milestone: its correctness, its compatibility with previously completed milestones, and its fit with the overall plan and spec. Does **more than run tests** — reads the code and reasons about it against the spec.
+
+## Rules
+
+- **No role may modify the spec to make a milestone pass.** The spec is fixed for the harness. If a milestone cannot be satisfied as specified, the Nurse escalates to the user; only the user's response can change the spec (escalation is the sole path to a spec change).
+- Only the Nurse modifies the harness. The Coordinator, Generator, and Evaluator operate within it.
 
 ```mermaid
 flowchart TD
