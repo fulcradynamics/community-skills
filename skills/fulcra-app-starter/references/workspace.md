@@ -31,6 +31,10 @@ Created in step 1 after user approval. Contains:
 - Core app idea
 - Fulcra-enabled enhancements
 - High-level vision
+- Harness section: notes the product is built and iterated through harness runs,
+  links to [`harness-control-flow.md`](harness-control-flow.md), and records the
+  current harness configuration (retry counts, per-run timeout, and any other
+  settings), including any overrides the user or agent introduces
 
 This is the approved plan that guides spec creation and implementation.
 

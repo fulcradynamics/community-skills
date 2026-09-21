@@ -8,12 +8,16 @@ Roles:
 - 🩺 **Nurse** — monitors and fixes the harness itself: health-check, fix attempts, escalation. The only role that modifies the harness.
 - 🎛️ **Coordinator** — operates each harness run (flow control and milestone state), but **cannot modify the harness itself**.
 - ✍️ **Generator** — builds the product (typically code) for the current milestone, including a reasonable — not excessive — number of tests.
-- ⚖️ **Evaluator** — independently evaluates what the Generator produced for the current milestone: its correctness, its compatibility with previously completed milestones, and its fit with the overall plan and spec. Does **more than run tests** — reads the code and reasons about it against the spec.
+- ⚖️ **Evaluator** — independently evaluates what the Generator produced for the current milestone: its correctness, its compatibility with previously completed milestones, and its fit with the overall plan and spec. Does **more than run tests** — reads the code and reasons about it against the spec, and tests the product as well as is viable.
 
 ## Rules
 
 - **No role may modify the spec to make a milestone pass.** The spec is fixed for the harness. If a milestone cannot be satisfied as specified, the Nurse escalates to the user; only the user's response can change the spec (escalation is the sole path to a spec change).
 - Only the Nurse modifies the harness. The Coordinator, Generator, and Evaluator operate within it.
+- **Two retries per milestone and two harness-fix attempts (three tries each).** After a failed review, the Coordinator retries the milestone on subsequent runs up to two more times — three attempts total — before ending the run as incomplete. The Nurse attempts to fix a broken harness up to two more times (three tries total) before escalating to the user.
+- **15-minute timeout per milestone run.** A run that exceeds 15 minutes is stopped and counts as a failed attempt (consuming a retry).
+
+These retry and timeout values are defaults; the user or agent may change them. plan.md must include a **Harness** section stating that the product is built and iterated through harness runs, linking to this file ([`harness-control-flow.md`](harness-control-flow.md)), and recording the current harness configuration — the retry counts, the per-run timeout, and any other harness settings — including any overrides the user or agent introduces.
 
 ```mermaid
 flowchart TD
