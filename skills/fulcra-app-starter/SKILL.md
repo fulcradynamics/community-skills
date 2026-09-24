@@ -117,7 +117,7 @@ Follow the template's `README.md` ("Getting Started"): `npm install`, `cp .env.e
 
 ### 8. Deploy Baseline
 
-Before deploying, ensure the Vercel CLI is authenticated. Run `vercel whoami`. If you are not logged in, ask the user to create a Vercel account (or log in) and authenticate the CLI by running `vercel login`, since anonymous deployments expire after an hour and disrupt the harness iteration cycle.
+Before deploying, ensure the Vercel CLI is authenticated. Run `vercel whoami`. If you are not logged in, ask the user to create a Vercel account (or log in) and authenticate the CLI by running `vercel login`. You must not rely on anonymous deployments, as they expire after an hour and disrupt the harness iteration cycle.
 
 Once authenticated, deploy the customized, working template to Vercel so the user has a live baseline before feature development. Set environment variables from `.env` using `--env` flags (React uses `NEXT_PUBLIC_*` prefix, Svelte uses `PUBLIC_*`):
 
