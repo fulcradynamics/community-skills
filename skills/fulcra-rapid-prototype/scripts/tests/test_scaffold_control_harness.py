@@ -275,6 +275,61 @@ def test_is_mergeable_requires_test_runner_pass_when_declared(tmp_path: Path) ->
     assert run_milestone.is_mergeable({"overall": "PASS"}, test_runner_declared=False)
 
 
+def test_dashboard_refresh_hook_runs_only_for_active_dashboard(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    target = tmp_path / "control"
+    _run_scaffold("--project-name", "Test Project", "--output-dir", str(target))
+    run_milestone = _load_run_milestone_module(target)
+    calls: list[tuple[str | None, dict[str, str], str]] = []
+    monkeypatch.setenv("HARNESS_DASHBOARD_REFRESH_CMD", "refresh-dashboard")
+    monkeypatch.setattr(run_milestone, "adapter", lambda command, env, label: calls.append((command, env, label)))
+
+    (target / "dashboard-decision.md").write_text("status: resolved\nchoice: create_and_publish\n")
+    run_milestone.refresh_dashboard_if_active("demo", "M1", "PASS")
+    assert calls == [("refresh-dashboard", {
+        "HARNESS_TEAM": "demo",
+        "HARNESS_MILESTONE": "M1",
+        "HARNESS_OUTCOME": "PASS",
+        "HARNESS_DASHBOARD_DECISION": str(target / "dashboard-decision.md"),
+    }, "dashboard-refresh")]
+
+    (target / "dashboard-decision.md").write_text("status: resolved\nchoice: defer\n")
+    run_milestone.refresh_dashboard_if_active("demo", "M1", "FAIL")
+    assert len(calls) == 1
+
+
+def test_terminal_evaluator_failure_persists_escalation_then_refreshes_dashboard(tmp_path: Path) -> None:
+    """The real coordinator path must cover evaluator/provider failures too."""
+    target = tmp_path / "control"
+    _run_scaffold("--project-name", "Test Project", "--output-dir", str(target))
+    deliverable = tmp_path / "deliverable"
+    deliverable.mkdir()
+    git_env = {**os.environ, "GIT_AUTHOR_NAME": "Test", "GIT_AUTHOR_EMAIL": "test@example.invalid", "GIT_COMMITTER_NAME": "Test", "GIT_COMMITTER_EMAIL": "test@example.invalid"}
+    subprocess.run(["git", "init", "-b", "main", str(deliverable)], check=True, env=git_env, capture_output=True, text=True)
+    (deliverable / "README.md").write_text("base\n")
+    subprocess.run(["git", "-C", str(deliverable), "add", "."], check=True, env=git_env, capture_output=True, text=True)
+    subprocess.run(["git", "-C", str(deliverable), "commit", "-m", "base"], check=True, env=git_env, capture_output=True, text=True)
+    (target / "coordinator" / "milestones.md").write_text("# Milestones\n\n## M1: Runtime failure\n\nScope.\n")
+    (target / "dashboard-decision.md").write_text("status: resolved\nchoice: create_and_publish\n")
+    generator = tmp_path / "generator.sh"
+    generator.write_text("#!/usr/bin/env bash\nset -euo pipefail\ncd \"$HARNESS_DELIVERABLE\"\nprintf generated > generated.txt\ngit add generated.txt\ngit commit -m $'candidate\\n\\nHarness-Candidate: '\"$HARNESS_CANDIDATE_ID\"\n")
+    generator.chmod(0o755)
+    evaluator = tmp_path / "evaluator.sh"
+    evaluator.write_text("#!/usr/bin/env bash\necho evaluator unavailable >&2\nexit 3\n")
+    evaluator.chmod(0o755)
+    uploads, fake_bin = tmp_path / "uploads", tmp_path / "fake-bin"
+    fake_bin.mkdir()
+    uploader = fake_bin / "fulcra"
+    uploader.write_text("#!/usr/bin/env python3\nimport os, shutil, sys\ndestination = os.path.join(os.environ['HARNESS_TEST_UPLOADS'], sys.argv[4])\nos.makedirs(os.path.dirname(destination), exist_ok=True)\nshutil.copyfile(sys.argv[3], destination)\n")
+    uploader.chmod(0o755)
+    refresh = tmp_path / "refresh.sh"
+    refresh.write_text("#!/usr/bin/env bash\nprintf '%s' \"$HARNESS_OUTCOME\" > \"$HARNESS_REFRESH_RESULT\"\n")
+    refresh.chmod(0o755)
+    result = subprocess.run([sys.executable, str(target / "coordinator" / "run_milestone.py"), "--milestone", "M1", "--deliverable", str(deliverable), "--git-mode", "local", "--integration-branch", "main", "--team", "demo"], env={**git_env, "PATH": f"{fake_bin}{os.pathsep}{os.environ['PATH']}", "HARNESS_TEST_UPLOADS": str(uploads), "HARNESS_GENERATOR_CMD": str(generator), "HARNESS_EVALUATOR_CMD": str(evaluator), "HARNESS_DASHBOARD_REFRESH_CMD": str(refresh), "HARNESS_REFRESH_RESULT": str(tmp_path / "refresh-result")}, capture_output=True, text=True)
+    assert result.returncode == 1
+    assert "Outcome:** ESCALATED" in (uploads / "team" / "demo" / "status-summary.md").read_text()
+    assert (tmp_path / "refresh-result").read_text() == "ESCALATED"
+
+
 def test_bootstrap_resolves_fulcra_or_fulcra_api_or_uvx(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Regression test for a real reported bug: bootstrap.py used to
     unconditionally shell out to `fulcra`, even though bootstrap.sh's own
@@ -399,6 +454,9 @@ def test_local_mode_uses_searchable_candidate_commit_and_integrates_multiple_com
     subprocess.run(["git", "-C", str(deliverable), "add", "."], check=True, env=git_env, capture_output=True, text=True)
     subprocess.run(["git", "-C", str(deliverable), "commit", "-m", "base"], check=True, env=git_env, capture_output=True, text=True)
     (target / "coordinator" / "milestones.md").write_text("# Milestones\n\n## M1: Local candidate\n\nScope.\n")
+    # No refresh adapter is configured below. An active dashboard must record
+    # staleness without changing this otherwise successful run to exit 1.
+    (target / "dashboard-decision.md").write_text("status: resolved\nchoice: create_and_publish\n")
     generator = tmp_path / "generator.sh"
     generator.write_text("""#!/usr/bin/env bash
 set -euo pipefail
@@ -436,6 +494,8 @@ shutil.copyfile(sys.argv[3], destination)
         text=True,
     )
     assert result.returncode == 0, result.stderr
+    assert "Outcome:** PASS" in (uploads / "team" / "demo" / "status-summary.md").read_text()
+    assert "refresh_failed_or_stale" in (uploads / "team" / "demo" / "dashboard" / "refresh-status.md").read_text()
     candidate = "harness/m1-candidate"
     head_sha = subprocess.run(["git", "-C", str(deliverable), "rev-parse", "main"], check=True, env=git_env, capture_output=True, text=True).stdout.strip()
     message = subprocess.run(["git", "-C", str(deliverable), "log", "-1", "--format=%B", "milestone/m1-local-candidate"], check=True, env=git_env, capture_output=True, text=True).stdout
