@@ -1,0 +1,4 @@
+.meeting-crm-cache/
+*.local.json
+my-config.json
+__pycache__/
