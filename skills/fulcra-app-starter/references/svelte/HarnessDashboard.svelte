@@ -41,8 +41,8 @@
 
   // Flow chart lookups for the currently selected run
   $: stepMap = new Map((currentRun?.events || []).map((e: any) => [e.step, e]));
-  const hasStep = (step: string) => stepMap.has(step);
-  const getStep = (step: string) => stepMap.get(step);
+  $: hasStep = (step: string) => stepMap.has(step);
+  $: getStep = (step: string) => stepMap.get(step);
 
   // Which branches of the constant flow chart this run actually took.
   // The Nurse health-check at the top acts on the *previous* run, so a fix or
