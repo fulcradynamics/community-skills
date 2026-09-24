@@ -32,27 +32,30 @@ Contributor names come from each skill's first commit in git history.
 
 ## Installation
 
-There is no plugin or marketplace manifest in this repo yet, so the reliable
-way to install a skill is a manual copy.
+The [skills CLI](https://github.com/vercel-labs/skills) installs every skill in
+this repo into the current project, for Claude Code, Codex, Cursor and the
+other agents it supports:
 
-Clone the repo and copy the skill folder you want into your agent's skills
-directory (e.g. `.claude/skills/` for Claude Code):
+```bash
+npx skills add fulcradynamics/community-skills -y
+```
+
+To install one skill for one agent, name both. The agent is the CLI's own
+name for it, for example `claude-code`, not `claude`:
+
+```bash
+npx skills add fulcradynamics/community-skills -y -s fulcra-watch-together -a claude-code
+```
+
+The `fulcra-mesh` pointer folder is skipped automatically.
+
+Or copy a skill by hand into your agent's skills directory (for example
+`.claude/skills/` for Claude Code):
 
 ```bash
 git clone https://github.com/fulcradynamics/community-skills
 cp -r community-skills/skills/<skill-name> .claude/skills/
 ```
-
-Because this repo follows the same `skills/<name>/SKILL.md` layout as
-agent-skills, the [skills CLI](https://github.com/vercel-labs/skills) may
-also work:
-
-```bash
-npx skills add fulcradynamics/community-skills
-```
-
-This hasn't been verified end to end for every skill in this repo, so if it
-doesn't work for you, fall back to the manual copy above.
 
 ## Safety
 
