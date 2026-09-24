@@ -100,19 +100,25 @@
       // Sort each run's events chronologically so the last event is the newest
       // one — getRunStatus and the per-step lookup both rely on latest-wins,
       // and long steps emit several records that may arrive out of order.
-      runsArray.forEach((r) =>
+      runsArray.forEach((r: any) =>
         r.events.sort((a: any, b: any) => (a.timestamp || '').localeCompare(b.timestamp || ''))
       );
-      runs = runsArray.sort((a, b) => {
+      const sortedRunsArray = runsArray.sort((a, b) => {
         const aTime = a.events[0]?.timestamp || '';
         const bTime = b.events[0]?.timestamp || '';
         return bTime.localeCompare(aTime);
       });
+      
+      runs = sortedRunsArray;
 
       // Preserve the user's selection across polls; only default to the
-      // latest run when nothing is selected yet or the selection disappeared.
-      const selectedId = currentRun?.run_id;
-      currentRun = runs.find((r) => r.run_id === selectedId) || runs[0] || null;
+      // latest run when nothing is selected yet or the selection disappeared,
+      // OR if the current selection was the previous latest run.
+      if (!currentRun || currentRun.run_id === sortedRunsArray[1]?.run_id || !runs.find((r) => r.run_id === currentRun.run_id)) {
+        currentRun = sortedRunsArray[0] || null;
+      } else {
+        currentRun = runs.find((r) => r.run_id === currentRun.run_id) || null;
+      }
     } catch (e) {
       console.error('Failed to fetch runs:', e);
       runs = [];

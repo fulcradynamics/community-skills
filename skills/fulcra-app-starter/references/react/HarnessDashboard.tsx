@@ -121,18 +121,22 @@ export default function HarnessDashboard() {
       runsArray.forEach((r) =>
         r.events.sort((a, b) => (a.timestamp || '').localeCompare(b.timestamp || ''))
       );
-      runsArray.sort((a, b) => {
+      const sortedRunsArray = runsArray.sort((a, b) => {
         const aTime = a.events[0]?.timestamp || '';
         const bTime = b.events[0]?.timestamp || '';
         return bTime.localeCompare(aTime);
       });
 
-      setRuns(runsArray);
+      setRuns(sortedRunsArray);
       // Preserve the user's selection across polls; only default to the
-      // latest run when nothing is selected yet or the selection disappeared.
-      setCurrentRun(
-        (prev) => runsArray.find((r) => r.run_id === prev?.run_id) || runsArray[0] || null
-      );
+      // latest run when nothing is selected yet or the selection disappeared,
+      // OR if the current selection was the previous latest run.
+      setCurrentRun((prev) => {
+        if (!prev || prev.run_id === sortedRunsArray[1]?.run_id || !sortedRunsArray.find((r) => r.run_id === prev.run_id)) {
+          return sortedRunsArray[0] || null;
+        }
+        return sortedRunsArray.find((r) => r.run_id === prev.run_id) || null;
+      });
     } catch (e) {
       console.error('Failed to fetch runs:', e);
       setRuns([]);
