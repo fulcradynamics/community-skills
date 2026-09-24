@@ -9,7 +9,9 @@ experimental, and may not be kept up to date. If you want the core, supported
 Fulcra skills (connecting to Fulcra, tracking data, dashboards, agent memory,
 workspaces, preferences), start with agent-skills instead.
 
-## Skills
+## Community skills
+
+Every skill below is community-contributed, not an official Fulcra skill.
 
 | Skill | What it does | Contributor |
 |---|---|---|
@@ -18,7 +20,7 @@ workspaces, preferences), start with agent-skills instead.
 | [fulcra-computed-data-types](skills/fulcra-computed-data-types/) | Generates custom Python scripts to parse raw data exports and ingest them as computed Fulcra data types, dynamically tagging records by a specific data dimension (e.g., Artists, Genres, Categories). | Treecle |
 | [fulcra-harness-dashboard](skills/fulcra-harness-dashboard/) | Adapts fulcra-project-dashboard into a safe, manager-facing view for a task-specific agent control harness: milestone/PR timeline, run evidence, durable status summary, decision requests, escalations, and optional curated publication. | early-access-leif-only-bot |
 | [fulcra-project-dashboard](skills/fulcra-project-dashboard/) | Builds a management dashboard for an agent-teams workspace, showing progress, logs, a generated summary, timeline/milestone charts, and a word map of agent activities. | Treecle |
-| [fulcra-prototype-grill-me](skills/fulcra-prototype-grill-me/) | Act as the lead prototyping engineer for Fulcra. Guides the user through a strict 6-step prototyping pipeline (Intake & Interview -> Architecture -> Plan -> Prototype -> Build -> Retro) using a Grill Me intake: ask exactly one clarifying question at a time. | early-access-leif-only-bot |
+| [fulcra-prototype-grill-me](skills/fulcra-prototype-grill-me/) | Acts as a lead prototyping engineer for Fulcra, guiding the user through a strict 6-step prototyping pipeline (Intake & Interview -> Architecture -> Plan -> Prototype -> Build -> Retro) using a Grill Me intake that asks one clarifying question at a time. | early-access-leif-only-bot |
 | [fulcra-rapid-prototype](skills/fulcra-rapid-prototype/) | Scaffold a project-specific Fulcra runtime harness and its separate control harness. Orchestrates fulcra-prototype-grill-me, one shared Fulcra Workspace, milestone/PR evaluation, and the recommended harness dashboard without duplicating those skills' detailed contracts. | schr3b3r |
 | [fulcra-sister-cities](skills/fulcra-sister-cities/) | Run or facilitate Sister Cities, an asynchronous city-trade social game for 3-10 players. Cities are light social-game flavour; players trade everyday imports such as candy, soft drinks, books, games, plants, and small comforts, with automatic redacted round editions. | early-access-leif-only-bot |
 | [fulcra-vault](skills/fulcra-vault/) | Manage a durable, Obsidian-like shared markdown knowledge vault using Open Knowledge Format (OKF) stored in Fulcra, enabling persistent shared memory across all agents. | Treecle |
