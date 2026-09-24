@@ -19,14 +19,14 @@
   const HARNESS_ANNOTATION_ID = env.PUBLIC_HARNESS_ANNOTATION_ID;
   const WORKSPACE_PATH = env.PUBLIC_WORKSPACE_PATH;
 
-  let runs: any[] = [];
-  let currentRun: any = null;
-  let overview: string = '';
-  let outstandingIssues: string = '';
+  let runs: any[] = $state([]);
+  let currentRun: any = $state(null);
+  let overview: string = $state('');
+  let outstandingIssues: string = $state('');
   let refreshInterval: any;
 
   // Ownership is decided by the backend; starts false until confirmed.
-  let isOwner = false;
+  let isOwner = $state(false);
 
   async function checkOwner() {
     try {
@@ -40,21 +40,21 @@
   }
 
   // Flow chart lookups for the currently selected run
-  $: stepMap = new Map((currentRun?.events || []).map((e: any) => [e.step, e]));
-  $: hasStep = (step: string) => stepMap.has(step);
-  $: getStep = (step: string) => stepMap.get(step);
+  let stepMap = $derived(new Map((currentRun?.events || []).map((e: any) => [e.step, e])));
+  const hasStep = (step: string) => stepMap.has(step);
+  const getStep = (step: string) => stepMap.get(step);
 
   // Which branches of the constant flow chart this run actually took.
   // The Nurse health-check at the top acts on the *previous* run, so a fix or
   // escalation appearing in this run means the nurse intervened before the run.
-  $: nurseIntervened = stepMap.has('FIX_ATTEMPT') || stepMap.has('ESCALATE');
-  $: projectComplete = stepMap.has('FIND_MILESTONE') && !stepMap.has('GENERATE');
-  $: reviewFailed =
+  let nurseIntervened = $derived(stepMap.has('FIX_ATTEMPT') || stepMap.has('ESCALATE'));
+  let projectComplete = $derived(stepMap.has('FIND_MILESTONE') && !stepMap.has('GENERATE'));
+  let reviewFailed = $derived(
     stepMap.has('REVIEW') &&
     !stepMap.has('MARK_COMPLETE') &&
-    (stepMap.has('RUN_COMPLETE') || stepMap.has('RUN_INCOMPLETE'));
+    (stepMap.has('RUN_COMPLETE') || stepMap.has('RUN_INCOMPLETE')));
   // Retries remaining => milestone left incomplete but the run still completes.
-  $: retryScheduled = reviewFailed && stepMap.has('RUN_COMPLETE');
+  let retryScheduled = $derived(reviewFailed && stepMap.has('RUN_COMPLETE'));
 
   async function fetchRuns() {
     try {
@@ -198,7 +198,7 @@
           <button
             class="run-item"
             class:active={run === currentRun}
-            on:click={() => currentRun = run}
+            onclick={() => currentRun = run}
           >
             <div class="run-header">
               <span class="run-id">{run.run_id}</span>

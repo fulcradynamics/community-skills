@@ -3,7 +3,7 @@
 
   // The owner's id lives server-side only; ask the backend whether we're the
   // owner (re-checking whenever auth state changes) instead of comparing ids.
-  let isOwner = false;
+  let isOwner = $state(false);
 
   async function checkOwner() {
     try {
@@ -14,11 +14,13 @@
     }
   }
 
-  $: if ($user.authenticated) {
-    checkOwner();
-  } else {
-    isOwner = false;
-  }
+  $effect(() => {
+    if ($user.authenticated) {
+      checkOwner();
+    } else {
+      isOwner = false;
+    }
+  });
 </script>
 
 {#if isOwner}
