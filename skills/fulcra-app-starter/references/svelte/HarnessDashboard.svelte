@@ -86,6 +86,7 @@
         const step = harnessData.step;
         const status = harnessData.status;
         const detail = harnessData.detail || '';
+        const evidence = typeof harnessData.evidence === 'string' ? harnessData.evidence : '';
         const timestamp = record.recorded_at;
 
         if (!runId || !step) return; // Skip records without required fields
@@ -93,7 +94,7 @@
         if (!runMap.has(runId)) {
           runMap.set(runId, { run_id: runId, events: [] });
         }
-        runMap.get(runId).events.push({ step, status, timestamp, detail });
+        runMap.get(runId).events.push({ step, status, timestamp, detail, evidence });
       });
 
       const runsArray = Array.from(runMap.values());
@@ -228,6 +229,9 @@
             </div>
             {#if hasStep(key) && getStep(key).detail}
               <div class="step-detail">{getStep(key).detail}</div>
+            {/if}
+            {#if hasStep(key) && getStep(key).evidence}
+              <div class="step-evidence">Evidence: {getStep(key).evidence}</div>
             {/if}
           </div>
         {/snippet}
@@ -779,6 +783,14 @@
     font-size: 0.875rem;
     margin-bottom: 0.5rem;
     line-height: 1.5;
+  }
+
+  .step-evidence {
+    color: #4b5563;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
   }
 
   .step-time {
