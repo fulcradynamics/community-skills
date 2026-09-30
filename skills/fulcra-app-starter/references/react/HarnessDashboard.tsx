@@ -25,6 +25,7 @@ interface Event {
   status: string;
   timestamp: string;
   detail: string;
+  evidence: string;
 }
 
 interface Run {
@@ -104,6 +105,7 @@ export default function HarnessDashboard() {
         const step = harnessData.step;
         const status = harnessData.status;
         const detail = harnessData.detail || '';
+        const evidence = typeof harnessData.evidence === 'string' ? harnessData.evidence : '';
         const timestamp = record.recorded_at;
 
         if (!runId || !step) return; // Skip records without required fields
@@ -111,7 +113,7 @@ export default function HarnessDashboard() {
         if (!runMap.has(runId)) {
           runMap.set(runId, { run_id: runId, events: [] });
         }
-        runMap.get(runId)!.events.push({ step, status, timestamp, detail });
+        runMap.get(runId)!.events.push({ step, status, timestamp, detail, evidence });
       });
 
       const runsArray = Array.from(runMap.values());
@@ -217,6 +219,7 @@ export default function HarnessDashboard() {
           {step && <span className={`status-badge status-${step.status}`}>{step.status}</span>}
         </div>
         {step && step.detail && <div className="step-detail">{step.detail}</div>}
+        {step && step.evidence && <div className="step-evidence">Evidence: {step.evidence}</div>}
       </div>
     );
   }
@@ -817,6 +820,14 @@ export default function HarnessDashboard() {
           font-size: 0.875rem;
           margin-bottom: 0.5rem;
           line-height: 1.5;
+        }
+
+        .harness-dashboard .step-evidence {
+          color: #4b5563;
+          font-size: 0.75rem;
+          line-height: 1.5;
+          white-space: pre-wrap;
+          overflow-wrap: anywhere;
         }
 
         .harness-dashboard .overview {

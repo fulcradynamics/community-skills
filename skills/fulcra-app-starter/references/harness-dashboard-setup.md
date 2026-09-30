@@ -111,6 +111,8 @@ against the spec with real tools and retains the evidence:
 
 - The baseline starts, the sign-in page renders, and an authenticated owner can
   use the app and reach `/harness` from the global Harness navigation.
+  Exercise browser sign-in through the callback and authenticated UI; a token
+  injected into API requests does not prove that the sign-in flow works.
 - The runs endpoint returns the actual M1 run ID and its recorded steps; the
   dashboard renders them, not an empty state or hardcoded demonstration data.
 - Verify record writing during this first harness run: write a real REVIEW
@@ -128,7 +130,13 @@ against the spec with real tools and retains the evidence:
   the commands, results, tested deployment URL, and UI/API evidence in workspace
   history so the result can be inspected later.
 
-Only after these checks pass may the Evaluator record `REVIEW` completed.
+Include the commands/UI actions, tested deployment URL, and observed results in
+the REVIEW event's required `evidence` string, with workspace paths for longer
+tool output. Confirm evidence appears below the detail in the dashboard cells.
+
+Only after these checks pass may the Evaluator record `REVIEW` completed with
+evidence of the successful evaluations actually performed. Missing or blocked
+checks are not passes; record the blocker and keep the milestone incomplete.
 The Coordinator then records `MARK_COMPLETE`, saves M1 completion and evidence,
 and records `RUN_COMPLETE`. Refresh the overview and read back the terminal
 events; confirm the dashboard displays the real review and completed M1 run

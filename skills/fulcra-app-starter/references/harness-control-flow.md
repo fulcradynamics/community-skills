@@ -3,6 +3,11 @@
 Lifecycle for the fulcra-app-starter harness. A single **harness run** processes one
 milestone; the Nurse re-triggers runs (cron, manual, etc.) to advance the project.
 
+Every milestone requires evaluation of the experience the user will have in the
+deployed app. It is how we establish that the work is usable, not merely plausible.
+Skipping or inventing that evaluation leaves the job unfinished, even when the
+code is written and the deployment succeeds.
+
 Roles:
 
 - 🩺 **Nurse** — monitors and fixes the harness itself: health-check, fix attempts, escalation. The only role that modifies the harness.
@@ -19,6 +24,7 @@ Roles:
   2. Obtain the current user's access token by running `uvx fulcra-api auth print-access-token`.
   3. Use `curl` to hit the back-end endpoints directly. Since the template apps use cookie-based authentication, pass the token as a cookie: `curl --cookie "fulcra_access_token=<TOKEN>" http://localhost:5173/api/...`
   4. If a browser automation tool (like `browser_exec`) is available in your environment, use it to drive and verify the UI.
+- Evidence makes the evaluation inspectable; it is not a substitute for performing it. Every event's `evidence` string records actions actually taken and facts observed so far. For `REVIEW` completed, report the successful evaluations actually performed: commands or UI actions, tested URL/revision, expected behavior, and observed results covering the milestone and relevant regressions. A build, code inspection, or authenticated API request alone cannot prove a user journey such as browser sign-in. Exercise sign-in through the callback and authenticated UI when establishing or changing authentication. If tools, credentials, or any required check are unavailable, record the blocker in a failed REVIEW and keep the milestone incomplete; follow retry/escalation rules. The Coordinator must inspect the evidence before recording `MARK_COMPLETE`; missing, vague, or incomplete evidence is not a passing review.
 - **Two retries per milestone and two harness-fix attempts (three tries each).** After a failed review, the Coordinator retries the milestone on subsequent runs up to two more times — three attempts total — before ending the run as incomplete. The Nurse attempts to fix a broken harness up to two more times (three tries total) before escalating to the user.
 - **15-minute timeout per milestone run.** A run that exceeds 15 minutes is stopped and counts as a failed attempt (consuming a retry).
 
@@ -135,18 +141,18 @@ or workspace access fails, use Nurse repair/escalation, not an untracked build.
 ## Recording Run Events
 
 Write records at key points in the flow with `fulcra-api record`. Pack the event
-fields (`run_id`, `step`, `status`, `detail`) into the `note` as a JSON string;
+fields (`run_id`, `step`, `status`, `detail`, `evidence`) into the `note` as a JSON string;
 the record's timestamp is set automatically:
 
 ```bash
-printf '%s\n' '{"note":"{\"run_id\":\"<run-id>\",\"step\":\"RUN_START\",\"status\":\"started\",\"detail\":\"Starting M1: working baseline and harness dashboard\"}"}' \
+printf '%s\n' '{"note":"{\"run_id\":\"<run-id>\",\"step\":\"RUN_START\",\"status\":\"started\",\"detail\":\"Starting M1: working baseline and harness dashboard\",\"evidence\":\"<actual health-check actions and observed results>\"}"}' \
   | uvx fulcra-api record "MomentAnnotation/<UUID>"
 ```
 
 Replace the placeholders before running. Use explicit JSON stdin (as above),
 or save the same outer JSON record to a file and run
 `uvx fulcra-api record "MomentAnnotation/<UUID>" --file event.json`.
-For generated detail text, use a JSON serializer twice: serialize the event to
+For generated detail and evidence text, use a JSON serializer twice: serialize the event to
 the `note` string, then serialize the outer record. Do not interpolate arbitrary
 text into shell quoting.
 
@@ -171,10 +177,23 @@ Verify that same event through the dashboard's backend and UI. No separate test
 annotation or recurring command-verification procedure is needed. Never record
 completions ahead of the work merely to populate the dashboard.
 
+### Evidence contract
+
+`detail` is a short status summary; `evidence` is a required non-empty plain-text
+string explaining what was done and found, not a plan or a restatement of the
+status. Started events describe actual setup/observations so far, never future
+successes. Failed events include the attempted check, observed failure, and any
+checks blocked or not performed. Completed events substantiate their outcome.
+Include concise factual results inline and workspace paths for longer output;
+links alone are not evidence. Never include tokens, cookies, passwords, or
+private user data. Replace every evidence placeholder below with real findings
+before recording; never copy hypothetical successful results into a run.
+
 ### Run Start
+
 ```json
 {
-  "note": "{\"run_id\": \"<unique-run-id>\", \"step\": \"RUN_START\", \"status\": \"started\", \"detail\": \"Starting harness run\"}",
+  "note": "{\"run_id\": \"<unique-run-id>\", \"step\": \"RUN_START\", \"status\": \"started\", \"detail\": \"Starting harness run\", \"evidence\": \"<actual health-check actions and observed results>\"}",
   "recorded_at": "<ISO-8601>"
 }
 ```
@@ -185,7 +204,7 @@ Write records when each step starts and completes:
 **Step Start:**
 ```json
 {
-  "note": "{\"run_id\": \"<run-id>\", \"step\": \"<STEP_NAME>\", \"status\": \"started\", \"detail\": \"\"}",
+  "note": "{\"run_id\": \"<run-id>\", \"step\": \"<STEP_NAME>\", \"status\": \"started\", \"detail\": \"\", \"evidence\": \"<actual setup actions and observations so far>\"}",
   "recorded_at": "<ISO-8601>"
 }
 ```
@@ -193,7 +212,7 @@ Write records when each step starts and completes:
 **Step Complete:**
 ```json
 {
-  "note": "{\"run_id\": \"<run-id>\", \"step\": \"<STEP_NAME>\", \"status\": \"completed\", \"detail\": \"<result-summary>\"}",
+  "note": "{\"run_id\": \"<run-id>\", \"step\": \"<STEP_NAME>\", \"status\": \"completed\", \"detail\": \"<result-summary>\", \"evidence\": \"<actions actually performed and observed results supporting completion>\"}",
   "recorded_at": "<ISO-8601>"
 }
 ```
@@ -201,7 +220,7 @@ Write records when each step starts and completes:
 **Step Failed:**
 ```json
 {
-  "note": "{\"run_id\": \"<run-id>\", \"step\": \"<STEP_NAME>\", \"status\": \"failed\", \"detail\": \"<error-message>\"}",
+  "note": "{\"run_id\": \"<run-id>\", \"step\": \"<STEP_NAME>\", \"status\": \"failed\", \"detail\": \"<error-message>\", \"evidence\": \"<attempted check, actual failure output, and checks not performed>\"}",
   "recorded_at": "<ISO-8601>"
 }
 ```
@@ -215,14 +234,15 @@ with what is happening now:
 
 ```json
 {
-  "note": "{\"run_id\": \"<run-id>\", \"step\": \"<STEP_NAME>\", \"status\": \"started\", \"detail\": \"<progress-summary>\"}",
+  "note": "{\"run_id\": \"<run-id>\", \"step\": \"<STEP_NAME>\", \"status\": \"started\", \"detail\": \"<progress-summary>\", \"evidence\": \"<actions and findings accumulated so far>\"}",
   "recorded_at": "<ISO-8601>"
 }
 ```
 
 Keep these coarse — every few minutes, not every action — so a run accumulates a
 handful of progress records, not hundreds. The dashboard keeps the newest record
-per step, so the step box shows the latest `detail` and switches to
+per step, so each update must carry forward relevant evidence gathered so far.
+The step box shows the latest `detail` and `evidence` and switches to
 `status: "completed"` (or `"failed"`) when you write that step's final record.
 
 ### Key Steps to Track
