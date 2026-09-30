@@ -113,8 +113,12 @@ against the spec with real tools and retains the evidence:
   use the app and reach `/harness` from the global Harness navigation.
 - The runs endpoint returns the actual M1 run ID and its recorded steps; the
   dashboard renders them, not an empty state or hardcoded demonstration data.
-- A new real step/progress event appears after refresh. The overview and issues
-  panels load their workspace files without API errors.
+- Verify record writing during this first harness run: write a real REVIEW
+  progress event, read it back with `fulcra-api get-records`, and check its run ID,
+  step, status, and JSON string note. Confirm the same event appears through the
+  runs endpoint and in the dashboard after refresh. Use this run's annotation,
+  not a separate command-test log. The overview and issues panels load their
+  workspace files without API errors.
 - Unauthenticated and authenticated non-owner requests cannot read runs,
   overview, or issues; owner controls are hidden for a non-owner. Verify backend
   denial, not only conditional UI rendering. If a required test identity or

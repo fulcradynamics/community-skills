@@ -154,20 +154,22 @@ text into shell quoting.
 stdin produces `Error: No input provided` even with field options. Also,
 `--note='{"run_id":...}'` is parsed as an object, not the string required by
 MomentAnnotation. Piped/file JSON avoids both problems without disabling schema
-validation. See [record-command-verification.md](record-command-verification.md)
-for the reproduction and live verification procedure.
+validation.
 
 The dashboard reads `recorded_at` for timing and JSON-parses the string `note`.
 The timestamp defaults to now when omitted. The JSON shapes below are outer
 records; replace their placeholder timestamps with real ISO-8601 timestamps or
 omit `recorded_at` to use the default.
 
-After a write, use `uvx fulcra-api get-records "MomentAnnotation/<UUID>" "1h"`
-and verify the expected `run_id`, step, status, and parseable string `note`.
+During the first harness run, the Evaluator verifies actual record writing as
+part of [M1 dashboard evaluation](harness-dashboard-setup.md#evaluate-m1-before-handoff).
+Use `uvx fulcra-api get-records "MomentAnnotation/<UUID>" "1h"` to read back a
+real run event and verify its `run_id`, step, status, and parseable string `note`.
 Ingestion can be asynchronous: poll within the run's timeout, without blindly
 resubmitting duplicate events. An upload receipt alone is not read-back proof.
-Once the dashboard exists, also verify the same events through its backend and
-UI. Never record completions ahead of the work merely to populate the dashboard.
+Verify that same event through the dashboard's backend and UI. No separate test
+annotation or recurring command-verification procedure is needed. Never record
+completions ahead of the work merely to populate the dashboard.
 
 ### Run Start
 ```json
