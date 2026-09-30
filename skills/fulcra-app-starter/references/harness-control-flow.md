@@ -184,10 +184,6 @@ links alone are not evidence. Never include tokens, cookies, passwords, or
 private user data. Replace every evidence placeholder below with real findings
 before recording; never copy hypothetical successful results into a run.
 
-This adds a field inside the JSON `note`, not a new MomentAnnotation schema or
-data type. Existing records remain readable without evidence; do not backfill
-them with invented results or treat their absence as proof of evaluation.
-
 ### Run Start
 
 ```json

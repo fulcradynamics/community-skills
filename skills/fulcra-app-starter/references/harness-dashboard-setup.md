@@ -132,8 +132,7 @@ against the spec with real tools and retains the evidence:
 
 Include the commands/UI actions, tested deployment URL, and observed results in
 the REVIEW event's required `evidence` string, with workspace paths for longer
-tool output. Confirm evidence appears below the detail in the dashboard cells
-as smaller, dark-gray text. Older records without evidence must still render.
+tool output. Confirm evidence appears below the detail in the dashboard cells.
 
 Only after these checks pass may the Evaluator record `REVIEW` completed with
 evidence of the successful evaluations actually performed. Missing or blocked
