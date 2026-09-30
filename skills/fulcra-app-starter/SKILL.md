@@ -1,6 +1,6 @@
 ---
 name: fulcra-app-starter
-description: "Scaffolds a new project using one of the Fulcra web app template repositories for someone to build on top of using the Fulcra sign in / sign up flow and data back end."
+description: "Build and iterate on Fulcra web apps through a required planning, generation, and evaluation harness, preserving requirements, decisions, and history."
 homepage: "https://github.com/fulcradynamics/community-skills"
 license: "MIT"
 user-invocable: true
@@ -9,7 +9,15 @@ metadata: { "openclaw": { "emoji": "🛠️" } }
 
 # Fulcra App Starter
 
-Scaffolds a new web application project with a batteries-included Fulcra authentication flow. Use when the user wants to build a custom web application.
+Build a working, maintainable Fulcra-backed web application through planned, generated, and evaluated milestones. Use when starting a custom web app or continuing one created with this skill. Deployment alone is not completion: preserve requirements, user decisions, evaluation evidence, and history so later changes can be integrated and checked against what already works.
+
+## Required Harness Contract
+
+- Read [harness-control-flow.md](references/harness-control-flow.md) before implementation. The harness is the development process, not an optional dashboard or a final setup step.
+- **M1 — Working baseline and harness dashboard** is always the first milestone. Run scaffolding, baseline deployment, and dashboard integration through the harness; do not build features first and backfill events later.
+- Execute each role with real tools. For simple work one agent may take the roles sequentially, but keep generation and evaluation separate: the Evaluator checks the spec and evidence rather than accepting the Generator's claims. Only the Nurse creates or repairs harness machinery.
+- Before handing off M1, verify the deployed dashboard displays its actual run events and evaluation result. An empty dashboard, invented success records, or a deployed app without evaluation is not a completed milestone.
+- Continue all feature work and later changes through the same harness. If authentication, recording, evaluation, or deployment is blocked, preserve the blocker and escalate; do not silently skip the harness.
 
 ## Preferred Tone
 
@@ -28,7 +36,7 @@ This skill helps users start a Fulcra-backed web application by cloning one of t
 - Ready-to-use structure for making authenticated API calls
 - Placeholder strings designed to be customized for the user's specific app
 
-Once scaffolded, the user and their agent can iterate on the project to build their specific application.
+The templates are the starting point; the harness makes the app reviewable and supports continued iteration against the stored plan, spec, decisions, and history.
 
 ## Template Options
 
@@ -60,7 +68,7 @@ Based on the user's idea, map it to Fulcra's capabilities to implement and enhan
 - **Multi-user interaction** — Leaderboards, sharing, social features across users
 - **File storage** — User-uploaded content
 
-Present a concise overall plan that includes the core idea including Fulcra-enabled enhancements.
+Present a concise overall plan that includes the core idea including Fulcra-enabled enhancements. Include a Harness section: M1 establishes a verified baseline and populated owner dashboard, and later milestones build features through generation and evaluation. Record the retry/timeout configuration from the control-flow reference.
 
 Get high-level approval from the user on this enhanced vision before proceeding.
 
@@ -78,13 +86,21 @@ Ask only necessary clarifying questions one at a time to gather details needed f
 
 As you go, note each specific decision the user makes — their actual choice, not a paraphrase.
 
-Once you have enough detail, create the spec with milestone breakdown, then upload to the workspace: the spec to `spec.md` and the collected decisions to `decisions.md` (at the end, not after each question). See [`references/workspace.md`](references/workspace.md).
+Once you have enough detail, create the spec with milestone breakdown, then upload to the workspace: the spec to `spec.md` and the collected decisions to `decisions.md` (at the end, not after each question). Define M1's acceptance criteria using the [dashboard handoff gate](references/harness-dashboard-setup.md#evaluate-m1-before-handoff); app-specific features start at M2. Initialize `progress.md` with M1 pending. See [`references/workspace.md`](references/workspace.md).
 
 ### 4. Choose Template
 
 Use Svelte unless the user prefers React or has already specified a preference.
 
-### 5. Clone and Initialize
+### 5. Start the First Harness Run
+
+Before cloning or writing app code, the Nurse bootstraps the minimal harness and its annotation data type using [harness-control-flow.md](references/harness-control-flow.md#setup). This is only the machinery needed to record and run M1, not an untracked dashboard implementation. Save the data type ID in `progress.md` and reuse it; do not create another in step 9.
+
+Mint a unique `run_id`, perform the Nurse health-check, write and read back `RUN_START`, and have the Coordinator record `FIND_MILESTONE` selecting M1. Record `GENERATE` started before implementation. Follow the recording instructions in the control-flow reference; if recording fails, stop and repair or escalate rather than continuing untracked.
+
+Steps 6–9 below are the implementation work **inside this run**, not prerequisites to starting the harness. Keep the default retry/timeout rules; if M1 needs more time, record an explicit configuration override in `plan.md` before continuing rather than silently ignoring the timeout.
+
+### 6. Generate the Baseline
 
 Clone the chosen template into a new directory named for their project:
 
@@ -103,11 +119,13 @@ Create `AGENTS.md` at the project root:
 **Workspace**: `workspace/<project-name>/`  
 **Skill**: fulcra-app-starter (fulcradynamics/community-skills)
 
-The Fulcra workspace is the primary source of truth. Download workspace files
-(plan.md, spec.md, progress.md) to understand current state and continue work.
+The Fulcra workspace is the primary source of truth. Read plan.md, spec.md,
+decisions.md, progress.md, and relevant history before continuing. Load the
+fulcra-app-starter skill and its harness-control-flow reference. All changes
+must use the harness: select a milestone, generate, perform separate evaluation
+with real tool evidence, then record the result and update workspace history.
+Never skip the harness or infer completion from a deployment alone.
 ```
-
-### 6. Customize Placeholders
 
 Update placeholder strings in the login flow. Each template includes placeholder text (like "Your App Name", "Your App Description", etc.) that should be replaced with content from the spec.
 
@@ -135,19 +153,21 @@ vercel --prod \
   --env NEXT_PUBLIC_FULCRA_API_URL=<value>
 ```
 
-Share the live deployment URL with the user. This gives the user a working deployed app to see before milestone-based building begins.
+You may share this URL as an **in-progress baseline**, not a completed M1 handoff. Continue the same harness run with dashboard integration and evaluation before app-specific feature development.
 
 ### 9. Set Up Harness and Dashboard
 
-Set up the harness tracking system and integrate the owner-only dashboard: create the harness data type, add the environment variables (using `uvx fulcra-api user-info` from the CLI to retrieve the Fulcra owner ID from the `"userid"` key), create the backend-only server endpoints, integrate the dashboard components, and redeploy.
+Within M1, the Nurse sets up the dashboard as part of the harness machinery; the Generator handles baseline app code. Reuse the harness data type from step 5, add the environment variables (using `uvx fulcra-api user-info` to retrieve the owner's `"userid"`), create the backend-only server endpoints, integrate the dashboard components, and redeploy. Keep role transitions explicit even when one agent performs both roles.
 
-Follow [`references/harness-dashboard-setup.md`](references/harness-dashboard-setup.md) for the full step-by-step (commands, env vars, endpoints, and component wiring). React is deferred — leave it as-is until tested.
+Follow [`references/harness-dashboard-setup.md`](references/harness-dashboard-setup.md) for commands, env vars, endpoints, component wiring, and acceptance checks. Both frameworks must pass the same gate; an untested React path is a blocker, not permission to omit the harness.
 
-After deployment, verify that the Harness dashboard page and the global Harness menu bar (e.g., `<OwnerNav />`) are correctly wired into the application code (e.g., in `+layout.svelte` or `layout.tsx`).
+Record `GENERATE` completed only after the implementation work is done. The Evaluator then records `REVIEW` started and executes the dashboard handoff gate against the deployed app, including the Harness page and global `<OwnerNav />`, live run data, and owner-only access. Store the tool evidence in the workspace; do not record `REVIEW` completed until its checks pass.
 
-### 10. Run Harness
+### 10. Close M1 and Continue Through the Harness
 
-Implement and run the harness following the flow described in [`references/harness-control-flow.md`](references/harness-control-flow.md). You must execute the harness flow using real tool calls. You may embody the roles sequentially yourself for simple tasks, or spawn sub-agents for complex ones—choose the most efficient path. However, you must actually perform the work for each role. The diagram defines the principles of the harness and what a single iteration looks like. You might run it directly or through a schedule.
+On a passing review, the Coordinator records `MARK_COMPLETE`, updates `progress.md` and milestone history with evidence, and records `RUN_COMPLETE`. The Nurse refreshes `overview.md`; verify that the dashboard now shows the real M1 result before presenting the completed baseline and dashboard to the user. On failure, leave M1 incomplete and follow the documented retry/escalation flow. Never manufacture a successful run to fill the dashboard.
+
+For M2 onward, select the earliest incomplete milestone and execute the same [control flow](references/harness-control-flow.md) with a new run ID. Read the current requirements, decisions, and history, generate the change, evaluate it against its acceptance criteria and previous milestones, then persist the result. User-requested changes update the recorded requirements before another run; roles cannot rewrite the spec merely to pass review. Resume this process after interruptions rather than switching to ad hoc coding.
 
 Keep this harness implementation as simple as possible: the Preferred Coding Style intention applies to the harness too, so favor the smallest thing that works instead of an elaborate framework.
 
@@ -157,6 +177,6 @@ Keep this harness implementation as simple as possible: the Preferred Coding Sty
 
 - Keep setup minimal and straightforward
 - The templates are designed to be customized—don't over-prescribe the structure
-- Focus on getting a working starting point with authentication already configured
+- A working starting point includes authentication, a populated harness dashboard, and verified M1 evidence
 - The user's vision for their app drives what happens next
 - Consult the Fulcra REST API docs when implementing app-specific features

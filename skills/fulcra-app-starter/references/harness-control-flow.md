@@ -103,7 +103,15 @@ The custom annotation enables the harness dashboard to show live run status. Wor
 
 ## Setup
 
-When setting up the harness (before first run), create a custom data type to
+The harness starts before app implementation, not after the dashboard is built.
+M1 is the working baseline and harness dashboard; later milestones add features.
+The Nurse bootstraps only the run mechanism and event storage before M1. During
+M1 the Nurse implements harness/dashboard machinery, the Generator implements
+the baseline app, and the Evaluator checks both. Keep these responsibilities
+separate even when one agent takes the roles sequentially.
+
+Before the first run, check `progress.md` for an existing annotation ID. Reuse
+it on resume. If absent, the Nurse creates a custom data type to
 hold run events. Use `MomentAnnotation` as the base type — it stores a free-form
 `note` (where we pack each run event as JSON) plus a timestamp:
 
@@ -111,8 +119,18 @@ hold run events. Use `MomentAnnotation` as the base type — it stores a free-fo
 uvx fulcra-api data-type create MomentAnnotation "Harness Runs: <project-name>"
 ```
 
-Save the returned data type ID (of the form `MomentAnnotation/<UUID>`). This is
-used as `PUBLIC_HARNESS_ANNOTATION_ID` in the dashboard's environment variables.
+The create response's `id` is a UUID; form `MomentAnnotation/<UUID>` from it.
+Save that full data type ID in `progress.md`, together with run state and retry
+counts. It becomes `PUBLIC_HARNESS_ANNOTATION_ID` in the Svelte dashboard
+(`NEXT_PUBLIC_HARNESS_ANNOTATION_ID` in the React dashboard). Do not create a
+second annotation when wiring the UI: it must display the records from M1.
+
+Mint the first `run_id`, health-check event storage and workspace access, then
+record and read back `RUN_START` before implementation. Record `FIND_MILESTONE`
+and `GENERATE` transitions as the work happens. The dashboard does not need to
+exist to record these events. Initialize `overview.md` and
+`outstanding-issues.md` before evaluating their dashboard panels. If recording
+or workspace access fails, use Nurse repair/escalation, not an untracked build.
 
 ## Recording Run Events
 
@@ -121,13 +139,37 @@ fields (`run_id`, `step`, `status`, `detail`) into the `note` as a JSON string;
 the record's timestamp is set automatically:
 
 ```bash
-uvx fulcra-api record MomentAnnotation/<UUID> \
-  --note='{"run_id": "<run-id>", "step": "GENERATE", "status": "started", "detail": ""}'
+printf '%s\n' '{"note":"{\"run_id\":\"<run-id>\",\"step\":\"RUN_START\",\"status\":\"started\",\"detail\":\"Starting M1: working baseline and harness dashboard\"}"}' \
+  | uvx fulcra-api record "MomentAnnotation/<UUID>"
 ```
 
-The dashboard reads each record's `recorded_at` for timing and parses `note` for
-the event fields, so nothing else needs to be set. The JSON shapes below show
-the `note` payload for each kind of event.
+Replace the placeholders before running. Use explicit JSON stdin (as above),
+or save the same outer JSON record to a file and run
+`uvx fulcra-api record "MomentAnnotation/<UUID>" --file event.json`.
+For generated detail text, use a JSON serializer twice: serialize the event to
+the `note` string, then serialize the outer record. Do not interpolate arbitrary
+text into shell quoting.
+
+**Do not use `--note` for these events.** In CLI 0.1.42, non-interactive empty
+stdin produces `Error: No input provided` even with field options. Also,
+`--note='{"run_id":...}'` is parsed as an object, not the string required by
+MomentAnnotation. Piped/file JSON avoids both problems without disabling schema
+validation.
+
+The dashboard reads `recorded_at` for timing and JSON-parses the string `note`.
+The timestamp defaults to now when omitted. The JSON shapes below are outer
+records; replace their placeholder timestamps with real ISO-8601 timestamps or
+omit `recorded_at` to use the default.
+
+During the first harness run, the Evaluator verifies actual record writing as
+part of [M1 dashboard evaluation](harness-dashboard-setup.md#evaluate-m1-before-handoff).
+Use `uvx fulcra-api get-records "MomentAnnotation/<UUID>" "1h"` to read back a
+real run event and verify its `run_id`, step, status, and parseable string `note`.
+Ingestion can be asynchronous: poll within the run's timeout, without blindly
+resubmitting duplicate events. An upload receipt alone is not read-back proof.
+Verify that same event through the dashboard's backend and UI. No separate test
+annotation or recurring command-verification procedure is needed. Never record
+completions ahead of the work merely to populate the dashboard.
 
 ### Run Start
 ```json
