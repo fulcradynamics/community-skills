@@ -11,6 +11,8 @@ metadata: { "openclaw": { "emoji": "🛠️" } }
 
 Build a working, maintainable Fulcra-backed web application through planned, generated, and evaluated milestones. Use when starting a custom web app or continuing one created with this skill. Deployment alone is not completion: preserve requirements, user decisions, evaluation evidence, and history so later changes can be integrated and checked against what already works.
 
+The goal is an app the user can actually use, not something that only looks like their request. Evaluation is required and is often the most important part of the job: it establishes that the deployed experience works. Skipping or faking it does not finish the job; delivering broken functionality as working erodes the user's trust and interest.
+
 ## Required Harness Contract
 
 - Read [harness-control-flow.md](references/harness-control-flow.md) before implementation. The harness is the development process, not an optional dashboard or a final setup step.
@@ -162,13 +164,13 @@ Within M1, the Nurse sets up the dashboard as part of the harness machinery; the
 
 Follow [`references/harness-dashboard-setup.md`](references/harness-dashboard-setup.md) for commands, env vars, endpoints, component wiring, and acceptance checks. Both frameworks must pass the same gate; an untested React path is a blocker, not permission to omit the harness.
 
-Record `GENERATE` completed only after the implementation work is done. The Evaluator then records `REVIEW` started and executes the dashboard handoff gate against the deployed app, including the Harness page and global `<OwnerNav />`, live run data, and owner-only access. Store the tool evidence in the workspace; do not record `REVIEW` completed until its checks pass.
+Record `GENERATE` completed only after the implementation work is done. The Evaluator then records `REVIEW` started and executes the dashboard handoff gate against the deployed app, including the Harness page and global `<OwnerNav />`, live run data, and owner-only access. This is where you establish that the user can actually use what you are handing over, not just view it. Store the tool evidence in the workspace; do not record `REVIEW` completed until its checks pass.
 
 ### 10. Close M1 and Continue Through the Harness
 
 On a passing review, the Coordinator records `MARK_COMPLETE`, updates `progress.md` and milestone history with evidence, and records `RUN_COMPLETE`. The Nurse refreshes `overview.md`; verify that the dashboard now shows the real M1 result before presenting the completed baseline and dashboard to the user. On failure, leave M1 incomplete and follow the documented retry/escalation flow. Never manufacture a successful run to fill the dashboard.
 
-For M2 onward, select the earliest incomplete milestone and execute the same [control flow](references/harness-control-flow.md) with a new run ID. Read the current requirements, decisions, and history, generate the change, evaluate it against its acceptance criteria and previous milestones, then persist the result. User-requested changes update the recorded requirements before another run; roles cannot rewrite the spec merely to pass review. Resume this process after interruptions rather than switching to ad hoc coding.
+For M2 onward, select the earliest incomplete milestone and execute the same [control flow](references/harness-control-flow.md) with a new run ID. Read the current requirements, decisions, and history, generate the change, then exercise the user's intended workflow against its acceptance criteria and check that previously working behavior still works. This evaluation is required for every milestone; recording success cannot substitute for doing it. Persist the actual result. User-requested changes update the recorded requirements before another run; roles cannot rewrite the spec merely to pass review. Resume this process after interruptions rather than switching to ad hoc coding.
 
 Keep this harness implementation as simple as possible: the Preferred Coding Style intention applies to the harness too, so favor the smallest thing that works instead of an elaborate framework.
 

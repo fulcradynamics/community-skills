@@ -3,6 +3,11 @@
 Lifecycle for the fulcra-app-starter harness. A single **harness run** processes one
 milestone; the Nurse re-triggers runs (cron, manual, etc.) to advance the project.
 
+Every milestone requires evaluation of the experience the user will have in the
+deployed app. It is how we establish that the work is usable, not merely plausible.
+Skipping or inventing that evaluation leaves the job unfinished, even when the
+code is written and the deployment succeeds.
+
 Roles:
 
 - 🩺 **Nurse** — monitors and fixes the harness itself: health-check, fix attempts, escalation. The only role that modifies the harness.
@@ -19,7 +24,7 @@ Roles:
   2. Obtain the current user's access token by running `uvx fulcra-api auth print-access-token`.
   3. Use `curl` to hit the back-end endpoints directly. Since the template apps use cookie-based authentication, pass the token as a cookie: `curl --cookie "fulcra_access_token=<TOKEN>" http://localhost:5173/api/...`
   4. If a browser automation tool (like `browser_exec`) is available in your environment, use it to drive and verify the UI.
-- **Evidence is required, not optional commentary.** Every event's `evidence` string records actions actually taken and facts observed so far. For `REVIEW` completed, report the successful evaluations actually performed: commands or UI actions, tested URL/revision, expected behavior, and observed results covering the milestone and relevant regressions. A build, code inspection, or authenticated API request alone cannot prove a user journey such as browser sign-in. Exercise sign-in through the callback and authenticated UI when establishing or changing authentication. If tools, credentials, or any required check are unavailable, record the blocker in a failed REVIEW and keep the milestone incomplete; follow retry/escalation rules. The Coordinator must inspect the evidence before recording `MARK_COMPLETE`; missing, vague, or incomplete evidence is not a passing review.
+- Evidence makes the evaluation inspectable; it is not a substitute for performing it. Every event's `evidence` string records actions actually taken and facts observed so far. For `REVIEW` completed, report the successful evaluations actually performed: commands or UI actions, tested URL/revision, expected behavior, and observed results covering the milestone and relevant regressions. A build, code inspection, or authenticated API request alone cannot prove a user journey such as browser sign-in. Exercise sign-in through the callback and authenticated UI when establishing or changing authentication. If tools, credentials, or any required check are unavailable, record the blocker in a failed REVIEW and keep the milestone incomplete; follow retry/escalation rules. The Coordinator must inspect the evidence before recording `MARK_COMPLETE`; missing, vague, or incomplete evidence is not a passing review.
 - **Two retries per milestone and two harness-fix attempts (three tries each).** After a failed review, the Coordinator retries the milestone on subsequent runs up to two more times — three attempts total — before ending the run as incomplete. The Nurse attempts to fix a broken harness up to two more times (three tries total) before escalating to the user.
 - **15-minute timeout per milestone run.** A run that exceeds 15 minutes is stopped and counts as a failed attempt (consuming a retry).
 
