@@ -21,8 +21,8 @@ workspace/<project-name>/
 ├── overview.md          # Concise progress + milestone summary (nurse, each loop)
 ├── progress.md          # Current state snapshot
 ├── outstanding-issues.md # Issues requiring user attention
-└── history/             # Timestamped milestone completion records
-    └── YYYYMMDD-HHMMSS_milestone-name.md
+└── history/             # Timestamped run outcomes and evaluation evidence
+    └── YYYYMMDD-HHMMSS_milestone-name_run-id.md
 ```
 
 ### plan.md
@@ -42,7 +42,9 @@ This is the approved plan that guides spec creation and implementation.
 
 Created during the interview step. Contains:
 - App description and purpose
-- Milestone breakdown
+- Milestone breakdown beginning with **M1 — Working baseline and harness dashboard**;
+  include the [M1 handoff checks](harness-dashboard-setup.md#evaluate-m1-before-handoff),
+  then app-specific milestones starting at M2
 - Key features and requirements
 
 Updated as requirements evolve.
@@ -98,7 +100,8 @@ Single source of truth for current state. Updated by Coordinator after each harn
 Suggested sections:
 - **Current Status** — Where we are, what's working
 - **Active Milestone** — Current milestone name from spec.md
-- **Harness State** — Current run status, retry count, last run timestamp
+- **Harness State** — Full annotation data type ID, current `run_id`, role/step,
+  run status, retry count, last run timestamp, and evidence/history links
 - **Next Actions** — Specific next steps
 - **Recent Completions** — Last 3-5 completed milestones with dates
 - **Open Questions** — Anything blocking or unclear
@@ -127,12 +130,16 @@ Format:
 
 ### history/
 
-One timestamped file per completed milestone. Created by Coordinator when milestone passes review.
+Keep a timestamped history entry for each run, including failed or interrupted
+attempts; never preserve only successful results. The Coordinator records
+milestone completion only after a passing evaluation.
 
 Suggested content:
 - What was built
 - Key decisions made during generation
 - Review notes and issues found
+- Run ID, milestone/attempt, actual tool commands and results, deployment URL,
+  and links to evaluation evidence (without credentials or tokens)
 - Any retries and what was attempted
 - Context for next milestone
 
@@ -170,13 +177,14 @@ uvx fulcra-api file list "workspace/<project-name>/"
 
 ### During Harness Runs
 
-**Coordinator** (after milestone completion):
+**Coordinator** (after every run, including failures):
 - Downloads current progress.md
-- Updates with new completion in Recent Completions
+- Records the run ID, outcome, retries, blockers, and evidence links; adds to
+  Recent Completions only after a passing review
 - Clears or updates Active Milestone
 - Uploads updated progress.md
 - Creates timestamped history file
-- Uploads to `workspace/<project-name>/history/YYYYMMDD-HHMMSS_milestone-name.md`
+- Uploads to `workspace/<project-name>/history/YYYYMMDD-HHMMSS_milestone-name_run-id.md`
 
 **Generator** (before starting work):
 - Downloads progress.md and spec.md
@@ -199,9 +207,11 @@ When resuming work after interruption:
 1. Download and read `progress.md` → See active milestone, harness state, and current status
 2. Download and read `spec.md` → Find milestone requirements
 3. Download and read `decisions.md` → Honor the specific decisions the user has made
-4. (Optional) Download `plan.md` → Understand original enhancement vision
-5. (Optional) Download recent history files → Understand patterns from past work
-6. Determine where to continue in the harness flow
+4. Download `plan.md` → Understand approved vision and harness configuration
+5. Download relevant history files → Preserve prior decisions and regression evidence
+6. Reconcile stored run state with annotation events. Do not mark interrupted
+   work complete without evaluation evidence; apply the retry/timeout rules and
+   continue through the harness, using a new run ID for the next attempt.
 
 The Coordinator uses this same pattern to find the next incomplete milestone.
 

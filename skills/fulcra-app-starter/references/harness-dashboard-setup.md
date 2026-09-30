@@ -1,20 +1,19 @@
 # Harness Dashboard Setup
 
-Steps to set up the harness tracking system and integrate the owner-only
-dashboard. Referenced from step 9 of [`../SKILL.md`](../SKILL.md). See
+M1 implementation and evaluation checklist for the owner-only dashboard.
+Execute inside the first harness run, not before starting the harness.
+Referenced from step 9 of [`../SKILL.md`](../SKILL.md). See
 [`harness-control-flow.md`](harness-control-flow.md) for the run flow and how
 events are recorded, and [`workspace.md`](workspace.md) for the workspace files.
 
-## Create the harness data type
+## Reuse the harness data type
 
-```bash
-uvx fulcra-api data-type create MomentAnnotation "Harness Runs: <project-name>"
-```
-
-Save the returned data type ID (of the form `MomentAnnotation/<UUID>`) — it
-becomes `PUBLIC_HARNESS_ANNOTATION_ID` below. See
-[`harness-control-flow.md`](harness-control-flow.md) for how to write run-event
-records into it.
+Read the full `MomentAnnotation/<UUID>` ID from `progress.md`, created by the
+Nurse in step 5. Confirm it already contains M1's `RUN_START`, `FIND_MILESTONE`,
+and `GENERATE` started records. If absent, return to
+[harness setup](harness-control-flow.md#setup) before implementing the dashboard;
+do not fabricate retrospective records or create a second empty data type.
+Use the same ID as `PUBLIC_HARNESS_ANNOTATION_ID` below.
 
 ## Add environment variables to `.env`
 
@@ -102,5 +101,36 @@ every 5 seconds to show live harness progress.
 vercel --prod
 ```
 
-Share the updated deployment URL with the user so they can see the harness
-dashboard.
+Configure the added harness environment variables on the deployment as well as
+locally; `.env` alone does not configure Vercel. Keep `OWNER_USER_ID` server-only.
+
+## Evaluate M1 before handoff
+
+The Evaluator records `REVIEW` started, then checks the deployed application
+against the spec with real tools and retains the evidence:
+
+- The baseline starts, the sign-in page renders, and an authenticated owner can
+  use the app and reach `/harness` from the global Harness navigation.
+- The runs endpoint returns the actual M1 run ID and its recorded steps; the
+  dashboard renders them, not an empty state or hardcoded demonstration data.
+- A new real step/progress event appears after refresh. The overview and issues
+  panels load their workspace files without API errors.
+- Unauthenticated and authenticated non-owner requests cannot read runs,
+  overview, or issues; owner controls are hidden for a non-owner. Verify backend
+  denial, not only conditional UI rendering. If a required test identity or
+  browser session is unavailable, record the missing check and escalate rather
+  than claiming it passed.
+- Build/check commands and relevant baseline regression checks pass. Record
+  the commands, results, tested deployment URL, and UI/API evidence in workspace
+  history so the result can be inspected later.
+
+Only after these checks pass may the Evaluator record `REVIEW` completed.
+The Coordinator then records `MARK_COMPLETE`, saves M1 completion and evidence,
+and records `RUN_COMPLETE`. Refresh the overview and read back the terminal
+events; confirm the dashboard displays the real review and completed M1 run
+before sharing it as the finished baseline. If verification fails, keep M1
+incomplete and follow the retry/escalation rules in the control-flow reference.
+
+**Do not present an empty dashboard as complete.** A URL may be shared earlier
+only as an explicitly in-progress preview. This gate applies to both Svelte and
+React; lack of testing is not a harness exemption.

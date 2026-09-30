@@ -18,4 +18,6 @@ This directory contains reference implementations and documentation for the fulc
 ### Shared Documentation
 
 - **`harness-control-flow.md`** - Harness design and tracking system
+- **`harness-dashboard-setup.md`** - M1 dashboard implementation and required handoff checks
+- **`record-command-verification.md`** - Live CLI reproduction and record round-trip checks
 - **`workspace.md`** - Workspace structure and patterns
