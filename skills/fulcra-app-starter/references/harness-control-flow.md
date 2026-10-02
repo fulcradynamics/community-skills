@@ -100,35 +100,14 @@ flowchart TD
 
 ## User-reported Bugs and Adjustments
 
-Treat a user-reported app bug or requested adjustment as a small milestone, not
-an exception to the harness. This applies even after all milestones are complete.
-
-1. Before implementation, read the current workspace and relevant history. Record
-   the user's actual report or requested change in `decisions.md`, and update
-   `spec.md` with the expected behavior, a concrete reproduction/check, and relevant
-   regression checks. Ask only if the intended behavior is unclear. A bug fix
-   preserves existing requirements; an adjustment records the user's authorized change.
-2. Add a pending sub-milestone under the affected milestone, for example `m2-1`
-   under M2, then `m2-2` for the next distinct request. Check existing IDs first;
-   never overwrite a prior fix or erase the parent's completion history. If the
-   parent is incomplete, it stays incomplete until its own acceptance criteria pass.
-   Record the sub-milestone and its position in `progress.md`; order it before
-   later work it blocks. Select work in the recorded order, not by sorting IDs.
-3. Upload the updated decisions, spec, and progress before starting the fix run.
-   If a request arrives during a run, record it for the next run rather than
-   silently changing the active run's criteria. Use the existing Nurse health-check
-   and Coordinator selection, then Generator and separate Evaluator roles. Identify
-   the sub-milestone in event `detail` and history; use the existing annotation,
-   event schema, and a new `run_id` for each attempt.
-4. The Evaluator exercises the reported failure or requested behavior against the
-   updated acceptance criteria and checks relevant previously working behavior.
-   Record actual commands/UI actions, target, and results using the evidence
-   contract. A build or asking the user to retest does not establish that the fix works.
-5. On failure, keep the same sub-milestone incomplete and retry it within the
-   existing limits; do not create another ID to reset its retry count. On a passing
-   review, the Coordinator marks that sub-milestone complete and records progress
-   and history; the Nurse refreshes the overview. Report verified results or the
-   remaining blocker to the user, not an unverified claim of a fix.
+Before implementing a user-reported bug fix or adjustment, persist the user's
+guidance in `decisions.md` and update `spec.md` with the intended behavior and
+acceptance criteria. Insert a pending milestone immediately after the last
+completed milestone, naming it for that position: for example, `m2-1` between
+M2 and M3, then `m2-2` for another insertion after `m2-1`. The position is based
+on progress, not on which earlier feature needs changing. Update `progress.md`
+and run the harness. From that point it is a regular milestone, using the same
+generation, evaluation, retry, and completion flow as any other milestone.
 
 ## Tracking System
 
