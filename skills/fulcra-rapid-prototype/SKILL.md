@@ -87,6 +87,13 @@ Run `fulcra-prototype-grill-me` through Intake & Interview and its Step 1b
 Workspace/authentication step. This establishes the project goal, captures the
 initial user context, and creates/joins the single project Workspace:
 
+Tell Grill-Me that it is running under `fulcra-rapid-prototype`. It must add
+its `## Rapid Prototype Continuation` section to every created or updated
+intake, interview, architecture, plan, and journal artifact. That section
+records this workflow as the owner and directs every future resumption to load
+this skill first. On resume, backfill the section into earlier Rapid Prototype
+artifacts before proceeding.
+
 ```text
 team/prototype-<project>/
 ```
@@ -114,6 +121,10 @@ Continue `fulcra-prototype-grill-me` through its Architecture user gate and
 Plan phase. Store the approved architecture and plan artifacts in the same
 Workspace as they are created. Do not start Grill-Me's Prototype/Build phases:
 the harness below replaces them.
+
+Confirm that the approved Architecture and Plan artifacts retain the `## Rapid
+Prototype Continuation` section. The continuation instruction is part of their
+durable project context, not a substitute for the user-approval gate.
 
 Required local artifacts after this step:
 
