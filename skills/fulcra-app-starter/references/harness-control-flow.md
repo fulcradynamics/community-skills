@@ -17,7 +17,7 @@ Roles:
 
 ## Rules
 
-- **No role may modify the spec to make a milestone pass.** The spec is fixed for the harness. If a milestone cannot be satisfied as specified, the Nurse escalates to the user; only the user's response can change the spec (escalation is the sole path to a spec change).
+- **No role may modify the spec to make a milestone pass.** The spec is fixed during a run. User-requested changes, including bug reports and adjustments, may update it before the next run as described below. If a milestone cannot be satisfied as specified, the Nurse escalates to the user; roles cannot weaken acceptance criteria themselves.
 - Only the Nurse modifies the harness. The Coordinator, Generator, and Evaluator operate within it.
 - The Evaluator must not pass a review based on reading the code alone. You must provide concrete evidence of exercising the newly built functionality using real tool execution on a "live" version of the app, or through another reliable verification method. Never record a REVIEW as completed without tool output proving the feature works end-to-end. To test functionality of a live app:
   1. Start the local development server (e.g., `npm run dev`) in the background.
@@ -97,6 +97,17 @@ flowchart TD
     style InnerLoop fill:#f5f5f5,stroke:#999999
     style Legend fill:#f5f5f5,stroke:#999999
 ```
+
+## User-reported Bugs and Adjustments
+
+Before implementing a user-reported bug fix or adjustment, persist the user's
+guidance in `decisions.md` and update `spec.md` with the intended behavior and
+acceptance criteria. Insert a pending milestone immediately after the last
+completed milestone, naming it for that position: for example, `m2-1` between
+M2 and M3, then `m2-2` for another insertion after `m2-1`. The position is based
+on progress, not on which earlier feature needs changing. Update `progress.md`
+and run the harness. From that point it is a regular milestone, using the same
+generation, evaluation, retry, and completion flow as any other milestone.
 
 ## Tracking System
 

@@ -175,6 +175,12 @@ uvx fulcra-api file list "workspace/<project-name>/"
 - Append the specific new feature/requirement to decisions.md and upload it
 - Reflect it in spec.md (this user-introduced change is a valid reason to update the spec)
 
+### When the user reports an app bug or requests an adjustment
+- Update decisions.md and spec.md with the user's guidance and acceptance criteria.
+- Insert a regular milestone immediately after the last completed milestone,
+  named for that position (e.g., `m2-1` after M2), and update progress.md.
+- Upload these files before implementation, then [run the harness as usual](harness-control-flow.md#user-reported-bugs-and-adjustments).
+
 ### During Harness Runs
 
 **Coordinator** (after every run, including failures):
