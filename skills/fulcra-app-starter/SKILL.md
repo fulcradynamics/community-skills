@@ -20,6 +20,7 @@ The goal is an app the user can actually use, not something that only looks like
 - Execute each role with real tools. For simple work one agent may take the roles sequentially, but keep generation and evaluation separate: the Evaluator checks the spec and evidence rather than accepting the Generator's claims. Only the Nurse creates or repairs harness machinery.
 - Every run event must include a non-empty `evidence` string describing what was actually done and observed so far. A completed `REVIEW` must report the successful evaluations actually performed, with commands or UI actions, the tested target, and observed results; intentions, a build alone, or "tests passed" are not sufficient. The Coordinator must reject a passing review without this evidence and leave the milestone incomplete.
 - Before handing off M1, verify the deployed dashboard displays its actual run events and evaluation result. An empty dashboard, invented success records, or a deployed app without evaluation is not a completed milestone.
+- Route user-reported app bugs and requested adjustments through [fix sub-milestones](references/harness-control-flow.md#user-reported-bugs-and-adjustments), such as `m2-1`, even for a small fix or an already completed app. Persist the user's guidance and acceptance criteria before implementation, then use the same generation and evaluation flow; do not hand an untested fix back to the user.
 - Continue all feature work and later changes through the same harness. If authentication, recording, evaluation, or deployment is blocked, preserve the blocker and escalate; do not silently skip the harness.
 
 ## Preferred Tone
@@ -128,6 +129,8 @@ fulcra-app-starter skill and its harness-control-flow reference. All changes
 must use the harness: select a milestone, generate, perform separate evaluation
 with real tool evidence, then record the result and update workspace history.
 Never skip the harness or infer completion from a deployment alone.
+For a user-reported bug or adjustment, record their guidance and create a fix
+sub-milestone (e.g., m2-1) in the spec before implementing it through the harness.
 ```
 
 Update placeholder strings in the login flow. Each template includes placeholder text (like "Your App Name", "Your App Description", etc.) that should be replaced with content from the spec.
