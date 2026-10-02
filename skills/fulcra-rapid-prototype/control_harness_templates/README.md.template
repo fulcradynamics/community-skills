@@ -87,7 +87,10 @@ verdict matching `schemas/verdict.md`.
 enforces `test_runner: PASS` as a merge gate when a test runner is declared,
 persists terminal Workspace records with `--team`, and invokes optional
 `HARNESS_PR_CREATE_CMD` / `HARNESS_PR_MERGE_CMD` adapters after remote
-push/PASS. A remote merge adapter must create a merge commit (never
+push/PASS. For an active `create_and_publish` dashboard, also set
+`HARNESS_DASHBOARD_REFRESH_CMD`; it receives the team, milestone, outcome, and
+decision-file path after each terminal outcome and performs the curated
+refresh/manifest gate. A remote merge adapter must create a merge commit (never
 fast-forward or rebase) and use `HARNESS_MERGE_MESSAGE`. Provide those adapters for your git host;
 the scaffold does not hardcode a specific hosting API.
 

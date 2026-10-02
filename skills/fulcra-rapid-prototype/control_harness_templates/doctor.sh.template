@@ -79,12 +79,22 @@ else
 fi
 
 echo "--- Required dashboard decision ---"
+DASHBOARD_STATUS=$(grep -E '^status:[[:space:]]*' "$SCRIPT_DIR/dashboard-decision.md" 2>/dev/null | head -1 | cut -d: -f2- | xargs)
 DASHBOARD_CHOICE=$(grep -E '^choice:[[:space:]]*' "$SCRIPT_DIR/dashboard-decision.md" 2>/dev/null | head -1 | cut -d: -f2- | xargs)
 DASHBOARD_PUBLICATION=$(grep -E '^publication:[[:space:]]*' "$SCRIPT_DIR/dashboard-decision.md" 2>/dev/null | head -1 | cut -d: -f2- | xargs)
+if [ "$DASHBOARD_STATUS" != "resolved" ]; then
+  echo "  FAIL dashboard decision is pending or invalid -- ask the user to confirm the recommended create-and-publish path, defer it, or decline it before runtime work"
+  PROBLEMS=$((PROBLEMS + 1))
+else
 case "$DASHBOARD_CHOICE" in
   create_and_publish)
     if [ "$DASHBOARD_PUBLICATION" = "confirmed" ]; then
-      echo "  OK   dashboard created/published with confirmed manifest"
+      if [ -n "${HARNESS_DASHBOARD_REFRESH_CMD:-}" ]; then
+        echo "  OK   dashboard created/published with confirmed manifest"
+      else
+        echo "  FAIL HARNESS_DASHBOARD_REFRESH_CMD is required to refresh the active dashboard after terminal outcomes"
+        PROBLEMS=$((PROBLEMS + 1))
+      fi
     else
       echo "  FAIL dashboard create-and-publish path lacks confirmed public manifest -- obtain explicit deployment confirmation or explicitly defer/decline"
       PROBLEMS=$((PROBLEMS + 1))
@@ -98,6 +108,7 @@ case "$DASHBOARD_CHOICE" in
     PROBLEMS=$((PROBLEMS + 1))
     ;;
 esac
+fi
 
 echo
 if [ "$PROBLEMS" -eq 0 ]; then
