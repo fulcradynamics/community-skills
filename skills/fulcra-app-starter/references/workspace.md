@@ -104,6 +104,8 @@ Suggested sections:
   run status, retry count, last run timestamp, and evidence/history links
 - **Next Actions** — Specific next steps
 - **Recent Completions** — Last 3-5 completed milestones with dates
+- **Deployment** — Deploy project `id` and `domain` (or that the user's own Vercel
+  account is used); see [`deploy.md`](deploy.md)
 - **Open Questions** — Anything blocking or unclear
 - **Notes** — Context worth preserving
 

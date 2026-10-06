@@ -97,12 +97,8 @@ every 5 seconds to show live harness progress.
 
 ## Deploy dashboard update
 
-```bash
-vercel --prod
-```
-
-Configure the added harness environment variables on the deployment as well as
-locally; `.env` alone does not configure Vercel. Keep `OWNER_USER_ID` server-only.
+Redeploy with the [deploy command](deploy.md#deploy), which passes the added
+harness variables from `.env` to the deployment. Keep `OWNER_USER_ID` server-only.
 
 ## Evaluate M1 before handoff
 
