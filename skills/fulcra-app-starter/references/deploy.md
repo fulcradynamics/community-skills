@@ -42,6 +42,9 @@ deploying.
 The app's `.env` variables are passed both at build time (`--build-env`, which
 React's `NEXT_PUBLIC_*` variables need) and at runtime (`--env`, which Svelte's
 `$env/dynamic` variables need), since Vercel doesn't set them from `.env`.
+`--engine-strict=false` lets `npx` install the Vercel CLI when the template's
+`.npmrc` sets `engine-strict=true` and the local Node version is newer than one
+of the CLI's dependencies supports.
 
 ```bash
 (
@@ -58,7 +61,7 @@ React's `NEXT_PUBLIC_*` variables need) and at runtime (`--env`, which Svelte's
     value=${value%\"}; value=${value#\"}
     ENV_FLAGS+=(--build-env "$key=$value" --env "$key=$value")
   done < <(grep -E '^[A-Za-z_][A-Za-z0-9_]*=' .env)
-  npx vercel deploy --prod --yes "${ENV_FLAGS[@]}"
+  npx --engine-strict=false vercel deploy --prod --yes "${ENV_FLAGS[@]}"
 )
 ```
 
