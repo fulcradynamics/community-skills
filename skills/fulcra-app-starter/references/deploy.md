@@ -16,7 +16,7 @@ so use the project name as a lowercase DNS label (letters, digits, and inner
 hyphens). `framework` is `sveltekit` for Svelte or `nextjs` for React.
 
 ```bash
-curl -sS -X POST https://api.fulcradynamics.com/user/v1/deploy/project \
+curl -sS -X POST https://api.devfulcra.com/user/v1/deploy/project \
   -H "Authorization: Bearer $(uvx fulcra-api auth print-access-token)" \
   -H "Content-Type: application/json" \
   -d '{"name": "<name>", "framework": "<sveltekit|nextjs>"}' \
@@ -48,7 +48,7 @@ React's `NEXT_PUBLIC_*` variables need) and at runtime (`--env`, which Svelte's
   set -e
   DEPLOY_PROJECT_ID=<id from progress.md>
   DEPLOY_TOKEN=$(curl -sSf -X POST \
-    "https://api.fulcradynamics.com/user/v1/deploy/project/$DEPLOY_PROJECT_ID/token" \
+    "https://api.devfulcra.com/user/v1/deploy/project/$DEPLOY_PROJECT_ID/token" \
     -H "Authorization: Bearer $(uvx fulcra-api auth print-access-token)")
   export VERCEL_TOKEN=$(jq -r .token <<< "$DEPLOY_TOKEN")
   export VERCEL_ORG_ID=$(jq -r .platform_team_id <<< "$DEPLOY_TOKEN")
