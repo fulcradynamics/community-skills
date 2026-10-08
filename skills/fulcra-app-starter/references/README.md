@@ -19,4 +19,5 @@ This directory contains reference implementations and documentation for the fulc
 
 - **`harness-control-flow.md`** - Harness design and tracking system
 - **`harness-dashboard-setup.md`** - M1 dashboard implementation and required handoff checks
+- **`deploy.md`** - Deploy projects on a Fulcra domain, the deploy command, and the Vercel account fallback
 - **`workspace.md`** - Workspace structure and patterns

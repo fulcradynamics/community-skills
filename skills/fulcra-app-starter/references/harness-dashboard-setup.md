@@ -97,22 +97,20 @@ every 5 seconds to show live harness progress.
 
 ## Deploy dashboard update
 
-```bash
-vercel --prod
-```
-
-Configure the added harness environment variables on the deployment as well as
-locally; `.env` alone does not configure Vercel. Keep `OWNER_USER_ID` server-only.
+Redeploy with the [deploy command](deploy.md#deploy), which passes the added
+harness variables from `.env` to the deployment. Keep `OWNER_USER_ID` server-only.
 
 ## Evaluate M1 before handoff
 
 The Evaluator records `REVIEW` started, then checks the deployed application
 against the spec with real tools and retains the evidence:
 
-- The baseline starts, the sign-in page renders, and an authenticated owner can
-  use the app and reach `/harness` from the global Harness navigation.
-  Exercise browser sign-in through the callback and authenticated UI; a token
-  injected into API requests does not prove that the sign-in flow works.
+- The baseline starts, the sign-in page renders and starts a device flow, and an
+  authenticated owner can use the app and reach `/harness` from the global
+  Harness navigation. Sign the browser in with the CLI token as the
+  `fulcra_access_token` cookie, and ask the user to try the real sign-in once
+  through `outstanding-issues.md` (non-blocking; see the
+  [control-flow rules](harness-control-flow.md#rules)).
 - The runs endpoint returns the actual M1 run ID and its recorded steps; the
   dashboard renders them, not an empty state or hardcoded demonstration data.
 - Verify record writing during this first harness run: write a real REVIEW
@@ -121,11 +119,14 @@ against the spec with real tools and retains the evidence:
   runs endpoint and in the dashboard after refresh. Use this run's annotation,
   not a separate command-test log. The overview and issues panels load their
   workspace files without API errors.
-- Unauthenticated and authenticated non-owner requests cannot read runs,
-  overview, or issues; owner controls are hidden for a non-owner. Verify backend
-  denial, not only conditional UI rendering. If a required test identity or
-  browser session is unavailable, record the missing check and escalate rather
-  than claiming it passed.
+- Unauthenticated and non-owner requests cannot read runs, overview, or issues;
+  owner controls are hidden for a non-owner. Verify backend denial, not only
+  conditional UI rendering. No second account is needed: send the owner's token
+  with its `fulcradynamics.com/userid` claim changed. `isOwner()` reads the claim
+  without verifying the signature, so this tests the backend's owner check,
+  while the Fulcra API still rejects the altered token. Expect `401` without a
+  cookie, `403` with the altered token, and `{"isOwner": false}` from the owner
+  route.
 - Build/check commands and relevant baseline regression checks pass. Record
   the commands, results, tested deployment URL, and UI/API evidence in workspace
   history so the result can be inspected later.

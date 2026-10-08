@@ -141,29 +141,13 @@ Follow the template's `README.md` ("Getting Started"): `npm install`, `cp .env.e
 
 ### 8. Deploy Baseline
 
-Before deploying, ensure the Vercel CLI is authenticated. Run `vercel whoami`. If you are not logged in, ask the user to create a Vercel account (or log in) and authenticate the CLI by running `vercel login`, since anonymous deployments expire after an hour and disrupt the harness iteration cycle.
-
-Once authenticated, deploy the customized, working template to Vercel so the user has a live baseline before feature development. Set environment variables from `.env` using `--env` flags (React uses `NEXT_PUBLIC_*` prefix, Svelte uses `PUBLIC_*`):
-
-```bash
-# For Svelte template:
-vercel --prod \
-  --env PUBLIC_AUTH0_DOMAIN=<value> \
-  --env PUBLIC_AUTH0_CLIENT_ID=<value> \
-  --env PUBLIC_FULCRA_API_URL=<value>
-
-# For React template:
-vercel --prod \
-  --env NEXT_PUBLIC_AUTH0_DOMAIN=<value> \
-  --env NEXT_PUBLIC_AUTH0_CLIENT_ID=<value> \
-  --env NEXT_PUBLIC_FULCRA_API_URL=<value>
-```
+Deploy the customized, working template so the user has a live baseline before feature development. Apps are deployed to a Fulcra domain without a Vercel account: create the app's deploy project once, saving it in `progress.md`, then deploy with a fresh project token. Follow [`references/deploy.md`](references/deploy.md), which also covers falling back to the user's own Vercel account. Use the same deploy command for every later redeploy.
 
 You may share this URL as an **in-progress baseline**, not a completed M1 handoff. Continue the same harness run with dashboard integration and evaluation before app-specific feature development.
 
 ### 9. Set Up Harness and Dashboard
 
-Within M1, the Nurse sets up the dashboard as part of the harness machinery; the Generator handles baseline app code. Reuse the harness data type from step 5, add the environment variables (using `uvx fulcra-api user-info` to retrieve the owner's `"userid"`), create the backend-only server endpoints, integrate the dashboard components, and redeploy. Keep role transitions explicit even when one agent performs both roles.
+Within M1, the Nurse sets up the dashboard as part of the harness machinery; the Generator handles baseline app code. Reuse the harness data type from step 5, add the environment variables (using `uvx fulcra-api user-info` to retrieve the owner's `"userid"`), create the backend-only server endpoints, integrate the dashboard components, and [redeploy](references/deploy.md#deploy). Keep role transitions explicit even when one agent performs both roles.
 
 Follow [`references/harness-dashboard-setup.md`](references/harness-dashboard-setup.md) for commands, env vars, endpoints, component wiring, and acceptance checks. Both frameworks must pass the same gate; an untested React path is a blocker, not permission to omit the harness.
 
