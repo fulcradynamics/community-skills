@@ -3,8 +3,8 @@
 
 Provider commands remain external/trusted configuration:
   HARNESS_GENERATOR_CMD, HARNESS_EVALUATOR_CMD
-Optional remote-host commands receive HARNESS_BRANCH/HARNESS_MILESTONE:
-  HARNESS_PR_CREATE_CMD, HARNESS_PR_MERGE_CMD
+Optional adapters:
+  HARNESS_PR_CREATE_CMD, HARNESS_PR_MERGE_CMD, HARNESS_DASHBOARD_REFRESH_CMD
 
 GitHub is not required. HARNESS_GIT_MODE=local uses only local branches;
 HARNESS_GIT_MODE=remote adds origin push and optional host PR adapters.
@@ -92,12 +92,70 @@ def upload_workspace_file(cli: list[str], team: str, local: Path, remote: str) -
     raise MilestoneError(f"Could not persist Workspace record team/{team}/{remote}")
 
 
-def persist_status(cli: list[str] | None, team: str | None, outcome: str, milestone: str, where: str, going: str, next_bearing: str) -> None:
+def persist_status(cli: list[str] | None, team: str | None, outcome: str, milestone: str, where: str, going: str, next_bearing: str) -> bool:
     if not cli or not team:
-        return
+        return False
     now = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     content = f"---\ntype: Harness Status Summary\n---\n\n# Harness checkpoint\n- **Outcome:** {outcome}\n- **Milestone:** {milestone}\n- **Updated:** {now}\n\n## Where we are\n{where}\n\n## Where we're going\n{going}\n\n## Next bearing\n{next_bearing}\n"
     write_workspace(cli, team, "status-summary.md", content)
+    return True
+
+
+def dashboard_choice() -> str:
+    text = (ROOT / "dashboard-decision.md").read_text()
+    if not re.search(r"^status:\s*resolved\s*$", text, re.M):
+        return ""
+    match = re.search(r"^choice:\s*(\S+)", text, re.M)
+    return match.group(1) if match else ""
+
+
+def refresh_dashboard_if_active(team: str | None, milestone: str, outcome: str) -> None:
+    if dashboard_choice() != "create_and_publish":
+        return
+    command = os.getenv("HARNESS_DASHBOARD_REFRESH_CMD")
+    if not command:
+        raise MilestoneError("HARNESS_DASHBOARD_REFRESH_CMD is required for an active published dashboard.")
+    adapter(command, {
+        "HARNESS_TEAM": team or "",
+        "HARNESS_MILESTONE": milestone,
+        "HARNESS_OUTCOME": outcome,
+        "HARNESS_DASHBOARD_DECISION": str(ROOT / "dashboard-decision.md"),
+    }, "dashboard-refresh")
+
+
+def record_dashboard_refresh_failure(cli: list[str] | None, team: str | None, milestone: str, outcome: str, error: Exception) -> None:
+    """Best-effort durable marker; dashboard trouble must not alter the run result."""
+    if not cli or not team:
+        return
+    now = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    content = f"# Dashboard refresh status\n\n- state: refresh_failed_or_stale\n- milestone: {milestone}\n- outcome: {outcome}\n- updated: {now}\n- error: {error}\n\nThe canonical harness outcome is in `status-summary.md`. Repair the dashboard adapter and refresh from that durable record.\n"
+    try:
+        write_workspace(cli, team, "dashboard/refresh-status.md", content)
+    except Exception as persist_error:
+        print(f"WARNING: dashboard refresh failed ({error}); could not persist dashboard staleness marker: {persist_error}", file=sys.stderr)
+
+
+def record_terminal_outcome(cli: list[str] | None, team: str | None, outcome: str, milestone: str, where: str, going: str, next_bearing: str) -> bool:
+    """Persist the canonical outcome before a best-effort dashboard refresh.
+
+    A broken optional dashboard must be visible, but cannot turn a PASS into
+    a failed harness run.  Likewise, never invoke its hook when the canonical
+    Workspace write failed or was not configured.
+    """
+    try:
+        persisted = persist_status(cli, team, outcome, milestone, where, going, next_bearing)
+    except Exception as error:
+        print(f"WARNING: terminal outcome was not persisted; dashboard refresh skipped: {error}", file=sys.stderr)
+        return False
+    if not persisted:
+        print("WARNING: terminal outcome was not persisted; dashboard refresh skipped (no Workspace team configured).", file=sys.stderr)
+        return False
+    try:
+        refresh_dashboard_if_active(team, milestone, outcome)
+    except Exception as error:
+        print(f"WARNING: dashboard refresh failed after persisted {outcome} outcome: {error}", file=sys.stderr)
+        record_dashboard_refresh_failure(cli, team, milestone, outcome, error)
+    return True
 
 
 def role_command(role: str, command: str, milestone: str, context: str, deliverable: Path, timeout: int, retries: int, candidate_id: str = "", candidate_sha: str | None = None) -> str:
@@ -315,12 +373,9 @@ def main() -> int:
     integration_branch = integration_branch_for(deliverable, args.git_mode, args.integration_branch)
     start_sha = ensure_milestone_branch(deliverable, branch, args.git_mode, integration_branch)
     candidate_id = candidate_id_for(args.milestone)
+    terminal_outcome_recorded = False
     try:
-        try:
-            generator_output = role_command("generator", generator, args.milestone, context, deliverable, args.role_timeout, args.max_retries, candidate_id)
-        except MilestoneError as exc:
-            persist_status(cli, args.team, "ESCALATED", args.milestone, str(exc), "Provider/process execution did not complete.", "Resolve provider/process blocker, then resume this branch.")
-            raise
+        generator_output = role_command("generator", generator, args.milestone, context, deliverable, args.role_timeout, args.max_retries, candidate_id)
         if cli and args.team:
             write_workspace(cli, args.team, f"artifact/{args.milestone}-generator.md", generator_output)
         candidate_sha = validate_candidate(deliverable, branch, start_sha, candidate_id)
@@ -339,10 +394,12 @@ def main() -> int:
         if verdict.get("decision_request") == "TRUE":
             if cli and args.team:
                 write_workspace(cli, args.team, f"decision/{args.milestone}-decision-request.md", evaluator_output)
-            persist_status(cli, args.team, "DECISION REQUIRED", args.milestone, "Evaluator emitted a user decision request.", "The milestone is paused pending user input.", "Record user answer in decisions.md/spec before resuming.")
+            record_terminal_outcome(cli, args.team, "DECISION REQUIRED", args.milestone, "Evaluator emitted a user decision request.", "The milestone is paused pending user input.", "Record user answer in decisions.md/spec before resuming.")
+            terminal_outcome_recorded = True
             return 1
         if not is_mergeable(verdict, test_runner_declared=not args.no_test_runner):
-            persist_status(cli, args.team, "FAIL", args.milestone, f"Evaluator verdict: {verdict}", "Candidate commit and branch remain available for a bounded corrective iteration.", "Resume the milestone branch and create a new candidate.")
+            record_terminal_outcome(cli, args.team, "FAIL", args.milestone, f"Evaluator verdict: {verdict}", "Candidate commit and branch remain available for a bounded corrective iteration.", "Resume the milestone branch and create a new candidate.")
+            terminal_outcome_recorded = True
             return 1
         if args.git_mode == "local":
             integration_sha = integrate_local(deliverable, integration_branch, candidate_sha, args.milestone)
@@ -351,8 +408,13 @@ def main() -> int:
             integration_sha = "host adapter responsible for non-fast-forward completion merge"
         if cli and args.team:
             write_workspace(cli, args.team, "milestone-progress.md", f"current: <next milestone>\ncompleted: {args.milestone}\n")
-        persist_status(cli, args.team, "PASS", args.milestone, f"Independent evaluator passed {candidate_id} ({candidate_sha}); completion {completion_marker}: {integration_sha}.", "The harness may advance to the next milestone.", "Advance to the next milestone.")
+        record_terminal_outcome(cli, args.team, "PASS", args.milestone, f"Independent evaluator passed {candidate_id} ({candidate_sha}); completion {completion_marker}: {integration_sha}.", "The harness may advance to the next milestone.", "Advance to the next milestone.")
+        terminal_outcome_recorded = True
         return 0
+    except MilestoneError as exc:
+        if not terminal_outcome_recorded:
+            record_terminal_outcome(cli, args.team, "ESCALATED", args.milestone, str(exc), "Provider, candidate validation, or evaluator processing did not complete.", "Resolve the recorded blocker, then resume this branch.")
+        raise
     finally:
         archive_repositories(cli, args.team, args.milestone, deliverable, args.approve_bundle_pruning)
 
