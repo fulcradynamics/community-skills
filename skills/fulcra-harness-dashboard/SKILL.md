@@ -47,12 +47,15 @@ scheduler “completed” status alone.
 
 1. Invoke `fulcra-project-dashboard` to build the base static triad and its
    manager-oriented layout.
-2. Copy `templates/dashboard-data.json` as the curated data contract and
-   use `scripts/refresh_harness_dashboard.py` to refresh it from downloaded
+2. Copy `templates/dashboard-data.json.template` as the curated data contract,
+   removing `.template` only from the chosen destination filename, and use
+   `scripts/refresh_harness_dashboard.py` to refresh it from downloaded
    `status-summary.md` and `milestone-progress.md`.
-3. Copy `templates/harness-dashboard-components.js` and
-   `templates/harness-dashboard-components.css` into the base dashboard's
-   public static-triad assets. Add a root element such as
+3. Copy `templates/harness-dashboard-components.js.template` and
+   `templates/harness-dashboard-components.css.template` into the base
+   dashboard's public static-triad assets. Keep `.template` on each source
+   filename and remove it only from the chosen destination filename. Add a
+   root element such as
    `<section id="harness-dashboard"></section>` and call
    `renderHarnessDashboard(root, data)` after the base dashboard loads the
    curated JSON. The component supplies actual rendering for the flight
@@ -79,12 +82,13 @@ Required minimum:
 4. readable contrast and unchanged access to milestones, runs, decisions,
    and escalations.
 
-Start with `templates/harness-dashboard-theme.css`. Copy it after the base
-`fulcra-project-dashboard` CSS and replace its theme placeholders. Do not
-add large decorative imagery, autoplay animation, or third-party visual
-assets merely to satisfy this requirement. If the project already has a
-recognized identity/theme, reuse it; otherwise ask the user for a concise
-vibe before rendering.
+Start with `templates/harness-dashboard-theme.css.template`. Copy it after the
+base `fulcra-project-dashboard` CSS, remove `.template` only from the chosen
+destination filename, and replace its theme placeholders. Do not add large
+decorative imagery, autoplay animation, or third-party visual assets merely
+to satisfy this requirement. If the project already has a recognized
+identity/theme, reuse it; otherwise ask the user for a concise vibe before
+rendering.
 
 The chosen theme must be recorded in the curated dashboard configuration or
 project status so later agents refresh rather than accidentally reset it.
@@ -172,7 +176,7 @@ Before every first deployment (and whenever the public manifest changes):
 
 1. Build an isolated `public/` directory containing only UI assets and
    explicitly curated `dashboard-data.json`.
-2. Copy `templates/public/noindex-head.html` into the `<head>` of
+2. Copy `templates/public/noindex-head.html.template` into the `<head>` of
    `public/index.html`, producing:
    ```html
    <meta name="robots" content="noindex, nofollow">
@@ -182,9 +186,11 @@ Before every first deployment (and whenever the public manifest changes):
    URL and noindex/nofollow directives reduce discovery; they are **not
    access control**.
 4. Obtain explicit user confirmation for that exact manifest.
-5. Deploy with `templates/publish_surge.sh` (or an equivalent host adapter)
-   using a random/unguessable domain. Keep the URL in the durable harness
-   status/dashboard configuration, not in a credential file.
+5. Copy `templates/publish_surge.sh.template` to a chosen destination filename
+   without the `.template` suffix, then deploy with that script (or an
+   equivalent host adapter) using a random/unguessable domain. Keep the URL in
+   the durable harness status/dashboard configuration, not in a credential
+   file.
 
 Never publish inboxes, full raw verdicts, credentials, private-repo content,
 or raw Fulcra downloads. Make dashboard publish failure visible but never
