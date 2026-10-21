@@ -41,6 +41,28 @@ To ensure reliable agentic execution and prevent skipped steps, follow the 6-ste
 5. **User Gates:** Do not proceed past Architecture or Prototype phases without explicit user approval of the markdown artifacts.
 6. **Decision Journaling:** Maintain a `journal.md` capturing the conversational context, trade-offs, and dead-ends of the session before bundling, ensuring full context portability.
 
+## Rapid Prototype continuity
+
+When this skill is invoked by `fulcra-rapid-prototype`, treat that skill as the
+workflow owner. Add the following `## Rapid Prototype Continuation` section to
+every phase artifact you create or update: `intake/brief.md`, each substantive
+`interview/*.md` record, `architecture.md`, `plan.md`, and `journal.md`.
+
+```markdown
+## Rapid Prototype Continuation
+
+This artifact was created under the `fulcra-rapid-prototype` workflow, with
+`fulcra-prototype-grill-me` performing the Intake, Interview, Architecture, or
+Plan work. When this project is resumed, load `fulcra-rapid-prototype` first.
+It must inspect the existing Git history and shared Fulcra Workspace, identify
+the current workflow outcome, and use the prescribed next step rather than
+starting direct implementation or unnecessarily rerunning discovery.
+```
+
+If resuming a Rapid Prototype project whose earlier artifacts lack this
+section, backfill it before continuing. Do not add it to projects that did not
+start under `fulcra-rapid-prototype`.
+
 ## The 6-Step Pipeline
 
 Follow these phases sequentially. At the end of each phase, `git add . && git commit -m "chore: complete [phase] phase"`.
