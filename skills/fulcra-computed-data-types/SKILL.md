@@ -18,9 +18,9 @@ This skill enables agents to act as personal data engineers. Instead of running 
 
 ## Dependencies & References
 
-This skill is an advanced extension of the core ingestion pipeline. You MUST load the `fulcra-ingest` skill (via `skill_view(name="fulcra-ingest")`) to access its reference files:
-- Use `references/fulcra-ingest-cli.md` for the exact syntax for `data-type create`, `tag create`, and `record` operations.
-- Use `references/fulcra-ingest-source-mapping.md` to ensure you properly register the new computed type in the user's `source_map.md` and log it in the `ingest_log.md`.
+This skill is an advanced extension of the core ingestion pipeline. You MUST load the `fulcra-ingest` skill (via `skill_view(name="fulcra-ingest")`) to access its reference files. They live in that skill, not in this one, so there is a single source of truth:
+- [fulcra-ingest-cli.md](https://github.com/fulcradynamics/agent-skills/blob/main/skills/fulcra-ingest/references/fulcra-ingest-cli.md) has the exact syntax for `data-type create`, `tag create`, and `record` operations.
+- [fulcra-ingest-source-mapping.md](https://github.com/fulcradynamics/agent-skills/blob/main/skills/fulcra-ingest/references/fulcra-ingest-source-mapping.md) explains how to register the new computed type in the user's `source_map.md` and log it in the `ingest_log.md`.
 
 ## The Workflow
 
